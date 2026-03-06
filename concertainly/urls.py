@@ -4,5 +4,5 @@ from concertainly import views
 
 app_name = "concertainly"
 urlpatterns = [
-    path("", views.index, name="index"),
+    path("", views.homepage, name="homepage"),
 ]
