@@ -9,15 +9,6 @@ class Artist(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
 
-
-class ConcertUser(models.Model):
-    # associate a ConcertUser to each user
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
-    
-    def __str__(self):
-        return self.user.username
-
 class Tour(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
