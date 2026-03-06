@@ -7,6 +7,7 @@ class UserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password',)
+        # pretty sure email isn't necessary
+        fields = ('username', 'password',)
 
-# we don't need an additional form because we're not storing any additional 
+# we don't need an additional form because we're not storing any additional information other than what is stored on User
