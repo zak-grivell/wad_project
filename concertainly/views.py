@@ -1,12 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from concertainly.models import *
-from concertainly.forms import CategoryForm
-from django.shortcuts import redirect 
-from django.urls import reverse
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
 
 def home(request):
     return render(request, "homepage.html")
