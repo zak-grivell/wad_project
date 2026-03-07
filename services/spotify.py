@@ -1,4 +1,3 @@
-# services/external_api.py
 import time
 from concertainly.models import Artist
 import requests
@@ -100,8 +99,6 @@ class SpotifyAPI:
                 "grant_type": "client_credentials",
             },
         ).json()
-
-        print(result)
 
         self.access_token = result["access_token"]
         self.token_expire = time.time() + result["expires_in"]
