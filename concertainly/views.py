@@ -15,13 +15,21 @@ def home(request):
     popular_tours = tours [3:13] #next top 10
 
     context_dict = {}
-    context_dict["highlight"] = highlight_tours
-    context_dict["popular"] = popular_tours
+    context_dict["highlight_tours"] = highlight_tours
+    context_dict["popular_tours"] = popular_tours
 
     return render(request, "homepage.html", context=context_dict)
 
 def search(request):
-    return render(request, "search.html")
+    #needs entries (total number of reviews) attribute
+    genre_list = Genre.objects.order_by("-entries")[:10] 
+    artist_list = Artist.objects.order_by("-entries")[:10]
+
+    context_dict = {}
+    context_dict["genre_list"] = genre_list
+    context_dict["artist_list"] = artist_list
+
+    return render(request, "search.html", context=context_dict)
 
 def user_register(request):
     registered = False
@@ -85,7 +93,9 @@ def account(request):
     return render(request, "account.html")
 
 def genre_list(request):
-    return render(request, "allGenres.html")
+    genres = Genre.objects.all()
+
+    return render(request, "allGenres.html", {"genres": genres})
 
 def genre(request, genre_name):
     genre = get_object_or_404(Genre, name=genre_name)

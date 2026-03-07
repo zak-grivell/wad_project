@@ -48,7 +48,6 @@ class Review(models.Model):
 
     set_list = models.ManyToManyField(Song)
 
-
-class Genre:
+class Genre(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key  = True)
     name = models.CharField(max_length=128)
