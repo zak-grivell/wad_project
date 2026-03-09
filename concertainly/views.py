@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from services.spotify import SpotifyAPI
 from concertainly.models import *
 from django.contrib.auth.decorators import login_required
 
@@ -8,6 +9,12 @@ def home(request):
 
 def search(request):
     return render(request, "search.html")
+
+def spotify_test(request):
+    s = SpotifyAPI()
+    
+    context_dict = {"boldmessage": str(s.artist("06HL4z0CvFAxyc27GXpf02"))}
+    return render(request, "index.html", context=context_dict)
 
 def register(request):
     return render(request, "register.html")
