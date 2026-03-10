@@ -11,7 +11,7 @@ class Artist(models.Model):
 
 class User(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
-    name = models.CharField(max_length=128)
+    username = models.CharField(max_length=128)
     password = models.CharField(max_length=64)
 
 class Tour(models.Model):
