@@ -11,7 +11,7 @@ from django.db.models import Count
 
 def home(request):
     tours = (
-        Tour.objects.annotate(review_count=Count("Review"))
+        Tour.objects.annotate(review_count=Count("review"))
         .filter(review_count__gt=0)
         .order_by("-review_count")
     )
@@ -27,12 +27,12 @@ def home(request):
 
 def search(request):
     genre_list = (
-        Genre.objects.annotate(review_count=Count("Review"))
+        Genre.objects.annotate(review_count=Count("review"))
         .filter(review_count__gt=0)
         .order_by("-review_count")[:10]
     )
     artist_list = (
-        Tour.objects.annotate(review_count=Count("Review"))
+        Tour.objects.annotate(review_count=Count("review"))
         .filter(review_count__gt=0)
         .order_by("-review_count")[:10]
     )
