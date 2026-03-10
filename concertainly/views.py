@@ -26,7 +26,6 @@ def home(request):
     return render(request, "homepage.html", context=context_dict)
 
 def search(request):
-    #needs entries (total number of reviews) attribute
     genre_list = (
         Genre.objects.annotate(review_count=Count("Review"))
         .filter(review_count__gt=0)
