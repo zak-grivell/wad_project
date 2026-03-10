@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from concertainly.models import Genre, Artist, Tour
-from concertainly.forms import UserForm, UserProfileForm
+from concertainly.forms import UserForm
 from django.shortcuts import redirect 
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
@@ -36,32 +36,24 @@ def user_register(request):
 
     if request.method =='POST':
         user_form = UserForm(request.POST)
-        profile_form = UserProfileForm(request.POST)
 
-        if user_form.is_valid() and profile_form.is_valid():
+        if user_form.is_valid():
             user = user_form.save()
 
             user.set_password(user.password)
             user.save()
 
-            profile = profile_form.save(commit=False)
-            profile.user = user
-            
-            profile.save()
-
             registered = True
 
             return redirect("concertainly:user_login")
         else:
-            print(user_form.errors, profile_form.errors)
+            print(user_form.errors)
     else:
         user_form = UserForm()
-        profile_form = UserProfileForm()
     
     return render(request,
                   "register.html",
                   context = {"user_form": user_form,
-                             "profile_form": profile_form,
                              "registered": registered})
 
 def user_login(request):
