@@ -1,15 +1,20 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from concertainly.models import Genre, Artist, Tour
+from concertainly.models import Genre, Artist, Tour, Review
 from concertainly.forms import UserForm
 from django.shortcuts import redirect 
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 
 
 def home(request):
-    tours = Tour.objects.order_by("-reviews") #needs reviews attribute in tours
+    tours = (
+        Tour.objects.annotate(review_count=Count("Review"))
+        .filter(review_count__gt=0)
+        .order_by("-review_count")
+    )
 
     highlight_tours = tours[:3] #top 3
     popular_tours = tours [3:13] #next top 10
@@ -22,8 +27,16 @@ def home(request):
 
 def search(request):
     #needs entries (total number of reviews) attribute
-    genre_list = Genre.objects.order_by("-entries")[:10] 
-    artist_list = Artist.objects.order_by("-entries")[:10]
+    genre_list = (
+        Genre.objects.annotate(review_count=Count("Review"))
+        .filter(review_count__gt=0)
+        .order_by("-review_count")[:10]
+    )
+    artist_list = (
+        Tour.objects.annotate(review_count=Count("Review"))
+        .filter(review_count__gt=0)
+        .order_by("-review_count")[:10]
+    )
 
     context_dict = {}
     context_dict["genre_list"] = genre_list
