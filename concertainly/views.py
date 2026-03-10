@@ -5,6 +5,9 @@ from concertainly.forms import UserForm
 from django.shortcuts import redirect 
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render
+from services.spotify import SpotifyAPI
+from concertainly.models import *
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 
@@ -56,6 +59,14 @@ def user_register(request):
             user.save()
 
             registered = True
+def spotify_test(request):
+    s = SpotifyAPI()
+    
+    context_dict = {"boldmessage": str(s.artist("06HL4z0CvFAxyc27GXpf02"))}
+    return render(request, "index.html", context=context_dict)
+
+def register(request):
+    return render(request, "register.html")
 
             return redirect("concertainly:user_login")
         else:

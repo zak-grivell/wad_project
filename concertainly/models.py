@@ -21,13 +21,13 @@ class Tour(models.Model):
 
 
 class Song(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key  = True)
+    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
     artist = models.ForeignKey(Artist, on_delete=CASCADE)
 
 
 class Review(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key  = True)
+    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     title = models.CharField(max_length=128)
     thoughts = models.CharField(max_length=1024)
     img_path = models.CharField(max_length=128)
@@ -48,6 +48,7 @@ class Review(models.Model):
 
     set_list = models.ManyToManyField(Song)
 
+
 class Genre(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key  = True)
+    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
