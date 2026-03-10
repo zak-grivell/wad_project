@@ -37,3 +37,4 @@ def artist(request, artist_name):
 
 def tour(request, tour_name):
     return render(request, "tour_detail.html", {"tour_name": tour_name})
+
