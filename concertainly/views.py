@@ -59,14 +59,6 @@ def user_register(request):
             user.save()
 
             registered = True
-def spotify_test(request):
-    s = SpotifyAPI()
-    
-    context_dict = {"boldmessage": str(s.artist("06HL4z0CvFAxyc27GXpf02"))}
-    return render(request, "index.html", context=context_dict)
-
-def register(request):
-    return render(request, "register.html")
 
             return redirect("concertainly:user_login")
         else:
@@ -78,6 +70,12 @@ def register(request):
                   "register.html",
                   context = {"user_form": user_form,
                              "registered": registered})
+
+def spotify_test(request):
+    s = SpotifyAPI()
+    
+    context_dict = {"boldmessage": str(s.artist("06HL4z0CvFAxyc27GXpf02"))}
+    return render(request, "index.html", context=context_dict)
 
 def user_login(request):
     if request.method == "POST":
