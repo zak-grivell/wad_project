@@ -2,18 +2,13 @@ import uuid
 from django.db.models.deletion import CASCADE
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Artist(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
     spotify_id = models.CharField(max_length=128)
-
-
-class User(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
-    name = models.CharField(max_length=128)
-    password = models.CharField(max_length=64)
 
 class Tour(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
@@ -22,7 +17,7 @@ class Tour(models.Model):
     ticket_master_id = models.CharField(max_length=128)
 
 class Song(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key  = True)
+    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
     artist = models.ForeignKey(Artist, on_delete=CASCADE)
 
@@ -30,7 +25,7 @@ class Song(models.Model):
 
 
 class Review(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key  = True)
+    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     title = models.CharField(max_length=128)
     thoughts = models.CharField(max_length=1024)
     img_path = models.CharField(max_length=128)
@@ -52,6 +47,6 @@ class Review(models.Model):
     set_list = models.ManyToManyField(Song)
 
 
-class Genre:
-    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key  = True)
+class Genre(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
