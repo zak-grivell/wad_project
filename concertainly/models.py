@@ -2,7 +2,7 @@ import uuid
 from django.db.models.deletion import CASCADE
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-
+from django.utils.text import slugify
 
 class Artist(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
@@ -18,6 +18,13 @@ class Tour(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
     artist = models.ForeignKey(Artist, on_delete=CASCADE)
+    slug = models.SlugField(unique = True)
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Tour, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
 
 
 class Song(models.Model):

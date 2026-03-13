@@ -39,11 +39,11 @@ def artist(request, artist_name):
 def tour(request, tour_name):
     return render(request, "tour.html", {"tour_name": tour_name})
 
-def show_reviews(request, tour_id):
+def show_reviews(request, tour_name):
     context_dict = {}
 
     try:
-        tour = Tour.objects.get(id = tour_id)
+        tour = Tour.objects.get(slug = tour_name)
         reviews = Review.objects.filter(tour = tour)
         context_dict['tour'] = tour
         context_dict['reviews'] = reviews

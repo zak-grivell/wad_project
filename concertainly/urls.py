@@ -13,5 +13,5 @@ urlpatterns = [
     path("genres/", views.genre_list, name="genre"),
     path("genres/<str:genre_name>/", views.genre, name="genre_detail"),
     path("artist/<str:artist_name>/", views.artist, name="artist"),
-    path('tour/<uuid:tour_id>/', views.show_reviews, name='show_tour')
+    path('tour/<slug:tour_name>/', views.show_reviews, name='show_tour')
 ]
