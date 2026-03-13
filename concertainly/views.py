@@ -41,7 +41,7 @@ def search(request):
         .order_by("-review_count")[:10]
     )
 
-def login(request):
+def user_login(request):
     return render(request, "login.html")
 
 @login_required
@@ -66,7 +66,7 @@ def artist(request, artist_name):
 def tour(request, tour_name):
     return render(request, "tour_detail.html", {"tour_name": tour_name})
 
-def register(request):
+def user_register(request):
     registered = False
     
     # if it's a post request, process the data
