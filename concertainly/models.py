@@ -7,6 +7,7 @@ from django.db import models
 class Artist(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
+    spotify_id = models.CharField(max_length=128)
 
 
 class User(models.Model):
@@ -18,12 +19,14 @@ class Tour(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
     artist = models.ForeignKey(Artist, on_delete=CASCADE)
-
+    ticket_master_id = models.CharField(max_length=128)
 
 class Song(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key  = True)
     name = models.CharField(max_length=128)
     artist = models.ForeignKey(Artist, on_delete=CASCADE)
+
+    spotify_id = models.CharField(max_length=128)
 
 
 class Review(models.Model):

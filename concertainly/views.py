@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from services.spotify import SpotifyAPI
+from services.ticketmaster import TicketMasterAPI
 from concertainly.models import *
 from django.contrib.auth.decorators import login_required
 
@@ -37,3 +38,6 @@ def artist(request, artist_name):
 
 def tour(request, tour_name):
     return render(request, "tour_detail.html", {"tour_name": tour_name})
+
+def ticket_master_test(request):
+    return HttpResponse(str(TicketMasterAPI().attraction_search({ "keyword": "Taylor", "size": 1 })))
