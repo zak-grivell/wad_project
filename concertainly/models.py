@@ -2,7 +2,7 @@ import uuid
 from django.db.models.deletion import CASCADE
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-from django.utils.text import slugify
+from django.template.defaultfilters import slugify
 
 class Artist(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)

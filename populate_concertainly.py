@@ -66,6 +66,7 @@ def populate():
     charlotte = add_user("Charlotte", "password")
     mark = add_user("Mark", "password")
     emma = add_user("Emma", "password")
+    john = add_user("John", "password")
 
     hit_me_hard_and_soft = add_tour("Hit Me Hard and Soft: The Tour", billie)
     from_zero = add_tour("FROM ZERO World Tour", linkin)
@@ -118,6 +119,19 @@ def populate():
         user = emma,
         tour = the_eras_tour,
         songs = [taylor_s1, taylor_s2, taylor_s3]
+    )
+
+    add_review(
+        title = "Good show",
+        thoughts = "I came to this concert with my daughter. I get why she loves taylor swift so much.",
+        img_path = "",
+        city = "London",
+        venue = "Wembley Stadium",
+        date = date(2024,6,21),
+        rating = 4,
+        user = john,
+        tour = the_eras_tour,
+        songs = []
     )
     
 
