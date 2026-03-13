@@ -9,6 +9,7 @@ from django.shortcuts import render
 from services.spotify import SpotifyAPI
 from concertainly.models import *
 from django.contrib.auth.decorators import login_required
+from concertainly.forms import UserForm
 from django.db.models import Count
 
 
@@ -40,66 +41,8 @@ def search(request):
         .order_by("-review_count")[:10]
     )
 
-    context_dict = {}
-    context_dict["genre_list"] = genre_list
-    context_dict["artist_list"] = artist_list
-
-    return render(request, "search.html", context=context_dict)
-
-def user_register(request):
-    registered = False
-
-    if request.method =='POST':
-        user_form = UserForm(request.POST)
-
-        if user_form.is_valid():
-            user = user_form.save()
-
-            user.set_password(user.password)
-            user.save()
-
-            registered = True
-
-            return redirect("concertainly:user_login")
-        else:
-            print(user_form.errors)
-    else:
-        user_form = UserForm()
-    
-    return render(request,
-                  "register.html",
-                  context = {"user_form": user_form,
-                             "registered": registered})
-
-def spotify_test(request):
-    s = SpotifyAPI()
-    
-    context_dict = {"boldmessage": str(s.artist("06HL4z0CvFAxyc27GXpf02"))}
-    return render(request, "index.html", context=context_dict)
-
 def user_login(request):
-    if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-
-        user = authenticate(username=username, password=password)
-
-        if user:
-            if user.is_active:
-                login(request, user)
-                return redirect(reverse("concertainly:home"))
-            else:
-                return HttpResponse("Your Concertainly account is disabled.")
-        else:
-            print(f"Invalid login details")
-            return HttpResponse("Invalid login details supplied.")
-    else:
-        return render(request, "login.html")
-
-@login_required
-def user_logout(request):
-    logout(request)
-    return redirect(reverse("concertainly:home"))
+    return render(request, "login.html")
 
 @login_required
 def account(request):
@@ -121,6 +64,30 @@ def artist(request, artist_name):
     return render(request, "artist.html", {"artist": artist})
 
 def tour(request, tour_name):
-    tour = get_object_or_404(Tour, name=tour_name)
+    return render(request, "tour_detail.html", {"tour_name": tour_name})
 
-    return render(request, "tour_detail.html", {"tour": tour})
+def user_register(request):
+    registered = False
+    
+    # if it's a post request, process the data
+    if request.method == "POST":
+        # grab form data
+        user_form = UserForm(request.POST)
+
+        # NOTE: if we ever add more info on each user (necessitating the existence of ConcertUser or something) we'll need a new form and a check that it's valid
+        if user_form.is_valid():
+            # save data
+            user = user_form.save()
+
+            # set_password does password hashing
+            user.set_password(user.password)
+            user.save()
+
+            registered = True
+        else:
+            # if invalid, complain to the terminal
+            print(user_form.errors)
+    else:
+        user_form = UserForm()
+
+    return render(request, 'conertainly/register.html', context = {'user_form': user_form, 'registered': registered})

@@ -2,17 +2,12 @@ import uuid
 from django.db.models.deletion import CASCADE
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Artist(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
-
-
-class User(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
-    username = models.CharField(max_length=128)
-    password = models.CharField(max_length=64)
 
 class Tour(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
