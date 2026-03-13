@@ -43,11 +43,11 @@ def add_review(title, thoughts, img_path, city, venue, date, rating, user, tour,
     )
 
     if not created:
-        review.thoughts = thoughts,
-        review.img_path = img_path,
-        review.city = city,
-        review.venue = venue,
-        review.date = date,
+        review.thoughts = thoughts
+        review.img_path = img_path
+        review.city = city
+        review.venue = venue
+        review.date = date
         review.rating = rating
         review.save()
     review.set_list.set(songs)

@@ -1,12 +1,19 @@
 from django import forms
 from concertainly.models import Song, Review
 
-class Tourform(forms.ModelForm):
+class ReviewForm(forms.ModelForm):
     set_list = forms.ModelMultipleChoiceField(
-        queryset=Song.objects.all(),
-        widget = forms.CheckboxSelectMultiple,
-        required = False)
+    queryset=Song.objects.all(),
+    widget = forms.CheckboxSelectMultiple,
+    required = False)
     
     class Meta:
         model = Review
-        fields = ['title', 'thoughts', 'img_path', 'city', 'venue', 'date', 'rating', 'set_list']
+        fields = ['title', 
+                  'thoughts', 
+                  'img_path', 
+                  'city', 
+                  'venue', 
+                  'date', 
+                  'rating', 
+                  'set_list']

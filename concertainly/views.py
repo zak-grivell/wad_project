@@ -3,6 +3,7 @@ from django.shortcuts import render
 from services.spotify import SpotifyAPI
 from concertainly.models import *
 from django.contrib.auth.decorators import login_required
+from concertainly.forms import ReviewForm
 
 def home(request):
     return render(request, "homepage.html")
@@ -36,5 +37,18 @@ def artist(request, artist_name):
     return render(request, "artist_detail.html", {"artist_name": artist_name})
 
 def tour(request, tour_name):
-    return render(request, "tour_detail.html", {"tour_name": tour_name})
+    return render(request, "tour.html", {"tour_name": tour_name})
 
+def show_reviews(request, tour_id):
+    context_dict = {}
+
+    try:
+        tour = Tour.objects.get(id = tour_id)
+        reviews = Review.objects.filter(tour = tour)
+        context_dict['tour'] = tour
+        context_dict['reviews'] = reviews
+
+    except Tour.DoesNotExist:
+        context_dict['tour'] = None
+        context_dict['reviews'] = None
+    return render(request, "tour.html", context=context_dict)
