@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
 from services.spotify import SpotifyAPI
+from services.ticketmaster import TicketMasterAPI
 from concertainly.models import *
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
@@ -121,6 +122,10 @@ def artist(request, artist_name):
     return render(request, "artist.html", {"artist": artist})
 
 def tour(request, tour_name):
+    return render(request, "tour_detail.html", {"tour_name": tour_name})
+
+def ticket_master_test(request):
+    return HttpResponse(str(TicketMasterAPI().attraction_search({ "keyword": "Taylor", "size": 1 })))
     tour = get_object_or_404(Tour, name=tour_name)
 
     return render(request, "tour_detail.html", {"tour": tour})
