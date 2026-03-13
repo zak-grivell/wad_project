@@ -27,14 +27,14 @@ def add_song(name, artist):
     song,_ = Song.objects.get_or_create(name=name, artist=artist)
     return song
 
-def add_review(title, thoughts, img_path, city, venue, date, rating, user, tour, songs):
+def add_review(title, thoughts, img, city, venue, date, rating, user, tour, songs):
     review, created = Review.objects.get_or_create(        
         title=title,
         user=user,
         tour=tour,
         defaults={
             "thoughts": thoughts,
-            "img_path": img_path,
+            "img": img,
             "city": city,
             "venue": venue,
             "date": date,
@@ -44,7 +44,7 @@ def add_review(title, thoughts, img_path, city, venue, date, rating, user, tour,
 
     if not created:
         review.thoughts = thoughts
-        review.img_path = img_path
+        review.img = img
         review.city = city
         review.venue = venue
         review.date = date
@@ -68,9 +68,13 @@ def populate():
     emma = add_user("Emma", "password")
     john = add_user("John", "password")
 
+    #one review
     hit_me_hard_and_soft = add_tour("Hit Me Hard and Soft: The Tour", billie)
     from_zero = add_tour("FROM ZERO World Tour", linkin)
+    #two reviews
     the_eras_tour = add_tour("The Eras Tour", taylor)
+    #no reviews
+    the_eras_tour_2 = add_tour("The Eras Tour 2.0", taylor)
 
     billie_s1 = add_song("bad guy", billie)
     billie_s2 = add_song("BIRDS OF A FEATHER", billie)
@@ -85,7 +89,7 @@ def populate():
     add_review(
         title = "Best tour forever",
         thoughts = "love itttt. Already looking forward to the next show.xxxxx",
-        img_path = "reviews/billie_1.jpg, reviews/billie_2.jpg",
+        img = "reviews/billie_1.jpg, reviews/billie_2.jpg",
         city = "Glasgow",
         venue = "OVO Hydro",
         date = date(2025,6,7),
@@ -98,7 +102,7 @@ def populate():
     add_review(
         title = "BEST",
         thoughts = "The nostalgia... Act 4 is my favourite. Soldiers forever.",
-        img_path = "reviews/linkin_1.jpeg",
+        img = "reviews/linkin_1.jpg",
         city = "Brooklyn",
         venue = "Barclays Center",
         date = date(2024,11,16),
@@ -111,7 +115,7 @@ def populate():
     add_review(
         title = "<3<3<3",
         thoughts = "Everything is so good espcailly like OMG I love her sm",
-        img_path = "reviews/taylor_1.jpg, reviews/taylor_2.jpg, reviews/taylor_3.jpg",
+        img = "reviews/taylor_1.jpg, reviews/taylor_2.jpg, reviews/taylor_3.jpg",
         city = "Edinburgh",
         venue = "Murrayfield Stadium",
         date = date(2024,6,9),
@@ -124,7 +128,7 @@ def populate():
     add_review(
         title = "Good show",
         thoughts = "I came to this concert with my daughter. I get why she loves taylor swift so much.",
-        img_path = "",
+        img = "",
         city = "London",
         venue = "Wembley Stadium",
         date = date(2024,6,21),
@@ -136,5 +140,5 @@ def populate():
     
 
 if __name__ == '__main__':
-    print('Starting concertainly population script...')
+    print('Starting concert-ainly population script...')
     populate()

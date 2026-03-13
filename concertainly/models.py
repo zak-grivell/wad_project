@@ -37,7 +37,7 @@ class Review(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     title = models.CharField(max_length=128)
     thoughts = models.CharField(max_length=1024)
-    img_path = models.CharField(max_length=128)
+    img = models.ImageField(upload_to='reviews/', blank=True, null=True , height_field=None, width_field=None, max_length=100)
 
     city = models.CharField(max_length=128)
     venue = models.CharField(max_length=128)

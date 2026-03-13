@@ -11,7 +11,7 @@ class ReviewForm(forms.ModelForm):
         model = Review
         fields = ['title', 
                   'thoughts', 
-                  'img_path', 
+                  'img', 
                   'city', 
                   'venue', 
                   'date', 
