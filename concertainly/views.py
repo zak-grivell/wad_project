@@ -118,8 +118,11 @@ def genre(request, genre_name):
 
 def artist(request, artist_name):
     artist = get_object_or_404(Artist, name=artist_name)
-
-    return render(request, "artist.html", {"artist": artist})
+    tours = Tour.objects.filter(artist=artist)
+    context_dict = {}
+    context_dict["artist"] = artist
+    context_dict["tours"] = tours
+    return render(request, "artist.html", context=context_dict)
 
 def tour(request, tour_name):
     tour = get_object_or_404(Tour, name=tour_name)
