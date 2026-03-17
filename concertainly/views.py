@@ -130,3 +130,6 @@ def tour(request, tour_name):
 
 def ticket_master_test(request):
     return HttpResponse(str(TicketMasterAPI().attraction_search({ "keyword": "Taylor", "size": 1 })))
+
+def review(request):
+    return render(request, "review.html")

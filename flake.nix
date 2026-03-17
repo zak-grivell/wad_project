@@ -19,6 +19,8 @@
             uv
             ruff
             ty
+
+            vscode-langservers-extracted
         ];
         buildInputs = with pkgs; [];
       in {

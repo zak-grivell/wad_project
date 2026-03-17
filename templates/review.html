@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title_block %}
+Tour Reviews
+{% endblock %}
+
+{% block body_block %}
+<section class="mx-3">
+  <h2>Review</h2>
+  <div class="mb-3">
+    <label for="review_title" class="form-label">Title</label>
+    <input type="text" class="form-control" id="review_title" placeholder="">
+  </div>
+  <div class="mb-3">
+    <label for="review_body" class="form-label">Comments</label>
+    <textarea class="form-control" id="review_body" rows="5"></textarea>
+  </div>
+  <div class="mb-3">
+    <label for="review_photo" class="form-label">Photo</label>
+    <input class="form-control" type="file" id="review_photo">
+  </div>
+</section>
+
+<section class="mx-3">
+  <h2>Rating</h2>
+  <div class="mb-3">
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="review_rating" id="review_rating_1" value="1">
+      <label class="form-check-label" for="review_rating_1">1</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="review_rating" id="review_rating_2" value="2">
+      <label class="form-check-label" for="review_rating_2">2</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="review_rating" id="review_rating_3" value="3">
+      <label class="form-check-label" for="review_rating_3">3</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="review_rating" id="review_rating_4" value="4">
+      <label class="form-check-label" for="review_rating_4">4</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="review_rating" id="review_rating_5" value="5">
+      <label class="form-check-label" for="review_rating_5">5</label>
+    </div>
+  </div>
+</section>
+
+<section class="mx-3">
+  <h2>Tour</h2>
+
+  <div class="mb-3">
+    <label for="exampleDataList" class="form-label">Datalist example</label>
+    <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
+    <datalist id="datalistOptions">
+      <option value="San Francisco">
+      <option value="New York">
+      <option value="Seattle">
+      <option value="Los Angeles">
+      <option value="Chicago">
+    </datalist>
+  </div>
+
+</section>
+{% endblock %}
