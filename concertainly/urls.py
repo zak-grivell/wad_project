@@ -14,5 +14,6 @@ urlpatterns = [
     path("genres/<str:genre_name>/", views.genre, name="genre"),
     path("artist/<str:artist_name>/", views.artist, name="artist"),
     path("tour/<str:tour_name>/", views.tour, name="tour"),
+    path("ticket", views.ticket_master_test),
     path("logout/", views.user_logout, name="logout"),
 ]
