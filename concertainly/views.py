@@ -49,7 +49,7 @@ def search(request):
 
 def user_register(request):
     registered = False
-    
+    print("in register")
     # if it's a post request, process the data
     if request.method == "POST":
         # grab form data
@@ -65,6 +65,7 @@ def user_register(request):
             user.save()
 
             registered = True
+            print("registered successfully")
         else:
             # if invalid, complain to the terminal
             print(user_form.errors)
