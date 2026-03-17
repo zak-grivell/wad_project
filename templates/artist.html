@@ -9,17 +9,16 @@
 {% block body_block %}
 <div class="container py-5">
     {% if artist %}
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>{{ artist.name }}</h1>
-        </div>
+            <h1 id="artistName">{{ artist.name }}</h1><br>
     {% endif %}
 
     {% if tours %}
         {% for tour in tours %}
+            <div class="artistCard">
             <div class="card mb-3">
             <div class="row g-0">
                 <div class="col-md-4">
-                <img src="..." class="img-fluid rounded-start" alt="tour image">
+                <img src="" class="img-fluid rounded-start" alt="tour image">
                 </div>
                 <div class="col-md-8">
                 <div class="card-body">
@@ -32,6 +31,7 @@
                     <a href="#" class="btn btn-primary">Post a Review</a> Tell everyone about it!</p>
                 </div>
                 </div>
+            </div>
             </div>
             </div>
         {% endfor %}
