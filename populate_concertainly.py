@@ -75,6 +75,9 @@ def populate():
     the_eras_tour = add_tour("The Eras Tour", taylor)
     #no reviews
     the_eras_tour_2 = add_tour("The Eras Tour 2.0", taylor)
+    fearless_tour = add_tour("Fearless Tour", taylor)
+    speak_now_world_tour = add_tour("Speak Now World Tour", taylor)
+    the_red_tour = add_tour("The Red Tour", taylor)
 
     billie_s1 = add_song("bad guy", billie)
     billie_s2 = add_song("BIRDS OF A FEATHER", billie)
@@ -89,7 +92,7 @@ def populate():
     add_review(
         title = "Best tour forever",
         thoughts = "love itttt. Already looking forward to the next show.xxxxx",
-        img = "reviews/billie_1.jpg, reviews/billie_2.jpg",
+        img = "reviews/billie_1.jpg",
         city = "Glasgow",
         venue = "OVO Hydro",
         date = date(2025,6,7),
@@ -115,7 +118,7 @@ def populate():
     add_review(
         title = "<3<3<3",
         thoughts = "Everything is so good espcailly like OMG I love her sm",
-        img = "reviews/taylor_1.jpg, reviews/taylor_2.jpg, reviews/taylor_3.jpg",
+        img = "reviews/taylor_1.jpg",
         city = "Edinburgh",
         venue = "Murrayfield Stadium",
         date = date(2024,6,9),
