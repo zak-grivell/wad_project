@@ -2,22 +2,23 @@ import uuid
 from django.db.models.deletion import CASCADE
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+<<<<<<< HEAD
 from django.template.defaultfilters import slugify
+=======
+from django.contrib.auth.models import User
+
+>>>>>>> 4bb8586baa4e541f373dd61b568e374618dd0c20
 
 class Artist(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
-
-
-class User(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
-    name = models.CharField(max_length=128)
-    password = models.CharField(max_length=64)
+    spotify_id = models.CharField(max_length=128)
 
 class Tour(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
     artist = models.ForeignKey(Artist, on_delete=CASCADE)
+<<<<<<< HEAD
     slug = models.SlugField(unique = True)
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
@@ -26,11 +27,16 @@ class Tour(models.Model):
     def __str__(self):
         return self.name
 
+=======
+    ticket_master_id = models.CharField(max_length=128)
+>>>>>>> 4bb8586baa4e541f373dd61b568e374618dd0c20
 
 class Song(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
     artist = models.ForeignKey(Artist, on_delete=CASCADE)
+
+    spotify_id = models.CharField(max_length=128)
 
 
 class Review(models.Model):

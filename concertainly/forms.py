@@ -1,19 +1,13 @@
 from django import forms
-from concertainly.models import Song, Review
+from django.contrib.auth.models import User
 
-class ReviewForm(forms.ModelForm):
-    set_list = forms.ModelMultipleChoiceField(
-    queryset=Song.objects.all(),
-    widget = forms.CheckboxSelectMultiple,
-    required = False)
-    
+# deals with the information that is stored in django's User class
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
+
     class Meta:
-        model = Review
-        fields = ['title', 
-                  'thoughts', 
-                  'img', 
-                  'city', 
-                  'venue', 
-                  'date', 
-                  'rating', 
-                  'set_list']
+        model = User
+        # pretty sure email isn't necessary
+        fields = ('username', 'password',)
+
+# we don't need an additional form because we're not storing any additional information other than what is stored on User
