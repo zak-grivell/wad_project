@@ -15,7 +15,7 @@
             <h1>{{ tour.artist.name }} : {{ tour.name }}</h1>
 
             {% if user.is_authenticated %}
-                <a href="{% url 'concertainly:add_review' tour.name %}" class="btn btn-success">
+                <a href="{% url 'concertainly:add_review' tour.id %}" class="btn btn-success">
                     Post Review
                 </a>
             {% else %}
@@ -41,14 +41,18 @@
                                 <p><strong>Uploaded by:</strong> {{ review.user.name }}</p>
 
                                 {% if review.set_list.all %}
-                                    <p><strong>Set List:</strong></p>
-                                    <ul class="mb-3">
-                                        {% for song in review.set_list.all %}
-                                            <li>{{ song.name }}</li>
-                                        {% endfor %}
-                                    </ul>
+                                    {% with songs=review.set_list.all %}
+                                            {% if songs %}
+                                                <p><strong>Set List:</strong></p>
+                                                <ul class="mb-3">
+                                                    {% for song in songs %}
+                                                        <li>{{ song.name }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                    {% endwith%}
                                 {% endif %}
-                            </div>
+                                </div>
 
                                 {% if review.img %}
                                     <div class="col-md-4 ">

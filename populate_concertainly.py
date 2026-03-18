@@ -5,26 +5,50 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE',
 
 import django
 django.setup()
-from concertainly.models import Artist, User, Tour, Song, Review, Genre
+from django.contrib.auth.models import User
+from concertainly.models import Artist, Tour, Song, Review, Genre
 
 def add_genre(name):
     genre,_ = Genre.objects.get_or_create(name=name)
     return genre
 
-def add_artist(name):
-    artist,_ = Artist.objects.get_or_create(name=name)
+def add_artist(name, spotify_id):
+    artist,_ = Artist.objects.get_or_create(
+        name=name,
+        defaults={"spotify_id": spotify_id}
+        )
+    if artist.spotify_id != spotify_id:
+        artist.spotify_id = spotify_id
+        artist.save()
     return artist
 
 def add_user(name, password):
-    user,_ = User.objects.get_or_create(name=name, defaults={"password":password})
+    user,created = User.objects.get_or_create(username = name)
+    if created:
+        user.set_password(password)
+        user.save()
     return user
     
-def add_tour(name, artist):
-    tour,_ = Tour.objects.get_or_create(name=name, artist=artist)
+def add_tour(name, artist, ticket_master_id = ""):
+    tour,_ = Tour.objects.get_or_create(
+        name=name, 
+        artist=artist,
+        defaults={"ticket_master_id": ticket_master_id}
+    )
+    if tour.ticket_master_id != ticket_master_id:
+        tour.ticket_master_id = ticket_master_id
+        tour.save()
     return tour
 
-def add_song(name, artist):
-    song,_ = Song.objects.get_or_create(name=name, artist=artist)
+def add_song(name, artist, spotify_id):
+    song,_ = Song.objects.get_or_create(
+        name=name, 
+        artist=artist,
+        defaults={"spotify_id": spotify_id}
+    )
+    if song.spotify_id != spotify_id:
+        song.spotify_id = spotify_id
+        song.save()
     return song
 
 def add_review(title, thoughts, img, city, venue, date, rating, user, tour, songs):
@@ -42,27 +66,23 @@ def add_review(title, thoughts, img, city, venue, date, rating, user, tour, song
         }
     )
 
-    if not created:
-        review.thoughts = thoughts
+    if img:
         review.img = img
-        review.city = city
-        review.venue = venue
-        review.date = date
-        review.rating = rating
-        review.save()
+    else:
+        review.img = None
+    review.save()
     review.set_list.set(songs)
+
     return review
 
 def populate():
-    rock = add_genre("Rock")
-    pop = add_genre("Pop")
+    add_genre("Rock")
+    add_genre("Pop")
      
-    billie = add_artist("Billie Eilish")
-    linkin = add_artist("Linkin Park")
-    taylor = add_artist("Taylor Swift")
+    billie = add_artist("Billie Eilish", "spotify_billie_eilish")
+    linkin = add_artist("Linkin Park", "spotify_linkin_park")
+    taylor = add_artist("Taylor Swift", "spotify_taylor_swift")
     
-    
-
     charlotte = add_user("Charlotte", "password")
     mark = add_user("Mark", "password")
     emma = add_user("Emma", "password")
@@ -79,15 +99,15 @@ def populate():
     speak_now_world_tour = add_tour("Speak Now World Tour", taylor)
     the_red_tour = add_tour("The Red Tour", taylor)
 
-    billie_s1 = add_song("bad guy", billie)
-    billie_s2 = add_song("BIRDS OF A FEATHER", billie)
-    billie_s3 = add_song("CHIHIRO", billie)
-    linkin_s1 = add_song("Numb", linkin)
-    linkin_s2 = add_song("In the End", linkin)
-    linkin_s3 = add_song("Faint", linkin)
-    taylor_s1 = add_song("Fearless", taylor)
-    taylor_s2 = add_song("You Belong With Me", taylor)
-    taylor_s3 = add_song("Love Story", taylor)
+    billie_s1 = add_song("bad guy", billie, "spotify_bad_guy")
+    billie_s2 = add_song("BIRDS OF A FEATHER", billie, "spotify_birds_of_a_feather")
+    billie_s3 = add_song("CHIHIRO", billie, "spotify_chihiro") 
+    linkin_s1 = add_song("Numb", linkin, "spotify_numb")
+    linkin_s2 = add_song("In the End", linkin, "spotify_in_the_end")
+    linkin_s3 = add_song("Faint", linkin, "spotify_faint")
+    taylor_s1 = add_song("Fearless", taylor, "spotify_fearless")
+    taylor_s2 = add_song("You Belong With Me", taylor, "spotify_you_belong_with_me")
+    taylor_s3 = add_song("Love Story", taylor, "spotify_love_story")
 
     add_review(
         title = "Best tour forever",
