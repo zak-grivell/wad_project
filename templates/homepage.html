@@ -3,3 +3,30 @@
 {% block title_block %}
     Homepage
 {% endblock %}
+
+{% block body_block %}
+
+{% if highlight_tour %}
+
+    <div class="card text-bg-dark">
+    <img src="..." class="card-img" alt="highlight tour">
+    <div class="card-img-overlay">
+        <h5 class="card-title">C{{ tour.name }}</h5>
+        <p class="card-text">{{ tour.artist.name }}</p>
+    </div>
+    </div>
+
+{% endif %}
+
+<div class="card-group">
+  {% for tour in popular_tours %}
+  <div class="card">
+    <img src="..." class="card-img-top" alt="popular tour">
+    <div class="card-body">
+      <h5 class="card-title">{{ tour.name }}</h5>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
