@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
 from services.spotify import SpotifyAPI
+from services.ticketmaster import TicketMasterAPI
 from concertainly.models import *
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
@@ -19,11 +20,11 @@ def home(request):
         .order_by("-review_count")
     )
 
-    highlight_tours = tours[:3] #top 3
-    popular_tours = tours [3:13] #next top 10
+    highlight_tour = tours[0]
+    popular_tours = tours [1:11]
 
     context_dict = {}
-    context_dict["highlight_tours"] = highlight_tours
+    context_dict["highlight_tour"] = highlight_tour
     context_dict["popular_tours"] = popular_tours
 
     return render(request, "homepage.html", context=context_dict)
@@ -48,28 +49,30 @@ def search(request):
 
 def user_register(request):
     registered = False
-
-    if request.method =='POST':
+    print("in register")
+    # if it's a post request, process the data
+    if request.method == "POST":
+        # grab form data
         user_form = UserForm(request.POST)
 
+        # NOTE: if we ever add more info on each user (necessitating the existence of ConcertUser or something) we'll need a new form and a check that it's valid
         if user_form.is_valid():
+            # save data
             user = user_form.save()
 
+            # set_password does password hashing
             user.set_password(user.password)
             user.save()
 
             registered = True
-
-            return redirect("concertainly:user_login")
+            print("registered successfully")
         else:
+            # if invalid, complain to the terminal
             print(user_form.errors)
     else:
         user_form = UserForm()
-    
-    return render(request,
-                  "register.html",
-                  context = {"user_form": user_form,
-                             "registered": registered})
+
+    return render(request, 'register.html', context = {'user_form': user_form, 'registered': registered})
 
 def spotify_test(request):
     s = SpotifyAPI()
@@ -122,10 +125,16 @@ def genre(request, genre_name):
 
 def artist(request, artist_name):
     artist = get_object_or_404(Artist, name=artist_name)
-
-    return render(request, "artist.html", {"artist": artist})
+    tours = Tour.objects.filter(artist=artist)
+    context_dict = {}
+    context_dict["artist"] = artist
+    context_dict["tours"] = tours
+    return render(request, "artist.html", context=context_dict)
 
 def tour(request, tour_name):
     tour = get_object_or_404(Tour, name=tour_name)
 
     return render(request, "tour_detail.html", {"tour": tour})
+
+def ticket_master_test(request):
+    return HttpResponse(str(TicketMasterAPI().attraction_search({ "keyword": "Taylor", "size": 1 })))
