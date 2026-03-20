@@ -109,7 +109,12 @@ def account(request):
     return render(request, "account.html")
 
 def genre_list(request):
-    genres = Genre.objects.all()
+    genreObjects = Genre.objects.all()
+    genres = [
+        'pop', 'rnb', 'hiphop', 'rock',
+        'metal', 'classical', 'jpop', 'punk',
+        'kpop', 'latin', 'edm', 'mandopop'
+    ]
 
     return render(request, "allGenres.html", {"genres": genres})
 
