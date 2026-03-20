@@ -165,9 +165,13 @@ class TicketMasterAPI:
     
 
     def attraction_search(self, params: SearchFields) -> list[Attraction]:
-        return requests.get(
+        data = requests.get(
             f"{URL}attractions.json", params=params | api_params
-        ).json()["_embedded"]["attractions"]
+        ).json()
+
+        print(data)
+        
+        return data["_embedded"]["attractions"]
 
     def attraction(self, id: str):
         return requests.get(f"{URL}attractions/{id}.json", params=api_params).json()

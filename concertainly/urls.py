@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from concertainly import views
 
 app_name = "concertainly"
@@ -17,4 +17,5 @@ urlpatterns = [
     path("ticket", views.ticket_master_test),
     path("logout/", views.user_logout, name="logout"),
     path("review", views.review, name="review"),
+    path("api/", include("concertainly.api.urls"), name="api"),
 ]

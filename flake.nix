@@ -21,7 +21,8 @@
             ty
 
             vscode-langservers-extracted
-        ];
+
+typescript-language-server        ];
         buildInputs = with pkgs; [];
       in {
         devShells.default = pkgs.mkShell {inherit nativeBuildInputs buildInputs;};

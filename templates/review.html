@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block title_block %}
 Tour Reviews
 {% endblock %}
@@ -48,19 +50,38 @@ Tour Reviews
 </section>
 
 <section class="mx-3">
+  <h2>Artist</h2>
+
+  <div class="mb-3">
+    <label for="artist_select" class="form-label">Artist Selection</label>
+    <input class="form-control" list="artist_options" id="artist_select" placeholder="Type to search...">
+    <datalist id="artist_options">
+    </datalist>
+  </div>
+</section>
+
+<section class="mx-3">
   <h2>Tour</h2>
 
   <div class="mb-3">
-    <label for="exampleDataList" class="form-label">Datalist example</label>
-    <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
-    <datalist id="datalistOptions">
-      <option value="San Francisco">
-      <option value="New York">
-      <option value="Seattle">
-      <option value="Los Angeles">
-      <option value="Chicago">
+    <label for="tour_select" class="form-label">Tour Selection</label>
+    <input class="form-control" list="tour_options" id="tour_select" placeholder="Type to search...">
+    <datalist id="tour_options">
     </datalist>
   </div>
-
 </section>
+
+<section class="mx-3">
+  <h2>Venue</h2>
+
+  <div class="mb-3">
+    <label for="venue_select" class="form-label">Venue Selection</label>
+    <input class="form-control" list="venue_options" id="venue_select" placeholder="Type to search...">
+    <datalist id="venue_options">
+    </datalist>
+  </div>
+</section>
+
+<script src="{% static 'review.js' %}"></script>
+
 {% endblock %}
