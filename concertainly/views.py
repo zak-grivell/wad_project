@@ -131,10 +131,13 @@ def artist(request, artist_name):
     context_dict["tours"] = tours
     return render(request, "artist.html", context=context_dict)
 
-def tour(request, tour_name):
-    tour = get_object_or_404(Tour, name=tour_name)
-
-    return render(request, "tour_detail.html", {"tour": tour})
+def tour(request, slug):
+    tour = Tour.objects.filter(slug=slug).first()
+    if tour:
+        reviews = Review.objects.filter(tour=tour)
+    else:
+        reviews = []
+    return render(request, "tour.html", {"tour": tour, "reviews": reviews})
 
 def ticket_master_test(request):
     return HttpResponse(str(TicketMasterAPI().attraction_search({ "keyword": "Taylor", "size": 1 })))

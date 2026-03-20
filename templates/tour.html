@@ -15,7 +15,7 @@
             <h1>{{ tour.artist.name }} : {{ tour.name }}</h1>
 
             {% if user.is_authenticated %}
-                <a href="{% url 'concertainly:add_review' tour.name %}" class="btn btn-success">
+                <a href="{% url 'concertainly:add_review' tour.id %}" class="btn btn-success">
                     Post Review
                 </a>
             {% else %}
@@ -29,7 +29,7 @@
             {% for review in reviews %}
                 <div class="card my-4">
                     <div class="card-body">
-                        <div class="row align-items-start">
+                        <div class="row align-items-center">
 
                             <div class="col-md-8">
                                 <h2 class="card-title mb-3">{{ review.title }}</h2>
@@ -41,17 +41,21 @@
                                 <p><strong>Uploaded by:</strong> {{ review.user.name }}</p>
 
                                 {% if review.set_list.all %}
-                                    <p><strong>Set List:</strong></p>
-                                    <ul class="mb-3">
-                                        {% for song in review.set_list.all %}
-                                            <li>{{ song.name }}</li>
-                                        {% endfor %}
-                                    </ul>
+                                    {% with songs=review.set_list.all %}
+                                            {% if songs %}
+                                                <p><strong>Set List:</strong></p>
+                                                <ul class="mb-3">
+                                                    {% for song in songs %}
+                                                        <li>{{ song.name }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                    {% endwith%}
                                 {% endif %}
-                            </div>
+                                </div>
 
                                 {% if review.img %}
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 ">
                                         <div class="review-image-box">
                                             <img src="{{ review.img.url }}" class="review-image" alt="review image">
                                         </div>
