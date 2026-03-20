@@ -126,8 +126,8 @@ def artist(request, artist_name):
     context_dict["tours"] = tours
     return render(request, "artist.html", context=context_dict)
 
-def tour(request, tour_id):
-    tour = get_object_or_404(Tour, id=tour_id)
+def tour(request, slug):
+    tour = get_object_or_404(Tour, slug=slug)
     reviews = Review.objects.filter(tour=tour)
     return render(request, "tour.html", {"tour": tour, "reviews": reviews})
 

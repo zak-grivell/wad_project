@@ -79,9 +79,9 @@ def populate():
     add_genre("Rock")
     add_genre("Pop")
      
-    billie = add_artist("Billie Eilish", "spotify_billie_eilish")
-    linkin = add_artist("Linkin Park", "spotify_linkin_park")
-    taylor = add_artist("Taylor Swift", "spotify_taylor_swift")
+    billie = add_artist("Billie Eilish", "6qqNVTkY8uBg9cP3Jd7DAH")
+    linkin = add_artist("Linkin Park", "6XyY86QOPPrYVGvF9ch6wz")
+    taylor = add_artist("Taylor Swift", "06HL4z0CvFAxyc27GXpf02")
     
     charlotte = add_user("Charlotte", "password")
     mark = add_user("Mark", "password")
