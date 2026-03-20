@@ -14,7 +14,6 @@ class ShowReviewTest(TestCase):
 
         self.artist = Artist.objects.create(
             name = "Test Artist",
-            slug = "test-artist"
         )
 
         self.tour_1 = Tour.objects.create(
@@ -34,7 +33,7 @@ class ShowReviewTest(TestCase):
             user = self.user,
             title = "Testing Review",
             thoughts = "some random text to show it works.",
-            location = "Glasgow",
+            city = "Glasgow",
             venue = "OVO Hydro",
             date = date(2024,6,21),
             rating = 1
@@ -45,7 +44,7 @@ class ShowReviewTest(TestCase):
             user=self.user,
             title="Testing Review 2",
             thoughts="another review",
-            location="Manchester",
+            city="Manchester",
             venue="AO Arena",
             date=date(2024,6,22),
             rating=4
@@ -54,26 +53,30 @@ class ShowReviewTest(TestCase):
 
     def test_with_review(self):
         response = self.client.get(
-            reverse("concertainly:show_reviews", args=[self.tour_1.slug])
+            reverse("concertainly:tour", args=[self.tour_1.slug])
         )
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "tour.html")
         self.assertContains(response, "Testing Review")
         self.assertContains(response, "some random text to show it works.")
+        self.assertContains(response, "Glasgow")
+        self.assertContains(response, "OVO Hydro")
         self.assertContains(response, "2024")
 
     def test_with_no_review(self):
-        Review.objects.all().delete()
+        Review.objects.filter(tour = self.tour_1).delete()
         response = self.client.get(
-            reverse("concertainly:show_reviews", args=[self.tour_1.slug])
+            reverse("concertainly:tour", args=[self.tour_1.slug])
         )
+        self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Be the first one to comment for this tour!")
 
     def test_with_invalid_tour(self):
         response = self.client.get(
-            reverse("concertainly:show_reviews", args=["not-existed-slug"])
+            reverse("concertainly:tour", args=["not-existed-slug"])
         )
+        self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Tour Not Found")
 
     def test_with_filtered_tour(self):
@@ -82,20 +85,22 @@ class ShowReviewTest(TestCase):
             user = self.user,
             title = "Should not exist",
             thoughts = "some random text",
-            location = "Glasgow",
+            city = "Glasgow",
             venue = "OVO Hydro",
             date = date(2024,6,21),
             rating = 1
         )
 
-        response = self.client.get(reverse("concertainly:show_reviews", args=[self.tour_1.slug]))
+        response = self.client.get(reverse("concertainly:tour", args=[self.tour_1.slug]))
 
+        self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Testing Review")
         self.assertContains(response, "Testing Review 2")
         self.assertNotContains(response, "Should not exist")
 
     def test_with_display_multi_reviews(self):
-        response = self.client.get(reverse("concertainly:show_reviews", args=[self.tour_1.slug]))
+        response = self.client.get(reverse("concertainly:tour", args=[self.tour_1.slug]))
 
+        self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Testing Review")
         self.assertContains(response, "Testing Review 2")
