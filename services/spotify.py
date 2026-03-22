@@ -46,10 +46,6 @@ SpotifyTrack = TypedDict(
     },
 )
 
-SpotifyTrack = TypedDict(
-    "SpotifyTrack",
-)
-
 SearchType = Literal["track", "artist"]
 
 
@@ -86,7 +82,7 @@ SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 class SpotifyAPI:
     token_expire = 0
     access_token = ""
-
+    
     def refresh_token(self):
         result = requests.post(
             "https://accounts.spotify.com/api/token",
@@ -103,24 +99,25 @@ class SpotifyAPI:
         self.access_token = result["access_token"]
         self.token_expire = time.time() + result["expires_in"]
 
-    def get_access_token(self) -> str:
+    def get_access_token(self) -> dict:
         if not self.access_token or time.time() >= self.token_expire:
             self.refresh_token()
 
-        return self.access_token
+        return { "Authorization": f"Bearer {self.access_token}" }
+        
 
     def artist(self, artist_id: str) -> SpotifyArtist:
         return requests.get(
             f"https://api.spotify.com/v1/artists/{artist_id}",
-            headers={"access_token": self.get_access_token()},
+            headers=self.get_access_token(),
         ).json()
 
     def search_artist(
         self, query: str, limit: int = 5, offset: int = 0
     ) -> ArtistSearchResult:
-        return requests.get(
+        data = requests.get(
             "https://api.spotify.com/v1/search",
-            headers={"access_token": self.get_access_token()},
+            headers=self.get_access_token(),
             params={
                 "q": query,
                 "type": ["artist"],
@@ -128,17 +125,21 @@ class SpotifyAPI:
                 "limit": limit,
                 "offset": offset,
             },
-        ).json()["artists"]
+        ).json()
+
+        print(data)
+        
+        return data["artists"]
 
     def search_track(
-        self, query: str, limit: int = 5, offset: int = 0
+        self, query: str, artist: str, limit: int = 5, offset: int = 0
     ) -> TrackSearchResult:
         return requests.get(
             "https://api.spotify.com/v1/search",
-            headers={"access_token": self.get_access_token()},
+            headers=self.get_access_token(),
             params={
-                "q": query,
-                "type": ["track"],
+                "q": query + (f" artist:{artist}" if artist else ""),
+                "type": "track",
                 "market": "gb",
                 "limit": limit,
                 "offset": offset,
@@ -150,7 +151,7 @@ class SpotifyAPI:
     ) -> SpotifySearch:
         return requests.get(
             "https://api.spotify.com/v1/search",
-            headers={"access_token": self.get_access_token()},
+            headers=self.get_access_token(),
             params={
                 "q": query,
                 "type": ["track", "artist"],
@@ -159,6 +160,3 @@ class SpotifyAPI:
                 "offset": offset,
             },
         ).json()["tracks"]
-
-
-api = SpotifyAPI()
