@@ -99,15 +99,15 @@ def populate():
     speak_now_world_tour = add_tour("Speak Now World Tour", taylor)
     the_red_tour = add_tour("The Red Tour", taylor)
 
-    billie_s1 = add_song("bad guy", billie, "spotify_bad_guy")
-    billie_s2 = add_song("BIRDS OF A FEATHER", billie, "spotify_birds_of_a_feather")
-    billie_s3 = add_song("CHIHIRO", billie, "spotify_chihiro") 
-    linkin_s1 = add_song("Numb", linkin, "spotify_numb")
-    linkin_s2 = add_song("In the End", linkin, "spotify_in_the_end")
-    linkin_s3 = add_song("Faint", linkin, "spotify_faint")
-    taylor_s1 = add_song("Fearless", taylor, "spotify_fearless")
-    taylor_s2 = add_song("You Belong With Me", taylor, "spotify_you_belong_with_me")
-    taylor_s3 = add_song("Love Story", taylor, "spotify_love_story")
+    billie_s1 = add_song("bad guy", billie, "2Fxmhks0bxGSBdJ92vM42m")
+    billie_s2 = add_song("BIRDS OF A FEATHER", billie, "6dOtVTDdiauQNBQEDOtlAB")
+    billie_s3 = add_song("CHIHIRO", billie, "7BRD7x5pt8Lqa1eGYC4dzj") 
+    linkin_s1 = add_song("Numb", linkin, "2nLtzopw4rPReszdYBJU6h")
+    linkin_s2 = add_song("In the End", linkin, "60a0Rd6pjrkxjPbaKzXjfq")
+    linkin_s3 = add_song("Faint", linkin, "7AB0cUXnzuSlAnyHOqmrZr")
+    taylor_s1 = add_song("Fearless", taylor, "77sMIMlNaSURUAXq5coCxE")
+    taylor_s2 = add_song("You Belong With Me", taylor, "1GEBsLDvJGw7kviySRI6GX")
+    taylor_s3 = add_song("Love Story", taylor, "1D4PL9B8gOg78jiHg3FvBb")
 
     add_review(
         title = "Best tour forever",
