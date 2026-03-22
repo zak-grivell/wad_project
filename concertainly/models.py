@@ -5,11 +5,16 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 
+class Genre(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
+    name = models.CharField(max_length=128)
 
 class Artist(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
     spotify_id = models.CharField(max_length=128)
+
+    genre = models.ForeignKey(Genre, on_delete=CASCADE)
 
 class Tour(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
@@ -54,6 +59,3 @@ class Review(models.Model):
     set_list = models.ManyToManyField(Song)
 
 
-class Genre(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
-    name = models.CharField(max_length=128)
