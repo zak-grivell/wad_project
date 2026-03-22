@@ -12,14 +12,28 @@ def add_genre(name):
     genre,_ = Genre.objects.get_or_create(name=name)
     return genre
 
-def add_artist(name, spotify_id):
+def add_artist(name, genre, spotify_id):
     artist,_ = Artist.objects.get_or_create(
         name=name,
-        defaults={"spotify_id": spotify_id}
+        defaults={
+            "genre": genre,
+            "spotify_id": spotify_id
+            }
         )
+    
+    changed = False
+
+    if artist.genre != genre:
+        artist.genre = genre
+        changed = True
+
     if artist.spotify_id != spotify_id:
         artist.spotify_id = spotify_id
+        changed = True
+    
+    if changed:
         artist.save()
+        
     return artist
 
 def add_user(name, password):
@@ -76,16 +90,17 @@ def add_review(title, thoughts, img, city, venue, date, rating, user, tour, song
     return review
 
 def populate():
-    add_genre("Rock")
-    add_genre("Pop")
+    pop = add_genre("Rock")
+    rock = add_genre("Pop")
+
      
-    billie = add_artist("Billie Eilish", "6qqNVTkY8uBg9cP3Jd7DAH")
-    linkin = add_artist("Linkin Park", "6XyY86QOPPrYVGvF9ch6wz")
-    taylor = add_artist("Taylor Swift", "06HL4z0CvFAxyc27GXpf02")
-    harry = add_artist("Harry Styles", "6KImCVD70vtIoJWnq6nGn3")
-    olivia = add_artist("Olivia Rodrigo","1McMsnEElThX1knmY4oliG")
-    sabrina = add_artist("Sabrina Carpenter","74KM79TiuVKeVCqs8QtB0B")
-    conan = add_artist("Conan Gray", "4Uc8Dsxct0oMqx0P6i60ea")
+    billie = add_artist("Billie Eilish", pop,  "6qqNVTkY8uBg9cP3Jd7DAH")
+    linkin = add_artist("Linkin Park", rock, "6XyY86QOPPrYVGvF9ch6wz")
+    taylor = add_artist("Taylor Swift", pop, "06HL4z0CvFAxyc27GXpf02")
+    harry = add_artist("Harry Styles", pop, "6KImCVD70vtIoJWnq6nGn3")
+    olivia = add_artist("Olivia Rodrigo", pop, "1McMsnEElThX1knmY4oliG")
+    sabrina = add_artist("Sabrina Carpenter", pop, "74KM79TiuVKeVCqs8QtB0B")
+    conan = add_artist("Conan Gray", pop, "4Uc8Dsxct0oMqx0P6i60ea")
     
     charlotte = add_user("Charlotte", "password")
     mark = add_user("Mark", "password")
