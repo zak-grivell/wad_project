@@ -7,24 +7,13 @@ Tour Reviews
 {% endblock %}
 
 {% block body_block %}
-<section class="mx-3">
+
+<section class="mx-3 mt-3">
   <h2>Review</h2>
   <div class="mb-3">
     <label for="review_title" class="form-label">Title</label>
     <input type="text" class="form-control" id="review_title" placeholder="">
   </div>
-  <div class="mb-3">
-    <label for="review_body" class="form-label">Comments</label>
-    <textarea class="form-control" id="review_body" rows="5"></textarea>
-  </div>
-  <div class="mb-3">
-    <label for="review_photo" class="form-label">Photo</label>
-    <input class="form-control" type="file" id="review_photo">
-  </div>
-</section>
-
-<section class="mx-3">
-  <h2>Rating</h2>
   <div class="mb-3">
     <div class="form-check form-check-inline">
       <input class="form-check-input" type="radio" name="review_rating" id="review_rating_1" value="1">
@@ -47,40 +36,50 @@ Tour Reviews
       <label class="form-check-label" for="review_rating_5">5</label>
     </div>
   </div>
-</section>
-
-<section class="mx-3">
-  <h2>Artist</h2>
 
   <div class="mb-3">
-    <label for="artist_select" class="form-label">Artist Selection</label>
-    <input class="form-control" list="artist_options" id="artist_select" placeholder="Type to search...">
-    <datalist id="artist_options">
-    </datalist>
+    <label for="review_body" class="form-label">Comments</label>
+    <textarea class="form-control" id="review_body" rows="5"></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label for="review_photo" class="form-label">Photo</label>
+    <input class="form-control" type="file" id="review_photo">
   </div>
 </section>
 
-<section class="mx-3">
-  <h2>Tour</h2>
 
-  <div class="mb-3">
-    <label for="tour_select" class="form-label">Tour Selection</label>
-    <input class="form-control" list="tour_options" id="tour_select" placeholder="Type to search...">
-    <datalist id="tour_options">
-    </datalist>
+<section class="mx-3 mt-3">
+  <h2>About</h2>
+
+  <div class="mb-3 input-group">
+    <span class="input-group-text" for="artist_select">Artist</span>
+    <input class="form-control" list="artist_options" id="artist_select" placeholder="Type to search artists">
+    <datalist id="artist_options"></datalist>
   </div>
-</section>
+  <div class="mb-3 input-group">
+    <label class="input-group-text" for="tour_select">Tour</label>
+    <input class="form-control" list="tour_options" id="tour_select" placeholder="Type to search tours">
+    <datalist id="tour_options"></datalist>
+  </div>
 
-<section class="mx-3">
-  <h2>Venue</h2>
-
-  <div class="mb-3">
-    <label for="venue_select" class="form-label">Venue Selection</label>
-    <input class="form-control" list="venue_options" id="venue_select" placeholder="Type to search...">
+  <div class="mb-3 input-group">
+    <label for="venue_select" class="input-group-text">Venue</label>
+    <input class="form-control" list="venue_options" id="venue_select" placeholder="Type to search venues"
+      autocomplete="on">
     <datalist id="venue_options">
     </datalist>
+    <div class="invalid-feedback">Example invalid feedback text</div>
+  </div>
+
+
+  <div class="mb-3 input-group">
+    <label for="date" class="input-group-text">Date</label>
+    <input class="form-control" type="date" id="date" name="date" />
   </div>
 </section>
+
+
 
 <script src="{% static 'review.js' %}"></script>
 

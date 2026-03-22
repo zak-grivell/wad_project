@@ -1,20 +1,20 @@
+from concertainly.models import Tour
 from django.http import HttpResponse
-from services.ticketmaster import TicketMasterAPI
 from django.http import JsonResponse
+
+PARAMS = {"keyword", "venueId", "attractionId"}
 
 
 def tour_search(request):
-    sp = TicketMasterAPI()
-
-    if not request.GET["q"] or len(request.GET["q"]) < 5:
+    if not request.GET["keyword"] or len(request.GET["keyword"]) < 3:
         return HttpResponse(status=400)
 
-    artists = sp.attraction_search({ "keyword": request.GET["q"] })
+    tours = Tour.objects.filter(name__contains=request.GET["keyword"])
 
     return JsonResponse(
         {
-            "artists": [
-                {"name": artist["name"], "id": artist["id"]} for artist in artists
+            "items": [
+                {"name": tour.name, "id": tour.id } for tour in tours
             ]
         }
     )

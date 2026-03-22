@@ -1,84 +1,68 @@
-let artist_options = document.getElementById("artist_options");
+/**
+@param {string} name
+@param {bool} required
+*/
+function searchDataList(name, required) {
+  const element = document.getElementById(`${name}_select`);
+  const datalist = document.getElementById(`${name}_options`);  
+  let valid_names = {};
 
-document.getElementById("artist_select").addEventListener("input", (event) => {  
-  /** @type {string} */
-  let text = event.target.value;
-  
-  artist_options.replaceChildren();
+  element.addEventListener("blur", () => {
+    if (element.value == "") return;
 
-  if (text.length < 5) { return }
+    element.classList.add('was-validated')
+    if (!element.dataset.id && required) {
+      element.setCustomValidity("Option not selected")
+      element.reportValidity();
+    } else {
+      element.setCustomValidity("")
+      element.reportValidity();
+    }
+  })
 
-  const params = new URLSearchParams({
-    q: text
-  });
+  const buffer_time = 1000;
+  let timer = null;
 
-  fetch(`api/artist_search?${params}`)
-    .then(res => res.json())
-    .then(options => {
-      options.artists.forEach((option /** @type {string} */) => {
-        let e = document.createElement("option");
+  const onStall = (text) => {
+    if (text.length < 3 || element.dataset.id) { return }
 
-        e.value = option.name;
-        e.dataset.id = option.id;
+    const params = new URLSearchParams({
+      keyword: text,
+    });
 
-        artist_options.append(e);
+    fetch(`api/${name}_search?${params}`)
+      .then(res => res.json())
+      .then(options => {
+        options.items.forEach((option /** @type {string} */) => {
+          let e = document.createElement("option");
+
+          e.value = option.name;
+          e.dataset.id = option.id;
+
+          valid_names[option.name.toLowerCase()] = option.id
+          datalist.append(e);
+        })
+
+        if (element.value.toLowerCase() in valid_names) {
+          element.dataset.id = valid_names[element.value.toLowerCase()]
+        }
       })
-    })
-    .catch(e => console.log(e))
-})
+      .catch(e => console.error(e))
+  }
 
-let tour_options = document.getElementById("tour_options");
-document.getElementById("tour_select").addEventListener("input", (event) => {  
-  /** @type {string} */
-  let text = event.target.value;
-  
-  tour_options.replaceChildren();
+  element.addEventListener("input", (event) => {
+    if (!(event.target.value.toLowerCase() in valid_names)) {
+      datalist.replaceChildren();
+      element.dataset.id = "";
+      valid_names = {};
+      clearTimeout(timer);
+      timer = setTimeout(() => onStall(event.target.value), buffer_time);
+    } else {
+      element.dataset.id = valid_names[element.value.toLowerCase()]
+    }
+  })
+}
 
-  if (text.length < 5) { return }
-
-  const params = new URLSearchParams({
-    q: text
-  });
-
-  fetch(`api/tour_search?${params}`)
-    .then(res => res.json())
-    .then(options => {
-      options.artists.forEach((option /** @type {string} */) => {
-        let e = document.createElement("option");
-
-        e.value = option.name;
-        e.dataset.id = option.id;
-
-        tour_options.append(e);
-      })
-    })
-    .catch(e => console.log(e))
-})
-
-let venue_options = document.getElementById("tour_options");
-document.getElementById("tour_select").addEventListener("input", (event) => {  
-  /** @type {string} */
-  let text = event.target.value;
-  
-  venue_options .replaceChildren();
-
-  if (text.length < 5) { return }
-
-  const params = new URLSearchParams({
-    q: text
-  });
-
-  fetch(`api/tour_search?${params}`)
-    .then(res => res.json())
-    .then(options => {
-      options.artists.forEach((option /** @type {string} */) => {
-        let e = document.createElement("option");
-
-        e.value = option.name;
-        e.dataset.id = option.id;
-
-        tour_options.append(e);
-      })
-    })
-    .catch(e => console.log(e))
-})
+searchDataList("artist", true);
+searchDataList("tour", false);
+searchDataList("venue", true);

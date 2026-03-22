@@ -46,10 +46,6 @@ SpotifyTrack = TypedDict(
     },
 )
 
-SpotifyTrack = TypedDict(
-    "SpotifyTrack",
-)
-
 SearchType = Literal["track", "artist"]
 
 
@@ -136,14 +132,14 @@ class SpotifyAPI:
         return data["artists"]
 
     def search_track(
-        self, query: str, limit: int = 5, offset: int = 0
+        self, query: str, artist: str, limit: int = 5, offset: int = 0
     ) -> TrackSearchResult:
         return requests.get(
             "https://api.spotify.com/v1/search",
             headers=self.get_access_token(),
             params={
-                "q": query,
-                "type": ["track"],
+                "q": query + (f" artist:{artist}" if artist else ""),
+                "type": "track",
                 "market": "gb",
                 "limit": limit,
                 "offset": offset,

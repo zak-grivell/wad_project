@@ -9,7 +9,7 @@ def artist_search(request):
     if not request.GET["keyword"] or len(request.GET["keyword"]) < 3:
         return HttpResponse(status=400)
 
-    artists = sp.search_artist(request.GET["keyword"])
+    artists = sp.search_track(request.GET["keyword"], artist=request.GET.get("artist", ""))
 
     return JsonResponse(
         {
