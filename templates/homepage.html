@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title_block %}
     Homepage
@@ -6,25 +7,55 @@
 
 {% block body_block %}
 
-{% if highlight_tour %}
+{% if highlight_tours %}
 
-    <div class="card text-bg-dark">
-    <img src="..." class="card-img" alt="highlight tour">
-    <div class="card-img-overlay">
-        <h5 class="card-title">C{{ tour.name }}</h5>
-        <p class="card-text">{{ tour.artist.name }}</p>
+<div id="highlightTours" class="carousel slide">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#highlightTours" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#highlightTours" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#highlightTours" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="{% static 'images/taylor.jpg' %}" class="d-block w-100" alt="highlight tour">
+      <div class="carousel-caption d-none d-md-block">
+        <p><a href="#" class="btn btn-dark">{{ tour1.name }}</a></p>
+      </div>
     </div>
+    <div class="carousel-item">
+      <img src="{% static 'images/harry.jpg' %}" class="d-block w-100" alt="highlight tour">
+      <div class="carousel-caption d-none d-md-block">
+        <p><a href="#" class="btn btn-dark">{{ tour2.name }}</a></p>
+      </div>
     </div>
+    <div class="carousel-item">
+      <img src="{% static 'images/sabrina.jpeg' %}" class="d-block w-100" alt="highlight tour">
+      <div class="carousel-caption d-none d-md-block">
+        <p><a href="#" class="btn btn-dark">{{ tour3.name }}</a></p>
+      </div>
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#highlightTours" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#highlightTours" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
 
 {% endif %}
 
-<div class="card-group">
+<div class="row row-cols-1 row-cols-md-3 g-4">
   {% for tour in popular_tours %}
+  <div class="col">
   <div class="card">
-    <img src="..." class="card-img-top" alt="popular tour">
+    <img src="{% static 'images/taylor-swif.jpg' %}" class="card-img-top" alt="popular tour">
     <div class="card-body">
-      <h5 class="card-title">{{ tour.name }}</h5>
+      <p><a href="#" class="btn btn-dark">{{ tour.name }}</a></p>
     </div>
+  </div>
   </div>
   {% endfor %}
 </div>

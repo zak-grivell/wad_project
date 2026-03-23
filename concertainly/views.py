@@ -20,12 +20,20 @@ def home(request):
         .order_by("-review_count")
     )
 
+<<<<<<< Updated upstream
     highlight_tours = tours[:3] #top 3
     popular_tours = tours [3:13] #next top 10
+=======
+    highlight_tours = tours[0:3]
+    popular_tours = tours [3:11]
+>>>>>>> Stashed changes
 
     context_dict = {}
     context_dict["highlight_tours"] = highlight_tours
     context_dict["popular_tours"] = popular_tours
+    context_dict["tour1"] = highlight_tours[0]
+    context_dict["tour2"] = highlight_tours[1]  
+    context_dict["tour3"] = highlight_tours[2]
 
     return render(request, "homepage.html", context=context_dict)
 

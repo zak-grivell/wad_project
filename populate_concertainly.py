@@ -119,6 +119,99 @@ def populate():
         tour = the_eras_tour,
         songs = [taylor_s1, taylor_s2, taylor_s3]
     )
+<<<<<<< Updated upstream
+=======
+
+    add_review(
+        title = "Good show",
+        thoughts = "I came to this concert with my daughter. I get why she loves taylor swift so much.",
+        img = "",
+        city = "London",
+        venue = "Wembley Stadium",
+        date = date(2024,6,21),
+        rating = 4,
+        user = john,
+        tour = the_eras_tour,
+        songs = []
+    )
+    add_review(
+        title = "starstruck",
+        thoughts = "been a fan since the 1d days... still am",
+        img = "",
+        city = "Glasgow",
+        venue = "Ibrox Stadium",
+        date = date(2022,6,11),
+        rating = 5,
+        user = carolina,
+        tour = love_on_tour,
+        songs = [harry_s4, harry_s5, harry_s6]
+    )
+
+    add_review(
+        title = "fantastic show",
+        thoughts = "proper performance from the vocals to the costume design to the dance choreography",
+        img = "",
+        city = "Manchester",
+        venue = "Co-op Live",
+        date = date(2025,3,13),
+        rating = 5,
+        user = delilah,
+        tour = short_n_sweet,
+        songs = [sabrina_s1, sabrina_s2, sabrina_s3]
+    )
+
+    add_review(
+        title = "sweeeet",
+        thoughts = "luved it!",
+        img = "",
+        city = "Birmingham",
+        venue = "Utilita Arena",
+        date = date(2025,3,6),
+        rating = 4,
+        user = alice,
+        tour = short_n_sweet,
+        songs = [sabrina_s4, sabrina_s5, sabrina_s6]
+    )
+
+    add_review(
+        title = ":D",
+        thoughts = "absolutely brilliant",
+        img = "",
+        city = "London",
+        venue = "Wembly Stadium",
+        date = date(2023,6,13),
+        rating = 4,
+        user = nate,
+        tour = love_on_tour,
+        songs = [harry_s1, harry_s2, harry_s3]
+    )
+
+    add_review(
+        title = "get tickets!",
+        thoughts = "so good, already have tickets to see his next tour WishBone World Tour",
+        img = "",
+        city = "London",
+        venue = "Eventim Opollo",
+        date = date(2022,6,9),
+        rating = 5,
+        user = lizzy,
+        tour = superache,
+        songs = [conan_s1, conan_s2, conan_s3]
+    )
+
+    add_review(
+        title = "did not disapoint at all!",
+        thoughts = "after listening to this album so much in my bedroom it was cool to hear it live",
+        img = "",
+        city = "Glasgow",
+        venue = "Ovo Hydro",
+        date = date(2024,5,7),
+        rating = 4,
+        user = luna,
+        tour = guts,
+        songs = [olivia_s1, olivia_s2, olivia_s3]
+    )
+>>>>>>> Stashed changes
     
 
 if __name__ == '__main__':
