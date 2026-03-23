@@ -20,12 +20,18 @@ def home(request):
         .order_by("-review_count")
     )
 
-    highlight_tour = tours[0]
-    popular_tours = tours [1:11]
+    highlight_tour = tours[0:3]
+    popular_tours = tours [3:13]
+    tour1 = highlight_tour[0]
+    tour2 = highlight_tour[1]
+    tour3 = highlight_tour[2]
 
     context_dict = {}
     context_dict["highlight_tour"] = highlight_tour
     context_dict["popular_tours"] = popular_tours
+    context_dict["tour1"] = tour1
+    context_dict["tour2"] = tour2
+    context_dict["tour3"] = tour3
 
     return render(request, "homepage.html", context=context_dict)
 
@@ -120,8 +126,11 @@ def genre_list(request):
 
 def genre(request, genre_name):
     genre = get_object_or_404(Genre, name=genre_name)
-
-    return render(request, "genre.html", {"genre": genre})
+    artists = Artist.objects.filter(genre=genre)
+    context_dict = {}
+    context_dict["artists"] = artists
+    context_dict["genre"] = genre
+    return render(request, "genre.html", context=context_dict)
 
 def artist(request, artist_name):
     artist = get_object_or_404(Artist, name=artist_name)

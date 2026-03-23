@@ -43,11 +43,11 @@ def add_user(name, password):
         user.save()
     return user
     
-def add_tour(name, artist, ticket_master_id = ""):
+def add_tour(name, artist, ticket_master_id = "", image=""):
     tour,_ = Tour.objects.get_or_create(
         name=name, 
         artist=artist,
-        defaults={"ticket_master_id": ticket_master_id}
+        defaults={"ticket_master_id": ticket_master_id, "image": image}
     )
     if tour.ticket_master_id != ticket_master_id:
         tour.ticket_master_id = ticket_master_id
@@ -90,8 +90,8 @@ def add_review(title, thoughts, img, city, venue, date, rating, user, tour, song
     return review
 
 def populate():
-    pop = add_genre("Rock")
-    rock = add_genre("Pop")
+    pop = add_genre("pop")
+    rock = add_genre("rock")
 
      
     billie = add_artist("Billie Eilish", pop,  "6qqNVTkY8uBg9cP3Jd7DAH")
@@ -114,15 +114,15 @@ def populate():
     luna = add_user("Luna", "password")
 
     #one review
-    hit_me_hard_and_soft = add_tour("Hit Me Hard and Soft: The Tour", billie)
-    from_zero = add_tour("FROM ZERO World Tour", linkin)
-    guts = add_tour("GUTS World Tour", olivia)
-    superache = add_tour("Superache Tour", conan)
+    hit_me_hard_and_soft = add_tour("Hit Me Hard and Soft: The Tour", billie, image="images/tour/billie.jpg")
+    from_zero = add_tour("FROM ZERO World Tour", linkin, image="images/tour/linkin.jpg")
+    guts = add_tour("GUTS World Tour", olivia, image="images/tour/olivia.jpg")
+    superache = add_tour("Superache Tour", conan, image="images/tour/conan.jpg")
 
     #two reviews
-    the_eras_tour = add_tour("The Eras Tour", taylor)
-    love_on_tour = add_tour("Love on Tour", harry)
-    short_n_sweet = add_tour("Short n' Sweet", sabrina)
+    love_on_tour = add_tour("Love on Tour", harry, image="images/tour/harry.jpg")
+    short_n_sweet = add_tour("Short n' Sweet", sabrina, image="images/tour/sabrina.jpeg")
+    the_eras_tour = add_tour("The Eras Tour", taylor, image="images/tour/taylor.jpg")
 
 
     #no reviews

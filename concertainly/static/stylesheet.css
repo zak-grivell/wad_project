@@ -37,8 +37,22 @@ button:hover img {
 }
 }
 
+/* artist page */ 
+
 .artistCard .card{
     background-color: #1e1e2f;
     color: white;
     border: 1px solid white;
+}
+
+/* home page*/
+
+.highlight-tour-carousel img {
+    height: 50vh;
+    object-fit: cover;
+}
+
+.popular-tour-card img {
+    height: 50vh;
+    object-fit: cover;
 }
