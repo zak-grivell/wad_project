@@ -15,7 +15,7 @@
             <h1>{{ tour.artist.name }} : {{ tour.name }}</h1>
 
             {% if user.is_authenticated %}
-                <a href="{% url 'concertainly:add_review' tour.id %}" class="btn btn-success">
+                <a href="{% url 'concertainly:review' tour.slug %}" class="btn btn-success">
                     Post Review
                 </a>
             {% else %}
@@ -27,7 +27,7 @@
 
         {% if reviews %}
             {% for review in reviews %}
-                <div class="card my-4">
+                <div class="card my-4 custom-card">
                     <div class="card-body">
                         <div class="row align-items-center">
 
@@ -38,7 +38,7 @@
                                 <p><strong>Venue:</strong> {{ review.venue }}</p>
                                 <p><strong>Date:</strong> {{ review.date }}</p>
                                 <p><strong>Rating:</strong> {{ review.rating }}/5</p>
-                                <p><strong>Uploaded by:</strong> {{ review.user.name }}</p>
+                                <p><strong>Uploaded by:</strong> {{ review.user.username }}</p>
 
                                 {% if review.set_list.all %}
                                     {% with songs=review.set_list.all %}

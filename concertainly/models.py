@@ -15,6 +15,12 @@ class Artist(models.Model):
     spotify_id = models.CharField(max_length=128)
 
     genre = models.ForeignKey(Genre, on_delete=CASCADE)
+    slug = models.SlugField(unique=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
 class Tour(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
@@ -23,7 +29,6 @@ class Tour(models.Model):
     ticket_master_id = models.CharField(max_length=128)
     slug = models.SlugField(unique=True, blank=True)
     image = models.CharField(max_length=128, blank=True)
-
 
     def save(self, *args, **kwargs):
         if not self.slug:

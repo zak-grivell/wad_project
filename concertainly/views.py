@@ -132,8 +132,8 @@ def genre(request, genre_name):
     context_dict["genre"] = genre
     return render(request, "genre.html", context=context_dict)
 
-def artist(request, artist_name):
-    artist = get_object_or_404(Artist, name=artist_name)
+def artist(request, slug):
+    artist = get_object_or_404(Artist, slug=slug)
     tours = Tour.objects.filter(artist=artist)
     context_dict = {}
     context_dict["artist"] = artist
