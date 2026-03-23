@@ -126,8 +126,11 @@ def genre_list(request):
 
 def genre(request, genre_name):
     genre = get_object_or_404(Genre, name=genre_name)
-
-    return render(request, "genre.html", {"genre": genre})
+    artists = Artist.objects.filter(genre=genre)
+    context_dict = {}
+    context_dict["artists"] = artists
+    context_dict["genre"] = genre
+    return render(request, "genre.html", context=context_dict)
 
 def artist(request, artist_name):
     artist = get_object_or_404(Artist, name=artist_name)

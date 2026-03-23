@@ -90,8 +90,8 @@ def add_review(title, thoughts, img, city, venue, date, rating, user, tour, song
     return review
 
 def populate():
-    pop = add_genre("Rock")
-    rock = add_genre("Pop")
+    pop = add_genre("pop")
+    rock = add_genre("rock")
 
      
     billie = add_artist("Billie Eilish", pop,  "6qqNVTkY8uBg9cP3Jd7DAH")
