@@ -20,12 +20,18 @@ def home(request):
         .order_by("-review_count")
     )
 
-    highlight_tour = tours[0]
-    popular_tours = tours [1:11]
+    highlight_tour = tours[0:3]
+    popular_tours = tours [3:13]
+    tour1 = highlight_tour[0]
+    tour2 = highlight_tour[1]
+    tour3 = highlight_tour[2]
 
     context_dict = {}
     context_dict["highlight_tour"] = highlight_tour
     context_dict["popular_tours"] = popular_tours
+    context_dict["tour1"] = tour1
+    context_dict["tour2"] = tour2
+    context_dict["tour3"] = tour3
 
     return render(request, "homepage.html", context=context_dict)
 
