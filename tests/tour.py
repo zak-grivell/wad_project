@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from concertainly.models import Tour, Review, Artist
+from concertainly.models import Tour, Review, Artist, Genre
 from datetime import date
 
 class ShowReviewTest(TestCase):
@@ -12,8 +12,13 @@ class ShowReviewTest(TestCase):
             password="password"
         )
 
+        self.genre = Genre.objects.create(name = "pop")
+
         self.artist = Artist.objects.create(
             name = "Test Artist",
+            spotify_id = "testid123456789",
+            genre = self.genre,
+            slug = "test-artist",
         )
 
         self.tour_1 = Tour.objects.create(

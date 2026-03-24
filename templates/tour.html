@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title_block %}
     {% if tour %}
@@ -57,7 +58,7 @@
                                 {% if review.img %}
                                     <div class="col-md-4 ">
                                         <div class="review-image-box">
-                                            <img src="{{ review.img.url }}" class="review-image" alt="review image">
+                                            <img src="{% static review.img %}" class="review-image" alt="review image">
                                         </div>
                                     </div>
                                 {% endif %}
