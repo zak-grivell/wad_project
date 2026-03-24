@@ -1,6 +1,30 @@
 body {
     background-color: #16161D;
-    color: white
+    color: white;
+    padding-top: 76px;
+}
+
+/* navbar */
+.navbar-translucent {
+  background-color: rgba(30, 30, 41, 0.7);
+  backdrop-filter: blur(5px);
+}
+
+.navbar-brand {
+    font-size: 2rem;
+}
+
+.nav-link {
+    font-weight: bold;
+}
+
+.navbar .nav-link {
+    color: #bbbbbb !important;
+    transition: color 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+    color: #ffffff !important;
 }
 
 /* tour page */
