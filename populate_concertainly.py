@@ -8,8 +8,8 @@ django.setup()
 from django.contrib.auth.models import User
 from concertainly.models import Artist, Tour, Song, Review, Genre
 
-def add_genre(name):
-    genre,_ = Genre.objects.get_or_create(name=name)
+def add_genre(name, nice_name):
+    genre,_ = Genre.objects.get_or_create(name=name, nice_name=nice_name)
     return genre
 
 def add_artist(name, genre, spotify_id):
@@ -90,8 +90,18 @@ def add_review(title, thoughts, img, city, venue, date, rating, user, tour, song
     return review
 
 def populate():
-    pop = add_genre("pop")
-    rock = add_genre("rock")
+    pop = add_genre("pop", "Pop")
+    rock = add_genre("rock","Rock")
+    rb = add_genre("rnb","R&B")
+    classical = add_genre("classical","Classical")
+    hiphop = add_genre("hiphop","Hip-Hop")
+    metal = add_genre("metal", "Metal")
+    jpop = add_genre("jpop", "J-Pop")
+    punk = add_genre("punk", "Punk")
+    kpop = add_genre("kpop", "K-Pop")
+    latin = add_genre("latin", "Latin")
+    edm = add_genre("edm", "EDM")
+    mandopop = add_genre("mandopop", "Mandopop")
 
      
     billie = add_artist("Billie Eilish", pop,  "6qqNVTkY8uBg9cP3Jd7DAH")
