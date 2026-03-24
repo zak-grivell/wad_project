@@ -143,7 +143,7 @@ def tour(request, slug):
     return render(request, "tour.html", {"tour": tour, "reviews": reviews})
 
 @login_required
-def review(request):
+def review(request, slug=None): # add redirect
     if (request.method == "POST"):
         form = ReviewForm(request.POST, request.FILES)
 
@@ -168,9 +168,18 @@ def review(request):
                 user=request.user
              )
 
-            return redirect(f"{reverse("tour")}/{tour.name}")  # ty:ignore[unresolved-attribute]
+            return redirect(reverse("tour", kwargs={"slug": tour.slug}))  # ty:ignore[unresolved-attribute]
         else:
             print(form.errors)
+    elif slug and (tour := Tour.objects.filter(slug=slug).first()):
+        print("filling in")
+        form = ReviewForm(initial={
+          "artist_id": tour.artist.external_id,
+          "artist_select": tour.artist.name,
+          "tour_id": tour.external_id,
+          "tour_select": tour.name
+      })
+        print(f"Form initial data: {form.initial}")
     else:
         form = ReviewForm()
     
