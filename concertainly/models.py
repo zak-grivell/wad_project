@@ -20,8 +20,8 @@ class Artist(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
     external_id = models.CharField(max_length=128)
-    spotify_id = models.CharField(max_length=128)
 
+    spotify_image = models.CharField(max_length=128)
     genres = models.ManyToManyField(Genre)
     slug = models.SlugField(unique=True, blank=True)
 
