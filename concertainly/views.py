@@ -22,6 +22,11 @@ def home(request):
 
     highlight_tour = tours[0:3]
     popular_tours = tours [3:13]
+
+    if len(highlight_tour) == 0:
+        print("no populated data")
+        return render(request, "noData.html", context=context_dict)
+    
     tour1 = highlight_tour[0]
     tour2 = highlight_tour[1]
     tour3 = highlight_tour[2]
