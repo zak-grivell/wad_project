@@ -20,12 +20,18 @@ def home(request):
         .order_by("-review_count")
     )
 
-    highlight_tours = tours[:3] #top 3
-    popular_tours = tours [3:13] #next top 10
+    highlight_tour = tours[0:3]
+    popular_tours = tours [3:13]
+    tour1 = highlight_tour[0]
+    tour2 = highlight_tour[1]
+    tour3 = highlight_tour[2]
 
     context_dict = {}
-    context_dict["highlight_tours"] = highlight_tours
+    context_dict["highlight_tour"] = highlight_tour
     context_dict["popular_tours"] = popular_tours
+    context_dict["tour1"] = tour1
+    context_dict["tour2"] = tour2
+    context_dict["tour3"] = tour3
 
     return render(request, "homepage.html", context=context_dict)
 
@@ -117,24 +123,41 @@ def account(request):
     return render(request, "account.html")
 
 def genre_list(request):
-    genres = Genre.objects.all()
+    genreObjects = Genre.objects.all()
+    genres = [
+        'pop', 'rnb', 'hiphop', 'rock',
+        'metal', 'classical', 'jpop', 'punk',
+        'kpop', 'latin', 'edm', 'mandopop'
+    ]
 
     return render(request, "allGenres.html", {"genres": genres})
 
 def genre(request, genre_name):
     genre = get_object_or_404(Genre, name=genre_name)
+    artists = Artist.objects.filter(genre=genre)
+    context_dict = {}
+    context_dict["artists"] = artists
+    context_dict["genre"] = genre
+    return render(request, "genre.html", context=context_dict)
 
-    return render(request, "genre.html", {"genre": genre})
+def artist(request, slug):
+    artist = get_object_or_404(Artist, slug=slug)
+    tours = Tour.objects.filter(artist=artist)
+    context_dict = {}
+    context_dict["artist"] = artist
+    context_dict["tours"] = tours
+    return render(request, "artist.html", context=context_dict)
 
-def artist(request, artist_name):
-    artist = get_object_or_404(Artist, name=artist_name)
-
-    return render(request, "artist.html", {"artist": artist})
-
-def tour(request, tour_name):
-    tour = get_object_or_404(Tour, name=tour_name)
-
-    return render(request, "tour_detail.html", {"tour": tour})
+def tour(request, slug):
+    tour = Tour.objects.filter(slug=slug).first()
+    if tour:
+        reviews = Review.objects.filter(tour=tour)
+    else:
+        reviews = []
+    return render(request, "tour.html", {"tour": tour, "reviews": reviews})
 
 def ticket_master_test(request):
     return HttpResponse(str(TicketMasterAPI().attraction_search({ "keyword": "Taylor", "size": 1 })))
+
+def review(request):
+    return render(request, "review.html")

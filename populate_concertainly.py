@@ -5,36 +5,74 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE',
 
 import django
 django.setup()
-from concertainly.models import Artist, User, Tour, Song, Review, Genre
+from django.contrib.auth.models import User
+from concertainly.models import Artist, Tour, Song, Review, Genre
 
 def add_genre(name):
     genre,_ = Genre.objects.get_or_create(name=name)
     return genre
 
-def add_artist(name):
-    artist,_ = Artist.objects.get_or_create(name=name)
+def add_artist(name, genre, spotify_id):
+    artist,_ = Artist.objects.get_or_create(
+        name=name,
+        defaults={
+            "genre": genre,
+            "spotify_id": spotify_id
+            }
+        )
+    
+    changed = False
+
+    if artist.genre != genre:
+        artist.genre = genre
+        changed = True
+
+    if artist.spotify_id != spotify_id:
+        artist.spotify_id = spotify_id
+        changed = True
+    
+    if changed:
+        artist.save()
+        
     return artist
 
 def add_user(name, password):
-    user,_ = User.objects.get_or_create(name=name, defaults={"password":password})
+    user,created = User.objects.get_or_create(username = name)
+    if created:
+        user.set_password(password)
+        user.save()
     return user
     
-def add_tour(name, artist):
-    tour,_ = Tour.objects.get_or_create(name=name, artist=artist)
+def add_tour(name, artist, ticket_master_id = "", image=""):
+    tour,_ = Tour.objects.get_or_create(
+        name=name, 
+        artist=artist,
+        defaults={"ticket_master_id": ticket_master_id, "image": image}
+    )
+    if tour.ticket_master_id != ticket_master_id:
+        tour.ticket_master_id = ticket_master_id
+        tour.save()
     return tour
 
-def add_song(name, artist):
-    song,_ = Song.objects.get_or_create(name=name, artist=artist)
+def add_song(name, artist, spotify_id):
+    song,_ = Song.objects.get_or_create(
+        name=name, 
+        artist=artist,
+        defaults={"spotify_id": spotify_id}
+    )
+    if song.spotify_id != spotify_id:
+        song.spotify_id = spotify_id
+        song.save()
     return song
 
-def add_review(title, thoughts, img_path, city, venue, date, rating, user, tour, songs):
+def add_review(title, thoughts, img, city, venue, date, rating, user, tour, songs):
     review, created = Review.objects.get_or_create(        
         title=title,
         user=user,
         tour=tour,
         defaults={
             "thoughts": thoughts,
-            "img_path": img_path,
+            "img": img,
             "city": city,
             "venue": venue,
             "date": date,
@@ -42,49 +80,89 @@ def add_review(title, thoughts, img_path, city, venue, date, rating, user, tour,
         }
     )
 
-    if not created:
-        review.thoughts = thoughts,
-        review.img_path = img_path,
-        review.city = city,
-        review.venue = venue,
-        review.date = date,
-        review.rating = rating
-        review.save()
+    if img:
+        review.img = img
+    else:
+        review.img = None
+    review.save()
     review.set_list.set(songs)
+
     return review
 
 def populate():
-    rock = add_genre("Rock")
-    pop = add_genre("Pop")
+    pop = add_genre("pop")
+    rock = add_genre("rock")
+
      
-    billie = add_artist("Billie Eilish")
-    linkin = add_artist("Linkin Park")
-    taylor = add_artist("Taylor Swift")
+    billie = add_artist("Billie Eilish", pop,  "6qqNVTkY8uBg9cP3Jd7DAH")
+    linkin = add_artist("Linkin Park", rock, "6XyY86QOPPrYVGvF9ch6wz")
+    taylor = add_artist("Taylor Swift", pop, "06HL4z0CvFAxyc27GXpf02")
+    harry = add_artist("Harry Styles", pop, "6KImCVD70vtIoJWnq6nGn3")
+    olivia = add_artist("Olivia Rodrigo", pop, "1McMsnEElThX1knmY4oliG")
+    sabrina = add_artist("Sabrina Carpenter", pop, "74KM79TiuVKeVCqs8QtB0B")
+    conan = add_artist("Conan Gray", pop, "4Uc8Dsxct0oMqx0P6i60ea")
     
-    
+    charlotte = add_user("Charlotte.528", "password")
+    mark = add_user("Mark420", "password")
+    emma = add_user("Emma_0104", "password")
+    john = add_user("John8429", "password")
+    delilah = add_user("Delilah+_+", "password")
+    alice = add_user("Alice-4922", "password")
+    carolina = add_user("Carolina-3958", "password")
+    lizzy = add_user("Lizzy@_@", "password")
+    nate = add_user("Nate.-.", "password")
+    luna = add_user("Luna-_-", "password")
 
-    charlotte = add_user("Charlotte", "password")
-    mark = add_user("Mark", "password")
-    emma = add_user("Emma", "password")
+    #one review
+    hit_me_hard_and_soft = add_tour("Hit Me Hard and Soft: The Tour", billie, image="images/tour/billie.jpg")
+    from_zero = add_tour("FROM ZERO World Tour", linkin, image="images/tour/linkin.jpg")
+    guts = add_tour("GUTS World Tour", olivia, image="images/tour/olivia.jpg")
+    superache = add_tour("Superache Tour", conan, image="images/tour/conan.jpg")
 
-    hit_me_hard_and_soft = add_tour("Hit Me Hard and Soft: The Tour", billie)
-    from_zero = add_tour("FROM ZERO World Tour", linkin)
-    the_eras_tour = add_tour("The Eras Tour", taylor)
+    #two reviews
+    love_on_tour = add_tour("Love on Tour", harry, image="images/tour/harry.jpg")
+    short_n_sweet = add_tour("Short n' Sweet", sabrina, image="images/tour/sabrina.jpeg")
+    the_eras_tour = add_tour("The Eras Tour", taylor, image="images/tour/taylor.jpg")
 
-    billie_s1 = add_song("bad guy", billie)
-    billie_s2 = add_song("BIRDS OF A FEATHER", billie)
-    billie_s3 = add_song("CHIHIRO", billie)
-    linkin_s1 = add_song("Numb", linkin)
-    linkin_s2 = add_song("In the End", linkin)
-    linkin_s3 = add_song("Faint", linkin)
-    taylor_s1 = add_song("Fearless", taylor)
-    taylor_s2 = add_song("You Belong With Me", taylor)
-    taylor_s3 = add_song("Love Story", taylor)
+
+    #no reviews
+    the_eras_tour_2 = add_tour("The Eras Tour 2.0", taylor)
+    fearless_tour = add_tour("Fearless Tour", taylor)
+    speak_now_world_tour = add_tour("Speak Now World Tour", taylor)
+    the_red_tour = add_tour("The Red Tour", taylor)
+
+    billie_s1 = add_song("bad guy", billie, "2Fxmhks0bxGSBdJ92vM42m")
+    billie_s2 = add_song("BIRDS OF A FEATHER", billie, "6dOtVTDdiauQNBQEDOtlAB")
+    billie_s3 = add_song("CHIHIRO", billie, "7BRD7x5pt8Lqa1eGYC4dzj") 
+    linkin_s1 = add_song("Numb", linkin, "2nLtzopw4rPReszdYBJU6h")
+    linkin_s2 = add_song("In the End", linkin, "60a0Rd6pjrkxjPbaKzXjfq")
+    linkin_s3 = add_song("Faint", linkin, "7AB0cUXnzuSlAnyHOqmrZr")
+    taylor_s1 = add_song("Fearless", taylor, "77sMIMlNaSURUAXq5coCxE")
+    taylor_s2 = add_song("You Belong With Me", taylor, "1GEBsLDvJGw7kviySRI6GX")
+    taylor_s3 = add_song("Love Story", taylor, "1D4PL9B8gOg78jiHg3FvBb")
+    harry_s1 = add_song("Kiwi", harry, "33SNO8AaciGbNaQFkxvPrW")
+    harry_s2 = add_song("Only Angel", harry, "5Lbsc65org0b85kNsPkluY")
+    harry_s3 = add_song("Cinema", harry, "35TyJIMR3xRouUuo2sjS6v")
+    harry_s4 = add_song("Golden", harry, "45S5WTQEGOB1VHr1Q4FuPl")
+    harry_s5 = add_song("Two Ghosts", harry, "4B1rpPmQXwj78wk6aIGwwU")
+    harry_s6 = add_song("Lights Up", harry, "4jAIqgrPjKLTY9Gbez25Qb")
+    sabrina_s1 = add_song("Busy Woman", sabrina, "0b0Dz0Gi86SVdBxYeiQcCP")
+    sabrina_s2 = add_song("Juno", sabrina, "21B4gaTWnTkuSh77iWEXdS")
+    sabrina_s3 = add_song("Manchild", sabrina, "42UBPzRMh5yyz0EDPr6fr1")
+    sabrina_s4 = add_song("Feather", sabrina, "2Zo1PcszsT9WQ0ANntJbID")
+    sabrina_s5 = add_song("Nobody's Son", sabrina, "4SRShYMtFIGgnOU7iBicMH")
+    sabrina_s6 = add_song("House Tour", sabrina, "25jgQBxuUkGDdCG1WGKKN9")
+    conan_s1 = add_song("This Song", conan, "2k6FKrR0wDIs6xCtU51GZ7")
+    conan_s2 = add_song("Movies", conan, "6FH6fmlh9DbvssuEQyQEVd")
+    conan_s3 = add_song("Actor", conan, "60mJHAb1XIDyk9bTLnyaQU")
+    olivia_s1 = add_song("Lacy", olivia, "6QT6j7rKt7Vk3IuV2AUO9W")
+    olivia_s2 = add_song("so american", olivia, "5Jh1i0no3vJ9u4deXkb4aV")
+    olivia_s3 = add_song("love is embarrassing", olivia, "26QLJMK8G0M06sk7h7Fkse")
 
     add_review(
         title = "Best tour forever",
         thoughts = "love itttt. Already looking forward to the next show.xxxxx",
-        img_path = "reviews/billie_1.jpg, reviews/billie_2.jpg",
+        img = "reviews/billie_1.jpg",
         city = "Glasgow",
         venue = "OVO Hydro",
         date = date(2025,6,7),
@@ -97,7 +175,7 @@ def populate():
     add_review(
         title = "BEST",
         thoughts = "The nostalgia... Act 4 is my favourite. Soldiers forever.",
-        img_path = "reviews/linkin_1.jpeg",
+        img = "reviews/linkin_1.jpg",
         city = "Brooklyn",
         venue = "Barclays Center",
         date = date(2024,11,16),
@@ -110,7 +188,7 @@ def populate():
     add_review(
         title = "<3<3<3",
         thoughts = "Everything is so good espcailly like OMG I love her sm",
-        img_path = "reviews/taylor_1.jpg, reviews/taylor_2.jpg, reviews/taylor_3.jpg",
+        img = "reviews/taylor_1.jpg",
         city = "Edinburgh",
         venue = "Murrayfield Stadium",
         date = date(2024,6,9),
@@ -119,8 +197,99 @@ def populate():
         tour = the_eras_tour,
         songs = [taylor_s1, taylor_s2, taylor_s3]
     )
+
+    add_review(
+        title = "Good show",
+        thoughts = "I came to this concert with my daughter. I get why she loves taylor swift so much.",
+        img = "",
+        city = "London",
+        venue = "Wembley Stadium",
+        date = date(2024,6,21),
+        rating = 4,
+        user = john,
+        tour = the_eras_tour,
+        songs = []
+    )
+
+    add_review(
+        title = "starstruck",
+        thoughts = "been a fan since the 1d days... still am",
+        img = "",
+        city = "Glasgow",
+        venue = "Ibrox Stadium",
+        date = date(2022,6,11),
+        rating = 5,
+        user = carolina,
+        tour = love_on_tour,
+        songs = [harry_s4, harry_s5, harry_s6]
+    )
+
+    add_review(
+        title = "fantastic show",
+        thoughts = "proper performance from the vocals to the costume design to the dance choreography",
+        img = "",
+        city = "Manchester",
+        venue = "Co-op Live",
+        date = date(2025,3,13),
+        rating = 5,
+        user = delilah,
+        tour = short_n_sweet,
+        songs = [sabrina_s1, sabrina_s2, sabrina_s3]
+    )
+
+    add_review(
+        title = "sweeeet",
+        thoughts = "luved it!",
+        img = "",
+        city = "Birmingham",
+        venue = "Utilita Arena",
+        date = date(2025,3,6),
+        rating = 4,
+        user = alice,
+        tour = short_n_sweet,
+        songs = [sabrina_s4, sabrina_s5, sabrina_s6]
+    )
+
+    add_review(
+        title = ":D",
+        thoughts = "absolutely brilliant",
+        img = "",
+        city = "London",
+        venue = "Wembly Stadium",
+        date = date(2023,6,13),
+        rating = 4,
+        user = nate,
+        tour = love_on_tour,
+        songs = [harry_s1, harry_s2, harry_s3]
+    )
+
+    add_review(
+        title = "get tickets!",
+        thoughts = "so good, already have tickets to see his next tour WishBone World Tour",
+        img = "",
+        city = "London",
+        venue = "Eventim Opollo",
+        date = date(2022,6,9),
+        rating = 5,
+        user = lizzy,
+        tour = superache,
+        songs = [conan_s1, conan_s2, conan_s3]
+    )
+
+    add_review(
+        title = "did not disapoint at all!",
+        thoughts = "after listening to this album so much in my bedroom it was cool to hear it live",
+        img = "",
+        city = "Glasgow",
+        venue = "Ovo Hydro",
+        date = date(2024,5,7),
+        rating = 4,
+        user = luna,
+        tour = guts,
+        songs = [olivia_s1, olivia_s2, olivia_s3]
+    )
     
 
 if __name__ == '__main__':
-    print('Starting concertainly population script...')
+    print('Starting concert-ainly population script...')
     populate()

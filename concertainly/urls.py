@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from concertainly import views
 
 app_name = "concertainly"
@@ -12,8 +12,10 @@ urlpatterns = [
     path("me/", views.account, name="account"),
     path("genres/", views.genre_list, name="genres"),
     path("genres/<str:genre_name>/", views.genre, name="genre"),
-    path("artist/<str:artist_name>/", views.artist, name="artist"),
-    path("tour/<str:tour_name>/", views.tour, name="tour"),
+    path("artist/<slug:slug>/", views.artist, name="artist"),
+    path("tour/<slug:slug>/", views.tour, name="tour"),
     path("ticket", views.ticket_master_test),
     path("logout/", views.user_logout, name="logout"),
+    path("review", views.review, name="review"),
+    path("api/", include("concertainly.api.urls"), name="api"),
 ]
