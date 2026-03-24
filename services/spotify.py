@@ -161,4 +161,7 @@ class SpotifyAPI:
             },
         ).json()["tracks"]
 
+    def artist_image(self, artist_id) -> str:
+        return self.artist(artist_id)["images"][-1]["url"]
+
 SPOTIFY_API = SpotifyAPI()

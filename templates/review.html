@@ -18,16 +18,6 @@ Tour Reviews
     <h2>Review</h2>
     <div class="mb-3">
       {{form.title}}
-      <!-- <label for="title" class="form-label">Title</label> -->
-      <!-- <input required type="text" id="title" placeholder="" -->
-      <!-- class="form-control {% if form.title.errors %}is-invalid{% endif %}" value="{{ form.title.value|default:'' }}"> -->
-
-
-      <!-- {% if form.title.errors %} -->
-      <!-- <div class="invalid-feedback"> -->
-      <!-- {{ form.title.errors|striptags }} -->
-      <!-- </div> -->
-      <!-- {% endif %} -->
     </div>
 
     <div class="mb-3 input-group">
@@ -53,8 +43,6 @@ Tour Reviews
 
     <div class="mb-3">
       {{form.review_photo}}
-      <!-- <label for="review_photo" class="form-label">Photo</label> -->
-      <!-- <input class="form-control" type="file" id="review_photo"> -->
     </div>
   </section>
 
@@ -62,12 +50,6 @@ Tour Reviews
 
   <section class="mx-3 mt-3">
     <h2>About</h2>
-
-    <!-- <div class="mb-3 input-group"> -->
-    <!-- <span class="input-group-text" for="artist_select">Artist</span> -->
-    <!-- <input class="form-control" list="artist_options" id="artist_select" placeholder="Type to search artists"> -->
-    <!-- <datalist id="artist_options"></datalist> -->
-    <!-- </div> -->
 
     {{form.artist_select}}
 
@@ -81,6 +63,6 @@ Tour Reviews
   <input type="submit" value="Post Review!" class="mx-3 mt-3 btn btn-primary">
 </form>
 
-<script src="{% static 'review.js' %}"></script>
+<!-- <script src="{% static 'review.js' %}"></script> -->
 
 {% endblock %}
