@@ -18,4 +18,5 @@ urlpatterns = [
     path("logout/", views.user_logout, name="logout"),
     path("review", views.review, name="review"),
     path("api/", include("concertainly.api.urls"), name="api"),
+    path("ts", views.spotify_test)
 ]

@@ -8,34 +8,42 @@ class Genre(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
 
+class Venue(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
+    name = models.CharField(max_length=128)
+    external_id = models.CharField(max_length=128)
+    city = models.CharField(max_length=128)
+
 class Artist(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
-    spotify_id = models.CharField(max_length=128)
+    external_id = models.CharField(max_length=128)
+    image_src = models.CharField(max_length=128)
 
-    genre = models.ForeignKey(Genre, on_delete=CASCADE)
+    genres = models.ManyToManyField(Genre)
 
 class Tour(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
     artist = models.ForeignKey(Artist, on_delete=CASCADE)
+    external_id = models.CharField(max_length=128)
 
+    
 class Song(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
     artist = models.ForeignKey(Artist, on_delete=CASCADE)
 
-    spotify_id = models.CharField(max_length=128)
+    external_id = models.CharField(max_length=128)
 
 
 class Review(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     title = models.CharField(max_length=128)
     thoughts = models.CharField(max_length=1024)
-    img_path = models.CharField(max_length=128)
+    img = models.ImageField(blank=True)
 
-    city = models.CharField(max_length=128)
-    venue = models.CharField(max_length=128)
+    venue = models.ForeignKey(Venue, on_delete=CASCADE)
     date = models.DateField()
 
     rating = models.IntegerField(

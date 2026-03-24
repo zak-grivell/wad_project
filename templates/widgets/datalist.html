@@ -1,0 +1,8 @@
+<div class="mb-3 input-group">
+  <span class="input-group-text">{{ widget.label }}</span>
+
+  <input type="text" name="{{ widget.name }}" value="{{ widget.value|stringformat:'' }}" list="{{ widget.datalist_id }}"
+    class="form-control" {% include "django/forms/widgets/attrs.html" %}>
+
+</div> <datalist id="{{ widget.datalist_id }}">
+</datalist>
