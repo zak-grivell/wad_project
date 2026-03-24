@@ -1,10 +1,10 @@
 from concertainly.models import Artist, Genre, Tour, Venue
 from django import forms
 from django.contrib.auth.models import User
-from services.lastfm import artist
+from services.lastfm import LASTFM_API
 from services.spotify import SPOTIFY_API
-from services.musicbrainz import get_tour_by_id
-from services.ticketmaster import TicketMasterAPI
+from services.musicbrainz import MUSICBRAINZ_API
+from services.ticketmaster import TICKET_MASTER_API
 
 
 # deals with the information that is stored in django's User class
@@ -96,7 +96,7 @@ class ReviewForm(forms.Form):
 
 
 def insert_artist(musicbrainz_id) -> Artist:
-    artist_data = artist(musicbrainz_id)
+    artist_data = LASTFM_API.artist(musicbrainz_id)
     img = SPOTIFY_API.search_artist(artist_data["name"], 1, 0)["items"][0]["images"][0]["url"]
     
     db_artist = Artist.objects.create(
@@ -114,7 +114,7 @@ def insert_artist(musicbrainz_id) -> Artist:
 
 
 def insert_tour(musicbrainz_id, artist) -> Tour:
-    tour = get_tour_by_id(musicbrainz_id)
+    tour = MUSICBRAINZ_API.tour(musicbrainz_id)
 
     db_tour = Tour.objects.create(external_id=musicbrainz_id, name=tour["name"], artist=artist)
 
@@ -124,7 +124,7 @@ def insert_tour(musicbrainz_id, artist) -> Tour:
 
 
 def insert_venue(id) -> Venue:
-    venue = TicketMasterAPI().venue(id)
+    venue = TICKET_MASTER_API.venue(id)
 
     db_venue = Venue.objects.create(external_id=id, name=venue["name"])
     db_venue.save()

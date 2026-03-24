@@ -4,9 +4,7 @@ from concertainly.models import Genre, Artist, Tour, Review, Venue
 from concertainly.forms import UserForm, ReviewForm, insert_artist, insert_tour, insert_venue
 from django.shortcuts import redirect 
 from django.urls import reverse
-from django.contrib.auth import authenticate, login, logout, get_user_model
-from services.spotify import SpotifyAPI
-from services.ticketmaster import TicketMasterAPI
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 
@@ -72,12 +70,6 @@ def user_register(request):
 
     return render(request, 'register.html', context = {'user_form': user_form, 'registered': registered})
 
-def spotify_test(request):
-    s = SpotifyAPI()
-    
-    context_dict = {"boldmessage": str(s.artist("06HL4z0CvFAxyc27GXpf02"))}
-    return HttpResponse(str(context_dict))
-
 def user_login(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -136,9 +128,6 @@ def tour(request, slug):
     else:
         reviews = []
     return render(request, "tour.html", {"tour": tour, "reviews": reviews})
-
-def ticket_master_test(request):
-    return HttpResponse(str(TicketMasterAPI().attraction_search({ "keyword": "Taylor", "size": 1 })))
 
 @login_required
 def review(request):
