@@ -160,3 +160,5 @@ class SpotifyAPI:
                 "offset": offset,
             },
         ).json()["tracks"]
+
+SPOTIFY_API = SpotifyAPI()

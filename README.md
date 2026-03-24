@@ -9,3 +9,6 @@
 - git rm -r --cached .
 - git add .
 and they should be gone!
+
+## if you need to reset migrations after a model change
+if you have bash installed execute ./res_mig.sh

@@ -1,23 +1,27 @@
+let artist_id = document.getElementById("id_artist_id");
+
 /**
 @param {string} name
 @param {bool} required
 */
 function searchDataList(name, required) {
   const element = document.getElementById(`${name}_select`);
-  const datalist = document.getElementById(`${name}_options`);  
+  const datalist = document.getElementById(`${name}_select_list`);
+  const id_feild = document.getElementById(`id_${name}_id`)
+  
   let valid_names = {};
 
   element.addEventListener("blur", () => {
     if (element.value == "") return;
 
     element.classList.add('was-validated')
-    if (!element.dataset.id && required) {
+    if (!id_feild.value && required) {
       element.setCustomValidity("Option not selected")
-      element.reportValidity();
     } else {
       element.setCustomValidity("")
-      element.reportValidity();
     }
+
+    element.reportValidity();
   })
 
   const buffer_time = 1000;
@@ -28,6 +32,7 @@ function searchDataList(name, required) {
 
     const params = new URLSearchParams({
       keyword: text,
+      artist_id: artist_id.value,
     });
 
     fetch(`api/${name}_search?${params}`)
@@ -44,7 +49,7 @@ function searchDataList(name, required) {
         })
 
         if (element.value.toLowerCase() in valid_names) {
-          element.dataset.id = valid_names[element.value.toLowerCase()]
+          id_feild.value = valid_names[element.value.toLowerCase()]
         }
       })
       .catch(e => console.error(e))
@@ -58,7 +63,7 @@ function searchDataList(name, required) {
       clearTimeout(timer);
       timer = setTimeout(() => onStall(event.target.value), buffer_time);
     } else {
-      element.dataset.id = valid_names[element.value.toLowerCase()]
+      id_feild.value = valid_names[element.value.toLowerCase()]
     }
   })
 }
