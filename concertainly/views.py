@@ -23,6 +23,8 @@ def home(request):
     highlight_tour = tours[0:3]
     popular_tours = tours [3:13]
 
+    context_dict = {}
+    
     if len(highlight_tour) == 0:
         print("no populated data")
         return render(request, "noData.html", context=context_dict)
@@ -31,7 +33,7 @@ def home(request):
     tour2 = highlight_tour[1]
     tour3 = highlight_tour[2]
 
-    context_dict = {}
+    
     context_dict["highlight_tour"] = highlight_tour
     context_dict["popular_tours"] = popular_tours
     context_dict["tour1"] = tour1
