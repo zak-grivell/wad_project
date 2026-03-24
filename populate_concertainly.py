@@ -11,8 +11,8 @@ django.setup()
 from django.contrib.auth.models import User  # noqa: E402
 from concertainly.models import Artist, Tour, Song, Review, Genre, Venue  # noqa: E402
 
-def add_genre(name):
-    genre,_ = Genre.objects.get_or_create(name=name)
+def add_genre(name, nice_name):
+    genre,_ = Genre.objects.get_or_create(name=name, nice_name=nice_name)
     return genre
 
 def add_venue(name, city):
@@ -100,8 +100,19 @@ def add_review(title, thoughts, img, venue, date, rating, user, tour, songs):
     return review
 
 def populate():
-    pop = add_genre("pop")
-    rock = add_genre("rock")
+    pop = add_genre("pop", "Pop")
+    rock = add_genre("rock","Rock")
+    rb = add_genre("rnb","R&B")
+    classical = add_genre("classical","Classical")
+    hiphop = add_genre("hiphop","Hip-Hop")
+    metal = add_genre("metal", "Metal")
+    jpop = add_genre("jpop", "J-Pop")
+    punk = add_genre("punk", "Punk")
+    kpop = add_genre("kpop", "K-Pop")
+    latin = add_genre("latin", "Latin")
+    edm = add_genre("edm", "EDM")
+    mandopop = add_genre("mandopop", "Mandopop")
+
      
     billie = add_artist("Billie Eilish", pop,  "6qqNVTkY8uBg9cP3Jd7DAH", "f4abc0b5-3f7a-4eff-8f78-ac078dbce533")
     linkin = add_artist("Linkin Park", rock, "6XyY86QOPPrYVGvF9ch6wz", "f59c5520-5f46-4d2c-b2c4-822eabf53419")
