@@ -32,8 +32,11 @@ function searchDataList(name, required) {
 
     const params = new URLSearchParams({
       keyword: text,
-      artist_id: artist_id.value,
     });
+
+    if (artist_id.value) {
+      params.artist_id = artist_id.value
+    }
 
     fetch(`api/${name}_search?${params}`)
       .then(res => res.json())
