@@ -9,12 +9,19 @@ class Genre(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
 
+class Venue(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
+    name = models.CharField(max_length=128)
+    external_id = models.CharField(max_length=128)
+    city = models.CharField(max_length=128)
+
 class Artist(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
-    spotify_id = models.CharField(max_length=128)
+    external_id = models.CharField(max_length=128)
+    image_src = models.CharField(max_length=128)
 
-    genre = models.ForeignKey(Genre, on_delete=CASCADE)
+    genres = models.ManyToManyField(Genre)
     slug = models.SlugField(unique=True, blank=True)
 
     def save(self, *args, **kwargs):
@@ -26,7 +33,7 @@ class Tour(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
     artist = models.ForeignKey(Artist, on_delete=CASCADE)
-    ticket_master_id = models.CharField(max_length=128)
+    external_id = models.CharField(max_length=128)
     slug = models.SlugField(unique=True, blank=True)
     image = models.CharField(max_length=128, blank=True)
 
@@ -35,12 +42,13 @@ class Tour(models.Model):
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
+    
 class Song(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
     artist = models.ForeignKey(Artist, on_delete=CASCADE)
 
-    spotify_id = models.CharField(max_length=128)
+    external_id = models.CharField(max_length=128)
 
 
 class Review(models.Model):
@@ -49,8 +57,7 @@ class Review(models.Model):
     thoughts = models.CharField(max_length=1024)
     img = models.ImageField(upload_to='reviews/', blank=True, null=True , height_field=None, width_field=None, max_length=100)
 
-    city = models.CharField(max_length=128)
-    venue = models.CharField(max_length=128)
+    venue = models.ForeignKey(Venue, on_delete=CASCADE)
     date = models.DateField()
 
     rating = models.IntegerField(

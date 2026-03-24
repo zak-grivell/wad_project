@@ -207,3 +207,5 @@ class TicketMasterAPI:
             f"{URL}venues/{id}.json",
             params=api_params
         ).json()
+
+TICKET_MASTER_API = TicketMasterAPI()
