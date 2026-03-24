@@ -1,14 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from concertainly.models import Genre, Artist, Tour, Review
-from concertainly.forms import UserForm
+from concertainly.models import Genre, Artist, Tour, Review, Venue
+from concertainly.forms import UserForm, ReviewForm, insert_artist, insert_tour, insert_venue
 from django.shortcuts import redirect 
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render
-from services.spotify import SpotifyAPI
-from services.ticketmaster import TicketMasterAPI
-from concertainly.models import *
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 
@@ -84,12 +80,6 @@ def user_register(request):
 
     return render(request, 'register.html', context = {'user_form': user_form, 'registered': registered})
 
-def spotify_test(request):
-    s = SpotifyAPI()
-    
-    context_dict = {"boldmessage": str(s.artist("06HL4z0CvFAxyc27GXpf02"))}
-    return render(request, "index.html", context=context_dict)
-
 def user_login(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -152,8 +142,36 @@ def tour(request, slug):
         reviews = []
     return render(request, "tour.html", {"tour": tour, "reviews": reviews})
 
-def ticket_master_test(request):
-    return HttpResponse(str(TicketMasterAPI().attraction_search({ "keyword": "Taylor", "size": 1 })))
-
+@login_required
 def review(request):
-    return render(request, "review.html")
+    if (request.method == "POST"):
+        form = ReviewForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            artist_query = Artist.objects.filter(external_id=form.cleaned_data["artist_id"])
+            artist = artist_query.first() if artist_query.exists() else insert_artist(form.cleaned_data['artist_id'])
+
+            tour_query = Tour.objects.filter(external_id=form.cleaned_data["tour_id"])
+            tour = tour_query.first() if tour_query.exists() else insert_tour(form.cleaned_data['tour_id'], artist=artist)
+            
+            venue_query = Venue.objects.filter(external_id=form.cleaned_data["venue_id"])
+            venue = venue_query.first() if venue_query.exists() else insert_venue(form.cleaned_data['venue_id'])
+            
+            Review.objects.create(
+                title=form.cleaned_data["title"],
+                thoughts=form.cleaned_data["comment"],
+                date=form.cleaned_data["date"],
+                rating=form.cleaned_data["rating"],
+                img=form.cleaned_data["review_photo"],
+                tour=tour,
+                venue=venue,
+                user=request.user
+             )
+
+            return redirect(f"{reverse("tour")}/{tour.name}")  # ty:ignore[unresolved-attribute]
+        else:
+            print(form.errors)
+    else:
+        form = ReviewForm()
+    
+    return render(request, "review.html", {"form": form})

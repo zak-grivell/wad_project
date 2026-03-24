@@ -8,78 +8,78 @@ Tour Reviews
 
 {% block body_block %}
 
-<section class="mx-3 mt-3">
-  <h2>Review</h2>
-  <div class="mb-3">
-    <label for="review_title" class="form-label">Title</label>
-    <input type="text" class="form-control" id="review_title" placeholder="">
-  </div>
-  <div class="mb-3">
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="review_rating" id="review_rating_1" value="1">
-      <label class="form-check-label" for="review_rating_1">1</label>
+<form action="review" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% for hidden in form.hidden_fields %}
+  {{ hidden }}
+  {% endfor %}
+
+  <section class="mx-3 mt-3">
+    <h2>Review</h2>
+    <div class="mb-3">
+      {{form.title}}
+      <!-- <label for="title" class="form-label">Title</label> -->
+      <!-- <input required type="text" id="title" placeholder="" -->
+      <!-- class="form-control {% if form.title.errors %}is-invalid{% endif %}" value="{{ form.title.value|default:'' }}"> -->
+
+
+      <!-- {% if form.title.errors %} -->
+      <!-- <div class="invalid-feedback"> -->
+      <!-- {{ form.title.errors|striptags }} -->
+      <!-- </div> -->
+      <!-- {% endif %} -->
     </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="review_rating" id="review_rating_2" value="2">
-      <label class="form-check-label" for="review_rating_2">2</label>
+
+    <div class="mb-3 input-group">
+      {% for radio in form.rating %}
+      <div class="form-check form-check-inline">
+        {{ radio.tag }}
+        <label for="{{ radio.id_for_label }}" class="form-check-label">
+          {{ radio.choice_label }}
+        </label>
+      </div>
+      {% endfor %}
+
+      {% if field.errors %}
+      <div class="invalid-feedback">
+        {{ form.rating.errors|striptags }}
+      </div>
+      {% endif %}
     </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="review_rating" id="review_rating_3" value="3">
-      <label class="form-check-label" for="review_rating_3">3</label>
+
+    <div class="mb-3">
+      {{form.comment}}
     </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="review_rating" id="review_rating_4" value="4">
-      <label class="form-check-label" for="review_rating_4">4</label>
+
+    <div class="mb-3">
+      {{form.review_photo}}
+      <!-- <label for="review_photo" class="form-label">Photo</label> -->
+      <!-- <input class="form-control" type="file" id="review_photo"> -->
     </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="review_rating" id="review_rating_5" value="5">
-      <label class="form-check-label" for="review_rating_5">5</label>
-    </div>
-  </div>
-
-  <div class="mb-3">
-    <label for="review_body" class="form-label">Comments</label>
-    <textarea class="form-control" id="review_body" rows="5"></textarea>
-  </div>
-
-  <div class="mb-3">
-    <label for="review_photo" class="form-label">Photo</label>
-    <input class="form-control" type="file" id="review_photo">
-  </div>
-</section>
+  </section>
 
 
-<section class="mx-3 mt-3">
-  <h2>About</h2>
 
-  <div class="mb-3 input-group">
-    <span class="input-group-text" for="artist_select">Artist</span>
-    <input class="form-control" list="artist_options" id="artist_select" placeholder="Type to search artists">
-    <datalist id="artist_options"></datalist>
-  </div>
-  <div class="mb-3 input-group">
-    <label class="input-group-text" for="tour_select">Tour</label>
-    <input class="form-control" list="tour_options" id="tour_select" placeholder="Type to search tours">
-    <datalist id="tour_options"></datalist>
-  </div>
+  <section class="mx-3 mt-3">
+    <h2>About</h2>
 
-  <div class="mb-3 input-group">
-    <label for="venue_select" class="input-group-text">Venue</label>
-    <input class="form-control" list="venue_options" id="venue_select" placeholder="Type to search venues"
-      autocomplete="on">
-    <datalist id="venue_options">
-    </datalist>
-    <div class="invalid-feedback">Example invalid feedback text</div>
-  </div>
+    <!-- <div class="mb-3 input-group"> -->
+    <!-- <span class="input-group-text" for="artist_select">Artist</span> -->
+    <!-- <input class="form-control" list="artist_options" id="artist_select" placeholder="Type to search artists"> -->
+    <!-- <datalist id="artist_options"></datalist> -->
+    <!-- </div> -->
 
+    {{form.artist_select}}
 
-  <div class="mb-3 input-group">
-    <label for="date" class="input-group-text">Date</label>
-    <input class="form-control" type="date" id="date" name="date" />
-  </div>
-</section>
+    {{form.tour_select}}
 
+    {{form.venue_select}}
 
+    {{form.date}}
+  </section>
+
+  <input type="submit" value="Post Review!" class="mx-3 mt-3 btn btn-primary">
+</form>
 
 <script src="{% static 'review.js' %}"></script>
 
