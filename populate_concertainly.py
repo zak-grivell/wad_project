@@ -101,6 +101,8 @@ def populate():
     olivia = add_artist("Olivia Rodrigo", pop, "1McMsnEElThX1knmY4oliG")
     sabrina = add_artist("Sabrina Carpenter", pop, "74KM79TiuVKeVCqs8QtB0B")
     conan = add_artist("Conan Gray", pop, "4Uc8Dsxct0oMqx0P6i60ea")
+    niall = add_artist("Niall Horan", pop,"1Hsdzj7Dlq2I7tHP7501T4")
+    sombr = add_artist("Sombr", pop, "4G9NDjRyZFDlJKMRL8hx3S")
     
     charlotte = add_user("Charlotte.528", "password")
     mark = add_user("Mark420", "password")
@@ -112,12 +114,17 @@ def populate():
     lizzy = add_user("Lizzy@_@", "password")
     nate = add_user("Nate.-.", "password")
     luna = add_user("Luna-_-", "password")
+    george = add_user("George100", "password")
+    casey = add_user("Casey<3", "password")
 
     #one review
     hit_me_hard_and_soft = add_tour("Hit Me Hard and Soft: The Tour", billie, image="images/tour/billie.jpg")
     from_zero = add_tour("FROM ZERO World Tour", linkin, image="images/tour/linkin.jpg")
     guts = add_tour("GUTS World Tour", olivia, image="images/tour/olivia.jpg")
     superache = add_tour("Superache Tour", conan, image="images/tour/conan.jpg")
+    theshow = add_tour("The Show", niall, image="images/tour/niall.jpg")
+    sombr_world_tour = add_tour("Sombr World Tour", sombr, image="images/tour/sombr.jpg")
+
 
     #two reviews
     love_on_tour = add_tour("Love on Tour", harry, image="images/tour/harry.jpg")
@@ -126,10 +133,10 @@ def populate():
 
 
     #no reviews
-    the_eras_tour_2 = add_tour("The Eras Tour 2.0", taylor)
-    fearless_tour = add_tour("Fearless Tour", taylor)
-    speak_now_world_tour = add_tour("Speak Now World Tour", taylor)
-    the_red_tour = add_tour("The Red Tour", taylor)
+    the_eras_tour_2 = add_tour("The Eras Tour 2.0", taylor, image="images/tour/erastour2.jpg")
+    fearless_tour = add_tour("Fearless Tour", taylor, image="images/tour/fearless.jpg")
+    speak_now_world_tour = add_tour("Speak Now World Tour", taylor, image="images/tour/speaknow.jpg")
+    the_red_tour = add_tour("The Red Tour", taylor, image="images/tour/redtour.jpg")
 
     billie_s1 = add_song("bad guy", billie, "2Fxmhks0bxGSBdJ92vM42m")
     billie_s2 = add_song("BIRDS OF A FEATHER", billie, "6dOtVTDdiauQNBQEDOtlAB")
@@ -288,6 +295,33 @@ def populate():
         tour = guts,
         songs = [olivia_s1, olivia_s2, olivia_s3]
     )
+
+    add_review(
+        title = "the show!",
+        thoughts = "great show (pardon the pun haha)",
+        img = "",
+        city = "Belfast",
+        venue = "SSE Arena",
+        date = date(2024,2,21),
+        rating = 4,
+        user = george,
+        tour = theshow,
+        songs = []
+    )
+
+    add_review(
+        title = "impressed",
+        thoughts = "officially a new fan after this - get on the sombr train if you havent yet!!",
+        img = "",
+        city = "Birmingham",
+        venue = "o2 Academy",
+        date = date(2026,3,13),
+        rating = 4,
+        user = casey,
+        tour = sombr_world_tour,
+        songs = []
+    )
+
     
 
 if __name__ == '__main__':
