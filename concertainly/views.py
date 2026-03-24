@@ -16,12 +16,23 @@ def home(request):
         .order_by("-review_count")
     )
 
-    highlight_tour = tours[0]
-    popular_tours = tours [1:11]
+    highlight_tour = tours[0:3]
+    popular_tours = tours [3:13]
+
+    if len(highlight_tour) == 0:
+        print("no populated data")
+        return render(request, "noData.html", context=context_dict)
+    
+    tour1 = highlight_tour[0]
+    tour2 = highlight_tour[1]
+    tour3 = highlight_tour[2]
 
     context_dict = {}
     context_dict["highlight_tour"] = highlight_tour
     context_dict["popular_tours"] = popular_tours
+    context_dict["tour1"] = tour1
+    context_dict["tour2"] = tour2
+    context_dict["tour3"] = tour3
 
     return render(request, "homepage.html", context=context_dict)
 
@@ -45,27 +56,24 @@ def search(request):
 
 def user_register(request):
     registered = False
-    print("in register")
     # if it's a post request, process the data
     if request.method == "POST":
         # grab form data
         user_form = UserForm(request.POST)
-
         # NOTE: if we ever add more info on each user (necessitating the existence of ConcertUser or something) we'll need a new form and a check that it's valid
         if user_form.is_valid():
             # save data
             user = user_form.save()
-
             # set_password does password hashing
             user.set_password(user.password)
             user.save()
-
             registered = True
-            print("registered successfully")
         else:
             # if invalid, complain to the terminal
             print(user_form.errors)
+            
     else:
+        print("not post")
         user_form = UserForm()
 
     return render(request, 'register.html', context = {'user_form': user_form, 'registered': registered})
@@ -110,11 +118,14 @@ def genre_list(request):
 
 def genre(request, genre_name):
     genre = get_object_or_404(Genre, name=genre_name)
+    artists = Artist.objects.filter(genre=genre)
+    context_dict = {}
+    context_dict["artists"] = artists
+    context_dict["genre"] = genre
+    return render(request, "genre.html", context=context_dict)
 
-    return render(request, "genre.html", {"genre": genre})
-
-def artist(request, artist_name):
-    artist = get_object_or_404(Artist, name=artist_name)
+def artist(request, slug):
+    artist = get_object_or_404(Artist, slug=slug)
     tours = Tour.objects.filter(artist=artist)
     context_dict = {}
     context_dict["artist"] = artist

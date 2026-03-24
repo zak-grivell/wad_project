@@ -1,14 +1,13 @@
-
 body {
     background-color: #16161D;
     color: white
 }
 
 /* tour page */
-.card {
-    background-color: #1f1f29;
+.custom-card {
+    background-color: #1e1e2f;
     color: white;
-    border: 2px solid #333;
+    border: 1px solid white;
 }
 
 .review-image-box {
@@ -24,6 +23,7 @@ body {
     object-fit: cover;
     border-radius: 10px;
 }
+
 /* allGenres page */
 button img {
   transition: 0.2s;
@@ -31,14 +31,39 @@ button img {
 
 button:hover img {
   transform: scale(1.05);
-#artistName{
-    color:rgb(255, 255, 255);
-    text-align: center;
 }
+
+/* artist page */ 
 
 .artistCard .card{
     background-color: #1e1e2f;
     color: white;
     border: 1px solid white;
 }
+.artistCard .card img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+#artistName{
+    text-align: center;
+    color:rgb(255, 255, 255);
+}
+
+/* home page*/
+
+.highlight-tour-carousel img {
+    height: 50vh;
+    object-fit: cover;
+}
+
+.popular-tour-card img {
+    height: 50vh;
+    object-fit: cover;
+}
+
+/* genre page */
+#genreName{
+    text-align: center;
+    text-transform: capitalize;
 }

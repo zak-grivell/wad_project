@@ -22,6 +22,12 @@ class Artist(models.Model):
     image_src = models.CharField(max_length=128)
 
     genres = models.ManyToManyField(Genre)
+    slug = models.SlugField(unique=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
 class Tour(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
@@ -29,6 +35,7 @@ class Tour(models.Model):
     artist = models.ForeignKey(Artist, on_delete=CASCADE)
     external_id = models.CharField(max_length=128)
     slug = models.SlugField(unique=True, blank=True)
+    image = models.CharField(max_length=128, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
