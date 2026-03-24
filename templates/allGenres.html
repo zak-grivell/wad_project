@@ -1,5 +1,29 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title_block %}
     Genres
+{% endblock %}
+
+{% block body_block %}
+<div class="page box">
+    <div class="title-frame ms-4">
+            <h1>Genres</h1>
+    </div>
+
+    <div class="container">
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 gx-5 gy-4">
+            {% for genre in genres %}
+            <div class="col">
+                <a href="{% url 'concertainly:genre' genre %}" class="d-block">
+                    <button class="btn p-0 border-0 w-100">
+                        <img src="{% static 'images/'|add:genre|add:'.png' %}"
+                            class="img-fluid rounded w-100">
+                    </button>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}

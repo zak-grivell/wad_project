@@ -1,5 +1,40 @@
 {% extends 'base.html' %}
 
 {% block title_block %}
-    Artist
+    {% if artist %}
+        {{ artist.name }}
+    {% endif %}
+{% endblock %}
+
+{% block body_block %}
+<div class="container py-5">
+    {% if artist %}
+            <h1 id="artistName">{{ artist.name }}</h1><br>
+    {% endif %}
+
+    {% if tours %}
+        {% for tour in tours %}
+            <div class="artistCard">
+            <div class="card mb-3">
+            <div class="row g-0">
+                <div class="col-md-4">
+                <img src="" class="img-fluid rounded-start" alt="tour image">
+                </div>
+                <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{ tour.name }}</h5>
+                    <p class="card-text">Deciding whether to go to {{ tour.name }}?
+                    Or been and want to reminisce?<br>
+                    <a href="#" class="btn btn-primary">View Reviews</a> To see everyones thoughts, photos, ratings and more....
+                    </p>
+                    <p class="card-text">Been to {{ tour.name }}?<br>
+                    <a href="#" class="btn btn-primary">Post a Review</a> Tell everyone about it!</p>
+                </div>
+                </div>
+            </div>
+            </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
 {% endblock %}
