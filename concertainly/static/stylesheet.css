@@ -44,6 +44,14 @@ button:hover img {
     color: white;
     border: 1px solid white;
 }
+.artistCard .card img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+#artistName{
+    text-align: center;
+}
 
 /* home page*/
 
