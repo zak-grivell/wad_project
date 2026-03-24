@@ -118,7 +118,6 @@ def populate():
     casey = add_user("Casey<3", "password")
 
     #one review
-    hit_me_hard_and_soft = add_tour("Hit Me Hard and Soft: The Tour", billie, image="images/tour/billie.jpg")
     from_zero = add_tour("FROM ZERO World Tour", linkin, image="images/tour/linkin.jpg")
     guts = add_tour("GUTS World Tour", olivia, image="images/tour/olivia.jpg")
     superache = add_tour("Superache Tour", conan, image="images/tour/conan.jpg")
@@ -126,10 +125,11 @@ def populate():
     sombr_world_tour = add_tour("Sombr World Tour", sombr, image="images/tour/sombr.jpg")
 
 
-    #two reviews
+    #two/+ reviews
     love_on_tour = add_tour("Love on Tour", harry, image="images/tour/harry.jpg")
     short_n_sweet = add_tour("Short n' Sweet", sabrina, image="images/tour/sabrina.jpeg")
     the_eras_tour = add_tour("The Eras Tour", taylor, image="images/tour/taylor.jpg")
+    hit_me_hard_and_soft = add_tour("Hit Me Hard and Soft: The Tour", billie, image="images/tour/billie.jpg")
 
 
     #no reviews
@@ -321,6 +321,34 @@ def populate():
         tour = sombr_world_tour,
         songs = []
     )
+
+    add_review(
+        title = "coool", 
+        thoughts = "first time going to billie's concert. not bad overall.", 
+        img = "images/reviews/billie_2.jpg",
+        city = "Glasgow",
+        venue = "OVO Hydro",
+        date = date(2025,6,7),
+        rating = 3,
+        user = lizzy,
+        tour = hit_me_hard_and_soft,
+        songs = [],
+    )
+
+    add_review(
+        title = "i lovee it", 
+        thoughts = "I love it sm. Love her. LEGEND.", 
+        img = "images/reviews/taylor_2.jpg",
+        city = "Glasgow",
+        venue = "OVO Hydro",
+        date = date(2025,6,7),
+        rating = 4,
+        user = carolina,
+        tour = the_eras_tour,
+        songs = [],
+    )
+
+
 
     
 
