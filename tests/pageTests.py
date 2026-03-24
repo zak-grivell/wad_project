@@ -67,3 +67,12 @@ class ArtistPage(TestCase):
             populate()
             response = self.client.get(reverse('concertainly:artist', kwargs={'artist_name': 'Taylor Swift'}))
             self.assertEqual(response.status_code, 200)
+
+class LoginPage(TestCase):
+
+    # are these tests correct? i don't know!
+    def test_username_field(self):
+        self.assertContains("Username: <input type=\"text\" name=\"username\" value=\"\"")
+
+    def test_password_field(self):
+        self.assertContains("Password: <input type=\"password\" name=\"password\" value=\"\"")
