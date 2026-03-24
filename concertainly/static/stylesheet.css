@@ -56,3 +56,9 @@ button:hover img {
     height: 50vh;
     object-fit: cover;
 }
+
+/* genre page */
+#genreName{
+    text-align: center;
+    text-transform: capitalize;
+}

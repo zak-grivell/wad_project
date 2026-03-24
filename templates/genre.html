@@ -7,7 +7,7 @@
 {% block body_block %}
 <div class="container py-5">
     {% if genre %}
-            <h1 id="artistName">{{ genre.name }}</h1><br>
+            <h1 id="genreName">{{ genre.name }} Artists</h1><br>
     {% endif %}
 
     {% if artists %}
@@ -17,7 +17,7 @@
             <div class="card">
                 <img src="" class="card-img-top" alt="artist image">
                 <div class="card-body">
-                <p><a href="{% url 'concertainly:artist' artist.name %}" class="btn btn-dark">{{ artist.name }}</a></p>
+                <p><a href="{% url 'concertainly:artist' artist.slug %}" class="btn btn-dark">{{ artist.name }}</a></p>
                 </div>
             </div>
             {% endfor %}
