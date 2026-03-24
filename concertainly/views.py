@@ -148,15 +148,10 @@ def review(request, slug=None): # add redirect
         form = ReviewForm(request.POST, request.FILES)
 
         if form.is_valid():
-            artist_query = Artist.objects.filter(external_id=form.cleaned_data["artist_id"])
-            artist = artist_query.first() if artist_query.exists() else insert_artist(form.cleaned_data['artist_id'])
-
-            tour_query = Tour.objects.filter(external_id=form.cleaned_data["tour_id"])
-            tour = tour_query.first() if tour_query.exists() else insert_tour(form.cleaned_data['tour_id'], artist=artist)
-            
-            venue_query = Venue.objects.filter(external_id=form.cleaned_data["venue_id"])
-            venue = venue_query.first() if venue_query.exists() else insert_venue(form.cleaned_data['venue_id'])
-            
+            artist = Artist.objects.get_or_create_from_api(form.cleaned_data["artist_id"])
+            tour = Tour.objects.get_or_create_from_api(form.cleaned_data["tour_id"], artist)
+            venue = Venue.objects.get_or_create_from_api(form.cleaned_data["tour_id"])
+                        
             Review.objects.create(
                 title=form.cleaned_data["title"],
                 thoughts=form.cleaned_data["comment"],
@@ -168,8 +163,8 @@ def review(request, slug=None): # add redirect
                 user=request.user
              )
 
-            return redirect(reverse("tour", kwargs={"slug": tour.slug}))  # ty:ignore[unresolved-attribute]
-        else:
+            return redirect(reverse("tour", kwargs={"slug": tour.slug}))
+        else:    
             print(form.errors)
     elif slug and (tour := Tour.objects.filter(slug=slug).first()):
         print("filling in")

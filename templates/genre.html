@@ -15,7 +15,7 @@ Genre
     <div class="row row-cols-2 row-cols-md-3 g-4">
       {% for artist in artists %}
       <div class="card">
-        <img src="{{artist.image_src}}" class="card-img-top" alt="artist image">
+        <img src="{{artist.spotify_image}}" class="card-img-top" alt="artist image">
         <div class="card-body">
           <p><a href="{% url 'concertainly:artist' artist.slug %}" class="btn btn-dark">{{ artist.name }}</a></p>
         </div>

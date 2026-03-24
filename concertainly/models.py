@@ -4,19 +4,57 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+from services.lastfm import LASTFM_API
+from services.spotify import SPOTIFY_API
+from services.ticketmaster import TICKET_MASTER_API
+from services.musicbrainz import MUSICBRAINZ_API
 
 class Genre(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
     nice_name = models.CharField(max_length=128, default="")
 
+class VenueManager(models.Manager):
+    def get_or_create_from_api(self, ticketmaster_id):
+        venue, created = self.get_or_create(external_id=ticketmaster_id)
+
+        if created:
+            venue_data = TICKET_MASTER_API.venue(ticketmaster_id)
+            
+            venue.name = venue_data.get("name", "Unknown Venue")
+            venue.save()
+                
+        return venue
+
 class Venue(models.Model):
+    objects = VenueManager()
+    
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
     external_id = models.CharField(max_length=128)
     city = models.CharField(max_length=128)
 
+class ArtistManager(models.Manager):
+    def get_or_create_from_api(self, musicbrainz_id: str) -> 'Artist':
+            artist, created = self.get_or_create(external_id=musicbrainz_id)
+
+            if created:
+                artist_data = LASTFM_API.artist(musicbrainz_id)
+                spotify_results = SPOTIFY_API.search_artist(artist_data["name"], 1, 0)
+            
+                artist.name = artist_data["name"]
+                artist.spotify_image = spotify_results ["items"][0]["images"][0]["url"]
+                artist.save()
+            
+                tag_names = [tag["name"] for tag in artist_data["tags"]["tag"]]
+                genres = Genre.objects.filter(name__in=tag_names)
+                artist.genres.set(genres)
+
+            return artist
+
 class Artist(models.Model):
+    objects = ArtistManager()
+    
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
     external_id = models.CharField(max_length=128)
@@ -30,7 +68,23 @@ class Artist(models.Model):
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
+class TourManager(models.Manager):
+    def get_or_create_from_api(self, musicbrainz_id: str, artist_instance: Artist) -> 'Tour':
+        tour, created = self.get_or_create(
+            external_id=musicbrainz_id,
+            defaults={'artist': artist_instance}
+        )
+
+        if created:
+            tour_data = MUSICBRAINZ_API.tour(musicbrainz_id)                
+            tour.name = tour_data["name"]
+            tour.save()
+                
+        return tour
+
 class Tour(models.Model):
+    objects = TourManager()
+    
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
     artist = models.ForeignKey(Artist, on_delete=CASCADE)
