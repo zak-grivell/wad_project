@@ -169,7 +169,7 @@ def populate():
     add_review(
         title = "Best tour forever",
         thoughts = "love itttt. Already looking forward to the next show.xxxxx",
-        img = "reviews/billie_1.jpg",
+        img = "images/reviews/billie_1.jpg",
         city = "Glasgow",
         venue = "OVO Hydro",
         date = date(2025,6,7),
@@ -182,7 +182,7 @@ def populate():
     add_review(
         title = "BEST",
         thoughts = "The nostalgia... Act 4 is my favourite. Soldiers forever.",
-        img = "reviews/linkin_1.jpg",
+        img = "images/reviews/linkin_1.jpg",
         city = "Brooklyn",
         venue = "Barclays Center",
         date = date(2024,11,16),
@@ -195,7 +195,7 @@ def populate():
     add_review(
         title = "<3<3<3",
         thoughts = "Everything is so good espcailly like OMG I love her sm",
-        img = "reviews/taylor_1.jpg",
+        img = "images/reviews/taylor_1.jpg",
         city = "Edinburgh",
         venue = "Murrayfield Stadium",
         date = date(2024,6,9),
