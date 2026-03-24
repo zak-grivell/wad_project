@@ -8,7 +8,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 
-
 def home(request):
     tours = (
         Tour.objects.annotate(review_count=Count("review"))
@@ -20,7 +19,7 @@ def home(request):
     popular_tours = tours [3:13]
 
     context_dict = {}
-    
+
     if len(highlight_tour) == 0:
         print("no populated data")
         return render(request, "noData.html", context=context_dict)
@@ -101,6 +100,7 @@ def user_login(request):
 
 @login_required
 def user_logout(request):
+    print("LOGGING OOOOOOOOOUT")
     logout(request)
     return redirect(reverse("concertainly:home"))
 

@@ -97,12 +97,12 @@ class ReviewForm(forms.Form):
 
 def insert_artist(musicbrainz_id) -> Artist:
     artist_data = LASTFM_API.artist(musicbrainz_id)
-    img = SPOTIFY_API.search_artist(artist_data["name"], 1, 0)["items"][0]["images"][0]["url"]
-    
+    spotify_id = SPOTIFY_API.search_artist(artist_data["name"], 1, 0)["items"][0]["id"]
+        
     db_artist = Artist.objects.create(
         external_id=musicbrainz_id,
         name=artist_data["name"],
-        image_src=img,
+        spotify_id=spotify_id,
     )
     db_artist.save()
 
