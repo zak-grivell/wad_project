@@ -120,7 +120,7 @@ def genre_list(request):
 
 def genre(request, genre_name):
     genre = get_object_or_404(Genre, name=genre_name)
-    artists = Artist.objects.filter(genre=genre)
+    artists = Artist.objects.filter(genres=genre)
     context_dict = {}
     context_dict["artists"] = artists
     context_dict["genre"] = genre
