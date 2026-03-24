@@ -1,34 +1,45 @@
+from math import hypot
 import os
 from datetime import date
 os.environ.setdefault('DJANGO_SETTINGS_MODULE',
                      'wad_project.settings')
 
+
 import django
 django.setup()
-from django.contrib.auth.models import User
-from concertainly.models import Artist, Tour, Song, Review, Genre
+
+from django.contrib.auth.models import User  # noqa: E402
+from concertainly.models import Artist, Tour, Song, Review, Genre, Venue  # noqa: E402
 
 def add_genre(name):
     genre,_ = Genre.objects.get_or_create(name=name)
     return genre
 
-def add_artist(name, genre, spotify_id):
+def add_venue(name, city):
+    venue, _ = Venue.objects.get_or_create(name=name, defaults={
+        "city": city
+    })
+    return venue
+
+def add_artist(name, genres, spotify_id, external_id):
     artist,_ = Artist.objects.get_or_create(
         name=name,
         defaults={
-            "genre": genre,
-            "spotify_id": spotify_id
-            }
-        )
+            "spotify_id": spotify_id,
+            "external_id": external_id
+        }
+    )
+
+    artist.genres.add(genres)
     
     changed = False
 
-    if artist.genre != genre:
-        artist.genre = genre
-        changed = True
-
     if artist.spotify_id != spotify_id:
         artist.spotify_id = spotify_id
+        changed = True
+
+    if artist.external_id != external_id:
+        artist.external_id = external_id
         changed = True
     
     if changed:
@@ -47,10 +58,10 @@ def add_tour(name, artist, ticket_master_id = "", image=""):
     tour,_ = Tour.objects.get_or_create(
         name=name, 
         artist=artist,
-        defaults={"ticket_master_id": ticket_master_id, "image": image}
+        defaults={"external_id": ticket_master_id, "image": image}
     )
-    if tour.ticket_master_id != ticket_master_id:
-        tour.ticket_master_id = ticket_master_id
+    if tour.external_id != ticket_master_id:
+        tour.external_id = ticket_master_id
         tour.save()
     return tour
 
@@ -58,14 +69,14 @@ def add_song(name, artist, spotify_id):
     song,_ = Song.objects.get_or_create(
         name=name, 
         artist=artist,
-        defaults={"spotify_id": spotify_id}
+        defaults={"external_id": spotify_id}
     )
-    if song.spotify_id != spotify_id:
-        song.spotify_id = spotify_id
+    if song.external_id != spotify_id:
+        song.external_id = spotify_id
         song.save()
     return song
 
-def add_review(title, thoughts, img, city, venue, date, rating, user, tour, songs):
+def add_review(title, thoughts, img, venue, date, rating, user, tour, songs):
     review, created = Review.objects.get_or_create(        
         title=title,
         user=user,
@@ -73,7 +84,6 @@ def add_review(title, thoughts, img, city, venue, date, rating, user, tour, song
         defaults={
             "thoughts": thoughts,
             "img": img,
-            "city": city,
             "venue": venue,
             "date": date,
             "rating": rating,
@@ -92,17 +102,16 @@ def add_review(title, thoughts, img, city, venue, date, rating, user, tour, song
 def populate():
     pop = add_genre("pop")
     rock = add_genre("rock")
-
      
-    billie = add_artist("Billie Eilish", pop,  "6qqNVTkY8uBg9cP3Jd7DAH")
-    linkin = add_artist("Linkin Park", rock, "6XyY86QOPPrYVGvF9ch6wz")
-    taylor = add_artist("Taylor Swift", pop, "06HL4z0CvFAxyc27GXpf02")
-    harry = add_artist("Harry Styles", pop, "6KImCVD70vtIoJWnq6nGn3")
-    olivia = add_artist("Olivia Rodrigo", pop, "1McMsnEElThX1knmY4oliG")
-    sabrina = add_artist("Sabrina Carpenter", pop, "74KM79TiuVKeVCqs8QtB0B")
-    conan = add_artist("Conan Gray", pop, "4Uc8Dsxct0oMqx0P6i60ea")
-    niall = add_artist("Niall Horan", pop,"1Hsdzj7Dlq2I7tHP7501T4")
-    sombr = add_artist("Sombr", pop, "4G9NDjRyZFDlJKMRL8hx3S")
+    billie = add_artist("Billie Eilish", pop,  "6qqNVTkY8uBg9cP3Jd7DAH", "f4abc0b5-3f7a-4eff-8f78-ac078dbce533")
+    linkin = add_artist("Linkin Park", rock, "6XyY86QOPPrYVGvF9ch6wz", "f59c5520-5f46-4d2c-b2c4-822eabf53419")
+    taylor = add_artist("Taylor Swift", pop, "06HL4z0CvFAxyc27GXpf02", "20244d07-534f-4eff-b4d4-930878889970")
+    harry = add_artist("Harry Styles", pop, "6KImCVD70vtIoJWnq6nGn3", "7eb1ce54-a355-41f9-8d68-e018b096d427")
+    olivia = add_artist("Olivia Rodrigo", pop, "1McMsnEElThX1knmY4oliG", "6925db17-f35e-42f3-a4eb-84ee6bf5d4b0")
+    sabrina = add_artist("Sabrina Carpenter", pop, "74KM79TiuVKeVCqs8QtB0B", "1882fe91-cdd9-49c9-9956-8e06a3810bd4")
+    conan = add_artist("Conan Gray", pop, "4Uc8Dsxct0oMqx0P6i60ea", "1882fe91-cdd9-49c9-9956-8e06a3810bd4")
+    niall = add_artist("Niall Horan", pop,"1Hsdzj7Dlq2I7tHP7501T4", "55e6074f-ef78-4ec3-8fff-bd1b8cc8c14a")
+    sombr = add_artist("Sombr", pop, "4G9NDjRyZFDlJKMRL8hx3S", "502cf908-9921-48bc-bf0e-265c881c0156")
     
     charlotte = add_user("Charlotte.528", "password")
     mark = add_user("Mark420", "password")
@@ -166,12 +175,22 @@ def populate():
     olivia_s2 = add_song("so american", olivia, "5Jh1i0no3vJ9u4deXkb4aV")
     olivia_s3 = add_song("love is embarrassing", olivia, "26QLJMK8G0M06sk7h7Fkse")
 
+    ovo = add_venue("OVO Hydro", "Glasgow")
+    barclays = add_venue("Barclays Center", "Brooklyn")
+    murrayfield_stadium = add_venue("Murrayfield Stadium", "Edinbrugh")
+    ibrox = add_venue("Ibrox Statium", "Glasgow")
+    wembley = add_venue("Wembly Stadium", "London")
+    coop_live = add_venue("Co-op Live", "Manchester")
+    utilita_arena = add_venue("Utilita Arena", "Birmingham")
+    eventim_apollo = add_venue("Eventim Apollo", "London")
+    sse_arena = add_venue("SSE Arena", "Belfast")
+    o2_academy_birmingham = add_venue("O2 Academy", "Birmingham")
+
     add_review(
         title = "Best tour forever",
         thoughts = "love itttt. Already looking forward to the next show.xxxxx",
         img = "reviews/billie_1.jpg",
-        city = "Glasgow",
-        venue = "OVO Hydro",
+        venue = ovo,
         date = date(2025,6,7),
         rating = 4,
         user = charlotte,
@@ -183,8 +202,7 @@ def populate():
         title = "BEST",
         thoughts = "The nostalgia... Act 4 is my favourite. Soldiers forever.",
         img = "reviews/linkin_1.jpg",
-        city = "Brooklyn",
-        venue = "Barclays Center",
+        venue = barclays,
         date = date(2024,11,16),
         rating = 5,
         user = mark,
@@ -196,8 +214,7 @@ def populate():
         title = "<3<3<3",
         thoughts = "Everything is so good espcailly like OMG I love her sm",
         img = "reviews/taylor_1.jpg",
-        city = "Edinburgh",
-        venue = "Murrayfield Stadium",
+        venue = murrayfield_stadium ,
         date = date(2024,6,9),
         rating = 5,
         user = emma,
@@ -209,8 +226,7 @@ def populate():
         title = "Good show",
         thoughts = "I came to this concert with my daughter. I get why she loves taylor swift so much.",
         img = "",
-        city = "London",
-        venue = "Wembley Stadium",
+        venue = wembley,
         date = date(2024,6,21),
         rating = 4,
         user = john,
@@ -222,8 +238,7 @@ def populate():
         title = "starstruck",
         thoughts = "been a fan since the 1d days... still am",
         img = "",
-        city = "Glasgow",
-        venue = "Ibrox Stadium",
+        venue = ibrox,
         date = date(2022,6,11),
         rating = 5,
         user = carolina,
@@ -235,8 +250,7 @@ def populate():
         title = "fantastic show",
         thoughts = "proper performance from the vocals to the costume design to the dance choreography",
         img = "",
-        city = "Manchester",
-        venue = "Co-op Live",
+        venue = coop_live,
         date = date(2025,3,13),
         rating = 5,
         user = delilah,
@@ -248,8 +262,7 @@ def populate():
         title = "sweeeet",
         thoughts = "luved it!",
         img = "",
-        city = "Birmingham",
-        venue = "Utilita Arena",
+        venue = utilita_arena,
         date = date(2025,3,6),
         rating = 4,
         user = alice,
@@ -261,8 +274,7 @@ def populate():
         title = ":D",
         thoughts = "absolutely brilliant",
         img = "",
-        city = "London",
-        venue = "Wembly Stadium",
+        venue = wembley,
         date = date(2023,6,13),
         rating = 4,
         user = nate,
@@ -274,8 +286,7 @@ def populate():
         title = "get tickets!",
         thoughts = "so good, already have tickets to see his next tour WishBone World Tour",
         img = "",
-        city = "London",
-        venue = "Eventim Opollo",
+        venue = eventim_apollo,
         date = date(2022,6,9),
         rating = 5,
         user = lizzy,
@@ -287,8 +298,7 @@ def populate():
         title = "did not disapoint at all!",
         thoughts = "after listening to this album so much in my bedroom it was cool to hear it live",
         img = "",
-        city = "Glasgow",
-        venue = "Ovo Hydro",
+        venue = ovo,
         date = date(2024,5,7),
         rating = 4,
         user = luna,
@@ -300,8 +310,7 @@ def populate():
         title = "the show!",
         thoughts = "great show (pardon the pun haha)",
         img = "",
-        city = "Belfast",
-        venue = "SSE Arena",
+        venue = sse_arena,
         date = date(2024,2,21),
         rating = 4,
         user = george,
@@ -313,8 +322,7 @@ def populate():
         title = "impressed",
         thoughts = "officially a new fan after this - get on the sombr train if you havent yet!!",
         img = "",
-        city = "Birmingham",
-        venue = "o2 Academy",
+        venue = o2_academy_birmingham,
         date = date(2026,3,13),
         rating = 4,
         user = casey,
