@@ -1,6 +1,16 @@
 body {
     background-color: #16161D;
-    color: white
+    color: white;
+    padding-top: 70px;
+}
+
+/* navbar */
+.navbar-brand {
+    font-size: 2rem;
+}
+
+.nav-link {
+    font-weight: bold;
 }
 
 /* tour page */
