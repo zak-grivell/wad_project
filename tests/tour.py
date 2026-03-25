@@ -112,3 +112,24 @@ class ShowReviewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Testing Review")
         self.assertContains(response, "Testing Review 2")
+
+    def test_with_annoymous_user(self):
+        response = self.client.get(
+            reverse("concertainly:tour", args=[self.tour_1.slug])
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, reverse("concertainly:login"))
+        self.assertContains(response, "Login to post a review")
+
+    def test_with_login_user(self):
+        self.client.login(username="testuser", password="password")
+        response = self.client.get(
+            reverse("concertainly:tour", args=[self.tour_1.slug])
+        )
+        self.assertContains(response, "Post Review")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            reverse("concertainly:review")
+        )
