@@ -7,7 +7,11 @@
 
 {% block body_block %}
     <div class="text-center py-5">
-        <h3>I'm searching it!</h3>
+        {% if any_results %}
+            <h3>Search Results</h3>
+        {% else %}
+            <h3>No results found!</h3>
+        {% endif %}
     </div>
     {% if reviews %}
         {% for review in reviews %}

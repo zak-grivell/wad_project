@@ -59,9 +59,12 @@ def search(request):
             if (s_tour):
                 reviews = [r for r in reviews if r.tour == s_tour[0]]
             if (s_venue):
+                print(s_venue[0])
+                for v in reviews.venue:
+                    print(v)
+    
                 reviews = [r for r in reviews if r.venue == s_venue[0]]
             if (s_date is not None and s_date[0] is not None):
-                # convert to string
                 reviews = [r for r in reviews if r.date.strftime('%Y-%m-%d') == s_date[0].strftime('%Y-%m-%d')]
             else:
                 print("epic date fail")
@@ -72,6 +75,7 @@ def search(request):
             
             context_dict = {}
             context_dict["reviews"] = reviews
+            context_dict["any_results"] = len(reviews) != 0
             return render(request, "search_results.html", context=context_dict)
         
         else:
