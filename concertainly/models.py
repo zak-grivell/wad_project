@@ -33,6 +33,9 @@ class Artist(models.Model):
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
+    def __str__(self):
+        return self.name
+
 class Tour(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key = True)
     name = models.CharField(max_length=128)
@@ -45,6 +48,9 @@ class Tour(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
 
     
 class Song(models.Model):
@@ -76,4 +82,9 @@ class Review(models.Model):
 
     set_list = models.ManyToManyField(Song)
 
+    def artist(self):
+        return self.tour.artist
+    
+    def __str__(self):
+        return "Review: ID - " + str(self.id) + ", Title - " + str(self.title) + ", Venue - " + str(self.venue) + ", Date - " + str(self.date) + ", Artist - " + str(self.artist()) + ", Tour - " + str(self.tour)
 

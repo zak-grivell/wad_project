@@ -45,27 +45,29 @@ def search(request):
             s_tour = Tour.objects.filter(name=form.cleaned_data["tour_select"])   
             s_venue = Venue.objects.filter(name=form.cleaned_data["venue_select"])
             s_date=form.cleaned_data["date"],
-            print(s_date)
             s_genre = Genre.objects.filter(name=form.cleaned_data["genre_select"])
 
-            reviews = Review.objects
+            reviews = Review.objects.all()
             
+            for elt in reviews:
+                print(elt)
+
             if (s_artist):
-                reviews = reviews.filter(lambda review: review.tour.artist == s_artist)
+                reviews = [r for r in reviews if r.artist() == s_artist[0]]
             if (s_tour):
-                reviews = reviews.filter(tour=s_tour)
+                reviews = [r for r in reviews if r.tour == s_tour[0]]
             if (s_venue):
-                reviews = reviews.filter(venue=s_venue)
+                reviews = [r for r in reviews if r.venue == s_venue[0]]
             if (s_date is not None and s_date[0] is not None):
                 # convert to string
-                reviews = reviews.filter(date=s_date[0].strftime('%Y-%m-%d'))
+                reviews = [r for r in reviews if r.date == s_date[0].strftime('%Y-%m-%d')]
         
             # TODO: add genre filtering
             #if (s_genre):
                 #reviews = reviews.filter(lambda review: review.tour.artist.genres.contains)
             
             context_dict = {}
-            context_dict["reviews"] = reviews.all()
+            context_dict["reviews"] = reviews
             return render(request, "search_results.html", context=context_dict)
         
         else:
