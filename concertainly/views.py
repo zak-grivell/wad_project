@@ -91,10 +91,10 @@ def user_login(request):
                 login(request, user)
                 return redirect(reverse("concertainly:home"))
             else:
-                return HttpResponse("Your Concertainly account is disabled.")
+                return render(request, "loginFailed.html", {"error_text": "Your Concertainly account is disabled."})
         else:
             print(f"Invalid login details")
-            return HttpResponse("Invalid login details supplied.")
+            return render(request, "loginFailed.html", {"error_text": "Invalid login details supplied."})
     else:
         return render(request, "login.html")
 
