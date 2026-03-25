@@ -94,6 +94,39 @@ class ReviewForm(forms.Form):
         ),
     )
 
+class SearchForm(forms.Form):
+    artist_id = forms.CharField(max_length=128, widget=forms.HiddenInput())
+    artist_select = forms.CharField(
+        max_length=128,
+        widget=DatalistWidget(
+            label="Artist",
+            attrs={
+                "id": "artist_select",
+            }
+        ),
+    )
+
+    tour_id = forms.CharField(max_length=128, widget=forms.HiddenInput())
+    tour_select = forms.CharField(
+        max_length=128,
+        widget=DatalistWidget(
+            label="Tour",
+            attrs={
+                "id": "tour_select",
+            }
+        ),
+    )
+
+    venue_id = forms.CharField(max_length=128, widget=forms.HiddenInput())
+    venue_select = forms.CharField(
+        max_length=128,
+        widget=DatalistWidget(
+            label="Venue",
+            attrs={
+                "id": "venue_select",
+            }
+        ),
+    )
 
 def insert_artist(musicbrainz_id) -> Artist:
     artist_data = LASTFM_API.artist(musicbrainz_id)

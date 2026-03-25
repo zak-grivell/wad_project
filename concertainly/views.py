@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from concertainly.models import Genre, Artist, Tour, Review, Venue
-from concertainly.forms import UserForm, ReviewForm, insert_artist, insert_tour, insert_venue
+from concertainly.forms import UserForm, ReviewForm, SearchForm, insert_artist, insert_tour, insert_venue
 from django.shortcuts import redirect 
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
@@ -37,9 +37,37 @@ def home(request):
     return render(request, "homepage.html", context=context_dict)
 
 def search(request):
+    if (request.method == "POST"):
+        form = SearchForm(request.POST, request.FILES)
+
+        # if form.is_valid():
+        #     artist_query = Artist.objects.filter(external_id=form.cleaned_data["artist_id"])
+        #     artist = artist_query.first() if artist_query.exists() else insert_artist(form.cleaned_data['artist_id'])
+
+        #     tour_query = Tour.objects.filter(external_id=form.cleaned_data["tour_id"])
+        #     tour = tour_query.first() if tour_query.exists() else insert_tour(form.cleaned_data['tour_id'], artist=artist)
+            
+        #     venue_query = Venue.objects.filter(external_id=form.cleaned_data["venue_id"])
+        #     venue = venue_query.first() if venue_query.exists() else insert_venue(form.cleaned_data['venue_id'])
+            
+        #     Review.objects.create(
+        #         title=form.cleaned_data["title"],
+        #         thoughts=form.cleaned_data["comment"],
+        #         date=form.cleaned_data["date"],
+        #         rating=form.cleaned_data["rating"],
+        #         img=form.cleaned_data["review_photo"],
+        #         tour=tour,
+        #         venue=venue,
+        #         user=request.user
+        #      )
+
+        #     return redirect(f"{reverse("tour")}/{tour.name}")  # ty:ignore[unresolved-attribute]
+        # else:
+        #     print(form.errors)
+    else:
+        form = SearchForm()
     
-    context_dict = {}
-    return render(request, "search.html", context=context_dict)
+    return render(request, "review.html", {"form": form})
 
 def user_register(request):
     registered = False

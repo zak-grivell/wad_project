@@ -2,9 +2,30 @@
 {% load static %}
 
 {% block title_block %}
-    Homepage
+    Search
 {% endblock %}
 
 {% block body_block %}
-    Test
+<form action="review" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% for hidden in form.hidden_fields %}
+  {{ hidden }}
+  {% endfor %}
+
+  <section class="mx-3 mt-3">
+    <h2>Search</h2>
+    {{form.artist_select}}
+
+    {{form.tour_select}}
+
+    {{form.venue_select}}
+
+    {{form.date}}
+  </section>
+
+  <input type="submit" value="Search" class="mx-3 mt-3 btn btn-primary">
+</form>
+
+<script src="{% static 'review.js' %}"></script>
+
 {% endblock %}
