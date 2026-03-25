@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from concertainly.models import Tour, Review, Artist, Genre
+from concertainly.models import Tour, Review, Artist, Genre, Venue
 from datetime import date
 
 class ShowReviewTest(TestCase):
@@ -16,9 +16,16 @@ class ShowReviewTest(TestCase):
 
         self.artist = Artist.objects.create(
             name = "Test Artist",
-            spotify_id = "testid123456789",
-            genre = self.genre,
+            external_id="test_external_id_123456789",
+            spotify_id = "test_id_123456789",
             slug = "test-artist",
+        )
+        self.artist.genres.add(self.genre)
+
+        self.venue = Venue.objects.create(
+            name="OVO Hydro",
+            external_id="venue_id",
+            city="Glasgow",
         )
 
         self.tour_1 = Tour.objects.create(
@@ -38,8 +45,7 @@ class ShowReviewTest(TestCase):
             user = self.user,
             title = "Testing Review",
             thoughts = "some random text to show it works.",
-            city = "Glasgow",
-            venue = "OVO Hydro",
+            venue = self.venue,
             date = date(2024,6,21),
             rating = 1
         )
@@ -49,8 +55,7 @@ class ShowReviewTest(TestCase):
             user=self.user,
             title="Testing Review 2",
             thoughts="another review",
-            city="Manchester",
-            venue="AO Arena",
+            venue = self.venue,
             date=date(2024,6,22),
             rating=4
         )
@@ -65,7 +70,6 @@ class ShowReviewTest(TestCase):
         self.assertTemplateUsed(response, "tour.html")
         self.assertContains(response, "Testing Review")
         self.assertContains(response, "some random text to show it works.")
-        self.assertContains(response, "Glasgow")
         self.assertContains(response, "OVO Hydro")
         self.assertContains(response, "2024")
 
@@ -90,8 +94,7 @@ class ShowReviewTest(TestCase):
             user = self.user,
             title = "Should not exist",
             thoughts = "some random text",
-            city = "Glasgow",
-            venue = "OVO Hydro",
+            venue = self.venue,
             date = date(2024,6,21),
             rating = 1
         )
