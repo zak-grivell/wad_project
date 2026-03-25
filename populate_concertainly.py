@@ -136,6 +136,9 @@ def populate():
     luna = add_user("Luna-_-", "password")
     george = add_user("George100", "password")
     casey = add_user("Casey<3", "password")
+    emelia = add_user("Emilia.xx", "password")
+    sam = add_user("its_me_sammy", "password")
+    daphne = add_user("Daphne_jones", "password")
 
     #one review
     from_zero = add_tour("FROM ZERO World Tour", linkin, image="images/tour/linkin.jpg")
@@ -362,6 +365,44 @@ def populate():
         rating = 4,
         user = carolina,
         tour = the_eras_tour,
+        songs = [],
+    )
+
+    #keep highlihgt highlighted
+
+    add_review(
+        title = "brill", 
+        thoughts = "had a blast icl", 
+        img = "",
+        venue = wembley,
+        date = date(2024,6,21),
+        rating = 4,
+        user = sam,
+        tour = the_eras_tour,
+        songs = [],
+    )
+
+    add_review(
+        title = "tpwk <3", 
+        thoughts = "hes amazing and so was the vibes the crowd, was a really special concert", 
+        img = "",
+        venue = ibrox,
+        date = date(2022,6,11),
+        rating = 4,
+        user = emelia,
+        tour = love_on_tour,
+        songs = [],
+    )
+
+    add_review(
+        title = "so glad i went", 
+        thoughts = "had an amazing time", 
+        img = "",
+        venue = utilita_arena,
+        date = date(2025,3,6),
+        rating = 4,
+        user = daphne,
+        tour = short_n_sweet,
         songs = [],
     )
 
