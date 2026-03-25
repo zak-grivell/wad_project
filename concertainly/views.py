@@ -38,21 +38,8 @@ def home(request):
     return render(request, "homepage.html", context=context_dict)
 
 def search(request):
-    genre_list = (
-        Genre.objects.annotate(review_count=Count("review"))
-        .filter(review_count__gt=0)
-        .order_by("-review_count")[:10]
-    )
-    artist_list = (
-        Tour.objects.annotate(review_count=Count("review"))
-        .filter(review_count__gt=0)
-        .order_by("-review_count")[:10]
-    )
-
+    
     context_dict = {}
-    context_dict["genre_list"] = genre_list
-    context_dict["artist_list"] = artist_list
-
     return render(request, "search.html", context=context_dict)
 
 def user_register(request):
