@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
 
 {% block title_block %}
-    Login Failed
+    Data Loading Error
 {% endblock %}
 
 {% block body_block %}
     <div class="text-center py-5">
-        <h2>{{ error_text }} <a href="{% url 'concertainly:login' %}" class="btn-success">Please try again.</a></h2>
+        <h3>{{ error_message }}</h3>
     </div>
-    
 {% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title_block %}
+    Search
+{% endblock %}
+
+{% block body_block %}
+<form action="{% url 'concertainly:search' %}" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% for hidden in form.hidden_fields %}
+  {{ hidden }}
+  {% endfor %}
+
+  <section class="mx-3 mt-3">
+    <h2>Search</h2>
+    {{form.artist_select}}
+
+    {{form.tour_select}}
+
+    {{form.venue_select}}
+
+    {{form.genre_select}}
+    
+    {{form.date}}
+  </section>
+
+  <input type="submit" value="Search" class="mx-3 mt-3 btn btn-primary">
+</form>
+
+<script src="{% static 'search.js' %}"></script>
+
+{% endblock %}
