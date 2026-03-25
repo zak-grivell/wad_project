@@ -98,6 +98,11 @@ button:hover img {
     background: radial-gradient(circle at top center, rgba(58, 58, 92, 0.7) 0%, rgba(15, 15, 19, 1) 70%);
 }
 
+.popular-tour-card .card:hover {
+    transform: translateY(-4px);
+    transition: 0.3s;
+}
+
 /* genre page */
 #genreName{
     text-align: center;

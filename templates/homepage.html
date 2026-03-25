@@ -50,7 +50,7 @@
 {% endif %}
 
 
-<div class="popular-tours-heading d-flex justify-content-center align-items-center  py-3">
+<div class="popular-tours-heading d-flex justify-content-center align-items-center py-3">
     <h2 class="m-0 text-white">Popular Tours</h2>
 </div>
 
@@ -59,8 +59,8 @@
     {% for tour in popular_tours %}
       <div class="col">
         <a href="{% url 'concertainly:tour' tour.slug %}" class="text-decoration-none">
-          <div class="card border-0 h-100">
-            <img src="{% static tour.image %}" class="card-img-top" alt="popular tour">
+          <div class="card rounded-0 border-0 h-100">
+            <img src="{% static tour.image %}" class="card-img-top rounded-0" alt="popular tour">
             <div class="card-body popular-tour-card-body text-center">
               <h5 class="card-title mb-1" >{{ tour.name }}</h5>
               <p class="card-text text-muted">{{ tour.artist.name }}</p>
