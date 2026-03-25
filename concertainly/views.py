@@ -119,12 +119,11 @@ def user_login(request):
                 login(request, user)
                 return redirect(reverse("concertainly:home"))
             else:
-                return error_page(request, dict(), "Your Concertainly account is disabled!")
+                context_dict["error"] = "Your Concertainly account is disabled."
         else:
-            print(f"Invalid login details")
-            return error_page(request, dict(), "Invalid login details supplied. Please try again!")
-    else:
-        return render(request, "login.html")
+            context_dict["error"] = "Login details invalid."
+
+    return render(request, "login.html", context_dict)
 
 @login_required
 def user_logout(request):
