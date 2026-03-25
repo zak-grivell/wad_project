@@ -95,7 +95,7 @@ class ReviewForm(forms.Form):
     )
 
 class SearchForm(forms.Form):
-    artist_id = forms.CharField(max_length=128, widget=forms.HiddenInput())
+    artist_id = forms.CharField(max_length=128, widget=forms.HiddenInput(), required=False)
     artist_select = forms.CharField(
         max_length=128,
         widget=DatalistWidget(
@@ -107,7 +107,7 @@ class SearchForm(forms.Form):
         required=False
     )
 
-    tour_id = forms.CharField(max_length=128, widget=forms.HiddenInput())
+    tour_id = forms.CharField(max_length=128, widget=forms.HiddenInput(), required=False)
     tour_select = forms.CharField(
         max_length=128,
         widget=DatalistWidget(
@@ -119,7 +119,7 @@ class SearchForm(forms.Form):
         required=False
     )
 
-    venue_id = forms.CharField(max_length=128, widget=forms.HiddenInput())
+    venue_id = forms.CharField(max_length=128, widget=forms.HiddenInput(), required=False)
     venue_select = forms.CharField(
         max_length=128,
         widget=DatalistWidget(
@@ -130,6 +130,20 @@ class SearchForm(forms.Form):
         ),
         required=False
     )
+
+    genre_id = forms.CharField(max_length=128, widget=forms.HiddenInput(), required=False)
+    genre_select = forms.CharField(
+        max_length=128,
+        widget=DatalistWidget(
+            label="Genre",
+            attrs={
+                "id": "genre_select",
+            }
+        ),
+        required=False
+    )
+
+    date = forms.DateField(widget=forms.DateInput(attrs={"class":"form-control", "type": "date" }), required=False)
 
 def insert_artist(musicbrainz_id) -> Artist:
     artist_data = LASTFM_API.artist(musicbrainz_id)

@@ -40,34 +40,44 @@ def search(request):
     if (request.method == "POST"):
         form = SearchForm(request.POST, request.FILES)
 
-        # if form.is_valid():
-        #     artist_query = Artist.objects.filter(external_id=form.cleaned_data["artist_id"])
-        #     artist = artist_query.first() if artist_query.exists() else insert_artist(form.cleaned_data['artist_id'])
+        if form.is_valid():
+            s_artist = Artist.objects.filter(name=form.cleaned_data["artist_select"])
+            s_tour = Tour.objects.filter(name=form.cleaned_data["tour_select"])   
+            s_venue = Venue.objects.filter(name=form.cleaned_data["venue_select"])
+            s_date=form.cleaned_data["date"],
+            print(s_date)
+            s_genre = Genre.objects.filter(name=form.cleaned_data["genre_select"])
 
-        #     tour_query = Tour.objects.filter(external_id=form.cleaned_data["tour_id"])
-        #     tour = tour_query.first() if tour_query.exists() else insert_tour(form.cleaned_data['tour_id'], artist=artist)
+            reviews = Review.objects
             
-        #     venue_query = Venue.objects.filter(external_id=form.cleaned_data["venue_id"])
-        #     venue = venue_query.first() if venue_query.exists() else insert_venue(form.cleaned_data['venue_id'])
+            if (s_artist):
+                reviews = reviews.filter(lambda review: review.tour.artist == s_artist)
+            if (s_tour):
+                reviews = reviews.filter(tour=s_tour)
+            if (s_venue):
+                reviews = reviews.filter(venue=s_venue)
+            if (s_date is not None and s_date[0] is not None):
+                # convert to string
+                reviews = reviews.filter(date=s_date[0].strftime('%Y-%m-%d'))
+        
+            # TODO: add genre filtering
+            #if (s_genre):
+                #reviews = reviews.filter(lambda review: review.tour.artist.genres.contains)
             
-        #     Review.objects.create(
-        #         title=form.cleaned_data["title"],
-        #         thoughts=form.cleaned_data["comment"],
-        #         date=form.cleaned_data["date"],
-        #         rating=form.cleaned_data["rating"],
-        #         img=form.cleaned_data["review_photo"],
-        #         tour=tour,
-        #         venue=venue,
-        #         user=request.user
-        #      )
-
-        #     return redirect(f"{reverse("tour")}/{tour.name}")  # ty:ignore[unresolved-attribute]
-        # else:
-        #     print(form.errors)
+            context_dict = {}
+            context_dict["reviews"] = reviews.all()
+            return render(request, "search_results.html", context=context_dict)
+        
+        else:
+            print("form data not valid")
+            print(form.errors)
     else:
         form = SearchForm()
     
     return render(request, "search.html", {"form": form})
+
+def search_results(request):
+    return render(request, "search_results.html", dict())
 
 def user_register(request):
     registered = False

@@ -22,7 +22,10 @@ function searchDataList(name, required) {
       artist_id: artist_id.value,
     });
 
-    fetch(`api/${name}_search?${params}`)
+    let url = new URL(`api/${name}_search`, window.location.origin);
+    url.search = params;
+
+    fetch(url)
       .then(res => res.json())
       .then(options => {
         options.items.forEach((option /** @type {string} */) => {

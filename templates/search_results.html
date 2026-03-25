@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title_block %}
+    Login
+{% endblock %}
+
+{% block body_block %}
+    <div class="text-center py-5">
+        <h3>I'm searching it!</h3>
+    </div>
+    <!-- this is exactly duplicated in tour.html, remember to move this to a base template somehow -->
+    {% if reviews %}
+        {% for review in reviews %}
+        <div class="card my-4 custom-card">
+                    <div class="card-body">
+                        <div class="row">
+ 
+                            <div class="col-md-8 align-self-start">
+                                <h2 class="card-title mb-3">{{ review.title }}</h2>
+                                <p><strong>Thoughts:</strong> {{ review.thoughts }}</p>
+                                <p><strong>Venue:</strong> {{ review.venue }}</p>
+                                <p><strong>Date:</strong> {{ review.date }}</p>
+                                <p><strong>Rating:</strong> {{ review.rating }}/5</p>
+                                <p><strong>Uploaded by:</strong> {{ review.user.username }}</p>
+ 
+                                {% if review.set_list.all %}
+                                    {% with songs=review.set_list.all %}
+                                            {% if songs %}
+                                                <p><strong>Set List:</strong></p>
+                                                <ul class="mb-3">
+                                                    {% for song in songs %}
+                                                        <li>{{ song.name }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                    {% endwith %}
+                                {% endif %}
+                                </div>
+ 
+                                {% if review.img %}
+                                    <div class="col-md-4 align-self-center">
+                                        <div class="review-image-box">
+                                            <img src="{% static review.img %}" class="review-image" alt="review image">
+                                        </div>
+                                    </div>
+                                {% endif %}
+ 
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
