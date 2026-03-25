@@ -368,8 +368,6 @@ def populate():
         songs = [],
     )
 
-    #keep highlihgt highlighted
-
     add_review(
         title = "brill", 
         thoughts = "had a blast icl", 
