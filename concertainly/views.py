@@ -21,8 +21,7 @@ def home(request):
     context_dict = {}
 
     if len(highlight_tour) == 0:
-        print("no populated data")
-        return render(request, "noData.html", context=context_dict)
+        return error_page(request, context_dict, "We had some trouble loading the data - none was found!")
     
     tour1 = highlight_tour[0]
     tour2 = highlight_tour[1]
@@ -78,10 +77,10 @@ def user_login(request):
                 login(request, user)
                 return redirect(reverse("concertainly:home"))
             else:
-                return HttpResponse("Your Concertainly account is disabled.")
+                return error_page(request, dict(), "Your Concertainly account is disabled!")
         else:
             print(f"Invalid login details")
-            return HttpResponse("Invalid login details supplied.")
+            return error_page(request, dict(), "Invalid login details supplied. Please try again!")
     else:
         return render(request, "login.html")
 
@@ -162,3 +161,7 @@ def review(request):
         form = ReviewForm()
     
     return render(request, "review.html", {"form": form})
+
+def error_page(request, context_dict, err_message):
+    context_dict["error_message"] = err_message
+    return render(request, "errorPage.html", context=context_dict)
