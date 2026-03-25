@@ -30,9 +30,9 @@
             {% for review in reviews %}
                 <div class="card my-4 custom-card">
                     <div class="card-body">
-                        <div class="row align-items-center">
+                        <div class="row">
 
-                            <div class="col-md-8">
+                            <div class="col-md-8 align-self-start">
                                 <h2 class="card-title mb-3">{{ review.title }}</h2>
                                 <p><strong>Thoughts:</strong> {{ review.thoughts }}</p>
                                 <p><strong>Location:</strong> {{ review.city }}</p>
@@ -56,7 +56,7 @@
                                 </div>
 
                                 {% if review.img %}
-                                    <div class="col-md-4 ">
+                                    <div class="col-md-4 align-self-center">
                                         <div class="review-image-box">
                                             <img src="{% static review.img %}" class="review-image" alt="review image">
                                         </div>
