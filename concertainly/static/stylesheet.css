@@ -90,6 +90,14 @@ button:hover img {
     object-fit: cover;
 }
 
+.popular-tours-heading {
+    background: radial-gradient(circle at center, rgba(58, 58, 92, 0.7) 0%, rgba(15, 15, 19, 0.7) 70%);
+}
+
+.popular-tour-card-body {
+    background: radial-gradient(circle at top center, rgba(58, 58, 92, 0.7) 0%, rgba(15, 15, 19, 1) 70%);
+}
+
 /* genre page */
 #genreName{
     text-align: center;
