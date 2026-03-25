@@ -65,7 +65,7 @@ class ArtistPage(TestCase):
 
         def test_example_artist(self):
             populate()
-            response = self.client.get(reverse('concertainly:artist', kwargs={'artist_name': 'Taylor Swift'}))
+            response = self.client.get(reverse('concertainly:artist', kwargs={'slug': 'taylor-swift'}))
             self.assertEqual(response.status_code, 200)
 
 class LoginPage(TestCase):

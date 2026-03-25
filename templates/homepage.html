@@ -49,16 +49,24 @@
 
 {% endif %}
 
-<br>
+
+<div class="popular-tours-heading d-flex justify-content-center align-items-center  py-3">
+    <h2 class="m-0 text-white">Popular Tours</h2>
+</div>
 
 <div class="col popular-tour-card">
-  <div class="row row-cols-2 row-cols-md-3 g-4">
+  <div class="row row-cols-2 row-cols-md-3">
     {% for tour in popular_tours %}
-      <div class="card">
-        <img src="{% static tour.image %}" class="card-img-top" alt="popular tour">
-        <div class="card-body">
-          <p><a href="{% url 'concertainly:tour' tour.slug %}" class="btn btn-dark">{{ tour.name }}</a></p>
-        </div>
+      <div class="col">
+        <a href="{% url 'concertainly:tour' tour.slug %}" class="text-decoration-none">
+          <div class="card border-0 h-100">
+            <img src="{% static tour.image %}" class="card-img-top" alt="popular tour">
+            <div class="card-body popular-tour-card-body text-center">
+              <h5 class="card-title mb-1" >{{ tour.name }}</h5>
+              <p class="card-text text-muted">{{ tour.artist.name }}</p>
+            </div>
+          </div>
+        </a>
       </div>
     {% endfor %}
   </div>

@@ -11,8 +11,8 @@ django.setup()
 from django.contrib.auth.models import User  # noqa: E402
 from concertainly.models import Artist, Tour, Song, Review, Genre, Venue  # noqa: E402
 
-def add_genre(name):
-    genre,_ = Genre.objects.get_or_create(name=name)
+def add_genre(name, nice_name):
+    genre,_ = Genre.objects.get_or_create(name=name, nice_name=nice_name)
     return genre
 
 def add_venue(name, city):
@@ -100,8 +100,19 @@ def add_review(title, thoughts, img, venue, date, rating, user, tour, songs):
     return review
 
 def populate():
-    pop = add_genre("pop")
-    rock = add_genre("rock")
+    pop = add_genre("pop", "Pop")
+    rock = add_genre("rock","Rock")
+    rb = add_genre("rnb","R&B")
+    classical = add_genre("classical","Classical")
+    hiphop = add_genre("hiphop","Hip-Hop")
+    metal = add_genre("metal", "Metal")
+    jpop = add_genre("jpop", "J-Pop")
+    punk = add_genre("punk", "Punk")
+    kpop = add_genre("kpop", "K-Pop")
+    latin = add_genre("latin", "Latin")
+    edm = add_genre("edm", "EDM")
+    mandopop = add_genre("mandopop", "Mandopop")
+
      
     billie = add_artist("Billie Eilish", pop,  "6qqNVTkY8uBg9cP3Jd7DAH", "f4abc0b5-3f7a-4eff-8f78-ac078dbce533")
     linkin = add_artist("Linkin Park", rock, "6XyY86QOPPrYVGvF9ch6wz", "f59c5520-5f46-4d2c-b2c4-822eabf53419")
@@ -125,9 +136,11 @@ def populate():
     luna = add_user("Luna-_-", "password")
     george = add_user("George100", "password")
     casey = add_user("Casey<3", "password")
+    emelia = add_user("Emilia.xx", "password")
+    sam = add_user("its_me_sammy", "password")
+    daphne = add_user("Daphne_jones", "password")
 
     #one review
-    hit_me_hard_and_soft = add_tour("Hit Me Hard and Soft: The Tour", billie, image="images/tour/billie.jpg")
     from_zero = add_tour("FROM ZERO World Tour", linkin, image="images/tour/linkin.jpg")
     guts = add_tour("GUTS World Tour", olivia, image="images/tour/olivia.jpg")
     superache = add_tour("Superache Tour", conan, image="images/tour/conan.jpg")
@@ -135,10 +148,11 @@ def populate():
     sombr_world_tour = add_tour("Sombr World Tour", sombr, image="images/tour/sombr.jpg")
 
 
-    #two reviews
+    #two/+ reviews
     love_on_tour = add_tour("Love on Tour", harry, image="images/tour/harry.jpg")
     short_n_sweet = add_tour("Short n' Sweet", sabrina, image="images/tour/sabrina.jpeg")
     the_eras_tour = add_tour("The Eras Tour", taylor, image="images/tour/taylor.jpg")
+    hit_me_hard_and_soft = add_tour("Hit Me Hard and Soft: The Tour", billie, image="images/tour/billie.jpg")
 
 
     #no reviews
@@ -189,7 +203,7 @@ def populate():
     add_review(
         title = "Best tour forever",
         thoughts = "love itttt. Already looking forward to the next show.xxxxx",
-        img = "reviews/billie_1.jpg",
+        img = "images/reviews/billie_1.jpg",
         venue = ovo,
         date = date(2025,6,7),
         rating = 4,
@@ -201,7 +215,7 @@ def populate():
     add_review(
         title = "BEST",
         thoughts = "The nostalgia... Act 4 is my favourite. Soldiers forever.",
-        img = "reviews/linkin_1.jpg",
+        img = "images/reviews/linkin_1.jpg",
         venue = barclays,
         date = date(2024,11,16),
         rating = 5,
@@ -213,7 +227,7 @@ def populate():
     add_review(
         title = "<3<3<3",
         thoughts = "Everything is so good espcailly like OMG I love her sm",
-        img = "reviews/taylor_1.jpg",
+        img = "images/reviews/taylor_1.jpg",
         venue = murrayfield_stadium ,
         date = date(2024,6,9),
         rating = 5,
@@ -329,6 +343,68 @@ def populate():
         tour = sombr_world_tour,
         songs = []
     )
+
+    add_review(
+        title = "coool", 
+        thoughts = "first time going to billie's concert. not bad overall.", 
+        img = "images/reviews/billie_2.jpg",
+        venue = ovo,
+        date = date(2025,6,7),
+        rating = 3,
+        user = lizzy,
+        tour = hit_me_hard_and_soft,
+        songs = [],
+    )
+
+    add_review(
+        title = "i lovee it", 
+        thoughts = "I love it sm. Love her. LEGEND.", 
+        img = "images/reviews/taylor_2.jpg",
+        venue = ovo,
+        date = date(2025,6,7),
+        rating = 4,
+        user = carolina,
+        tour = the_eras_tour,
+        songs = [],
+    )
+
+    add_review(
+        title = "brill", 
+        thoughts = "had a blast icl", 
+        img = "",
+        venue = wembley,
+        date = date(2024,6,21),
+        rating = 4,
+        user = sam,
+        tour = the_eras_tour,
+        songs = [],
+    )
+
+    add_review(
+        title = "tpwk <3", 
+        thoughts = "hes amazing and so was the vibes the crowd, was a really special concert", 
+        img = "",
+        venue = ibrox,
+        date = date(2022,6,11),
+        rating = 4,
+        user = emelia,
+        tour = love_on_tour,
+        songs = [],
+    )
+
+    add_review(
+        title = "so glad i went", 
+        thoughts = "had an amazing time", 
+        img = "",
+        venue = utilita_arena,
+        date = date(2025,3,6),
+        rating = 4,
+        user = daphne,
+        tour = short_n_sweet,
+        songs = [],
+    )
+
+
 
     
 

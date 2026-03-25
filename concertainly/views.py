@@ -93,6 +93,9 @@ def user_register(request):
             user.set_password(user.password)
             user.save()
             registered = True
+            if user:
+                login(request, user)
+            return redirect('concertainly:home')
         else:
             # if invalid, complain to the terminal
             print(user_form.errors)
@@ -104,6 +107,7 @@ def user_register(request):
     return render(request, 'register.html', context = {'user_form': user_form, 'registered': registered})
 
 def user_login(request):
+    context_dict = {}
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -144,7 +148,7 @@ def genre_list(request):
 
 def genre(request, genre_name):
     genre = get_object_or_404(Genre, name=genre_name)
-    artists = Artist.objects.filter(genre=genre)
+    artists = Artist.objects.filter(genres=genre)
     context_dict = {}
     context_dict["artists"] = artists
     context_dict["genre"] = genre
@@ -167,7 +171,7 @@ def tour(request, slug):
     return render(request, "tour.html", {"tour": tour, "reviews": reviews})
 
 @login_required
-def review(request):
+def review(request, slug=None): # add redirect
     if (request.method == "POST"):
         form = ReviewForm(request.POST, request.FILES)
 
@@ -192,9 +196,18 @@ def review(request):
                 user=request.user
              )
 
-            return redirect(f"{reverse("tour")}/{tour.name}")  # ty:ignore[unresolved-attribute]
+            return redirect(reverse("tour", kwargs={"slug": tour.slug}))  # ty:ignore[unresolved-attribute]
         else:
             print(form.errors)
+    elif slug and (tour := Tour.objects.filter(slug=slug).first()):
+        print("filling in")
+        form = ReviewForm(initial={
+          "artist_id": tour.artist.external_id,
+          "artist_select": tour.artist.name,
+          "tour_id": tour.external_id,
+          "tour_select": tour.name
+      })
+        print(f"Form initial data: {form.initial}")
     else:
         form = ReviewForm()
     

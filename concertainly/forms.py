@@ -28,12 +28,10 @@ class DatalistWidget(forms.TextInput):
 
     def __init__(self, options=None, label=None, attrs=None):
         super().__init__(attrs)
-        self.options = options or []
         self.label = label or ""
 
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
-        context["widget"]["options"] = self.options
         context["widget"]["label"] = self.label or name.replace('_', ' ').capitalize()
         context["widget"]["datalist_id"] = attrs.get("id", name) + "_list"
         return context

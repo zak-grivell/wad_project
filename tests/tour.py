@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from concertainly.models import Tour, Review, Artist
+from concertainly.models import Tour, Review, Artist, Genre, Venue
 from datetime import date
 
 class ShowReviewTest(TestCase):
@@ -12,8 +12,20 @@ class ShowReviewTest(TestCase):
             password="password"
         )
 
+        self.genre = Genre.objects.create(name = "pop")
+
         self.artist = Artist.objects.create(
             name = "Test Artist",
+            external_id="test_external_id_123456789",
+            spotify_id = "test_id_123456789",
+            slug = "test-artist",
+        )
+        self.artist.genres.add(self.genre)
+
+        self.venue = Venue.objects.create(
+            name="OVO Hydro",
+            external_id="venue_id",
+            city="Glasgow",
         )
 
         self.tour_1 = Tour.objects.create(
@@ -33,8 +45,7 @@ class ShowReviewTest(TestCase):
             user = self.user,
             title = "Testing Review",
             thoughts = "some random text to show it works.",
-            city = "Glasgow",
-            venue = "OVO Hydro",
+            venue = self.venue,
             date = date(2024,6,21),
             rating = 1
         )
@@ -44,8 +55,7 @@ class ShowReviewTest(TestCase):
             user=self.user,
             title="Testing Review 2",
             thoughts="another review",
-            city="Manchester",
-            venue="AO Arena",
+            venue = self.venue,
             date=date(2024,6,22),
             rating=4
         )
@@ -60,7 +70,6 @@ class ShowReviewTest(TestCase):
         self.assertTemplateUsed(response, "tour.html")
         self.assertContains(response, "Testing Review")
         self.assertContains(response, "some random text to show it works.")
-        self.assertContains(response, "Glasgow")
         self.assertContains(response, "OVO Hydro")
         self.assertContains(response, "2024")
 
@@ -85,8 +94,7 @@ class ShowReviewTest(TestCase):
             user = self.user,
             title = "Should not exist",
             thoughts = "some random text",
-            city = "Glasgow",
-            venue = "OVO Hydro",
+            venue = self.venue,
             date = date(2024,6,21),
             rating = 1
         )
@@ -104,3 +112,24 @@ class ShowReviewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Testing Review")
         self.assertContains(response, "Testing Review 2")
+
+    def test_with_annoymous_user(self):
+        response = self.client.get(
+            reverse("concertainly:tour", args=[self.tour_1.slug])
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, reverse("concertainly:login"))
+        self.assertContains(response, "Login to post a review")
+
+    def test_with_login_user(self):
+        self.client.login(username="testuser", password="password")
+        response = self.client.get(
+            reverse("concertainly:tour", args=[self.tour_1.slug])
+        )
+        self.assertContains(response, "Post Review")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            reverse("concertainly:review")
+        )

@@ -1,3 +1,7 @@
+html {
+    overflow-y: scroll;
+}
+
 body {
     background-color: #16161D;
     color: white;
@@ -11,6 +15,15 @@ body {
 
 .nav-link {
     font-weight: bold;
+}
+
+.navbar .nav-link {
+    color: #bbbbbb !important;
+    transition: color 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+    color: #ffffff !important;
 }
 
 /* tour page */
@@ -72,8 +85,26 @@ button:hover img {
     object-fit: cover;
 }
 
+.popular-tours-heading {
+    background: radial-gradient(circle at center, rgba(58, 58, 92, 0.7) 0%, rgba(15, 15, 19, 0.7) 70%);
+}
+
+.popular-tour-card-body {
+    background: radial-gradient(circle at top center, rgba(58, 58, 92, 0.7) 0%, rgba(15, 15, 19, 1) 70%);
+}
+
 /* genre page */
 #genreName{
     text-align: center;
     text-transform: capitalize;
+}
+
+/* registration page */
+.no-scroll {
+    height: 100vh;
+    overflow: hidden;
+}
+
+.card {
+    background-color: rgb(37, 37, 58);
 }
