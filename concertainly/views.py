@@ -49,8 +49,10 @@ def search(request):
 
             reviews = Review.objects.all()
             
-            for elt in reviews:
-                print(elt)
+            print("artist - " + str(not not s_artist))
+            print("tour - " + str(not not s_tour))
+            print("venue - " + str(not not s_venue))
+            print("date - " + str(not not s_date))
 
             if (s_artist):
                 reviews = [r for r in reviews if r.artist() == s_artist[0]]
@@ -60,7 +62,9 @@ def search(request):
                 reviews = [r for r in reviews if r.venue == s_venue[0]]
             if (s_date is not None and s_date[0] is not None):
                 # convert to string
-                reviews = [r for r in reviews if r.date == s_date[0].strftime('%Y-%m-%d')]
+                reviews = [r for r in reviews if r.date.strftime('%Y-%m-%d') == s_date[0].strftime('%Y-%m-%d')]
+            else:
+                print("epic date fail")
         
             # TODO: add genre filtering
             #if (s_genre):
