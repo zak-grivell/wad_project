@@ -104,6 +104,7 @@ class SearchForm(forms.Form):
                 "id": "artist_select",
             }
         ),
+        required=False
     )
 
     tour_id = forms.CharField(max_length=128, widget=forms.HiddenInput())
@@ -115,6 +116,7 @@ class SearchForm(forms.Form):
                 "id": "tour_select",
             }
         ),
+        required=False
     )
 
     venue_id = forms.CharField(max_length=128, widget=forms.HiddenInput())
@@ -126,6 +128,7 @@ class SearchForm(forms.Form):
                 "id": "venue_select",
             }
         ),
+        required=False
     )
 
 def insert_artist(musicbrainz_id) -> Artist:

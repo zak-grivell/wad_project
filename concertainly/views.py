@@ -67,7 +67,7 @@ def search(request):
     else:
         form = SearchForm()
     
-    return render(request, "review.html", {"form": form})
+    return render(request, "search.html", {"form": form})
 
 def user_register(request):
     registered = False
