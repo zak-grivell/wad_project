@@ -5,10 +5,15 @@ html {
 body {
     background-color: #16161D;
     color: white;
-    padding-top: 70px;
+    padding-top: 64px;
 }
 
 /* navbar */
+.navbar-translucent {
+    background: radial-gradient(circle at bottom center, rgba(58, 58, 92, 0.7) 0%, rgba(15, 15, 19, 0.7) 70%);
+    backdrop-filter: blur(5px);
+}
+
 .navbar-brand {
     font-size: 2rem;
 }
