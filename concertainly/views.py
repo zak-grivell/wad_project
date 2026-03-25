@@ -69,6 +69,9 @@ def user_register(request):
             user.set_password(user.password)
             user.save()
             registered = True
+            if user:
+                login(request, user)
+            return redirect('concertainly:home')
         else:
             # if invalid, complain to the terminal
             print(user_form.errors)
@@ -80,6 +83,7 @@ def user_register(request):
     return render(request, 'register.html', context = {'user_form': user_form, 'registered': registered})
 
 def user_login(request):
+    context_dict = {}
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -91,12 +95,12 @@ def user_login(request):
                 login(request, user)
                 return redirect(reverse("concertainly:home"))
             else:
-                return HttpResponse("Your Concertainly account is disabled.")
+                context_dict["error"] = "Your Concertainly account is disabled."
         else:
-            print(f"Invalid login details")
-            return HttpResponse("Invalid login details supplied.")
-    else:
-        return render(request, "login.html")
+            context_dict["error"] = "Invalid login details."
+
+        context_dict["username"] = username
+    return render(request, "login.html", context_dict)
 
 @login_required
 def user_logout(request):

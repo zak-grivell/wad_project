@@ -1,13 +1,13 @@
 body {
-    background-color: #16161D;
+    background-color: #0f0f13;
     color: white;
-    padding-top: 76px;
+    padding-top: 64px;
 }
 
 /* navbar */
 .navbar-translucent {
-  background-color: rgba(30, 30, 41, 0.7);
-  backdrop-filter: blur(5px);
+    background: radial-gradient(circle at bottom center, rgba(58, 58, 92, 0.7) 0%, rgba(15, 15, 19, 0.7) 70%);
+    backdrop-filter: blur(5px);
 }
 
 .navbar-brand {
@@ -90,4 +90,14 @@ button:hover img {
 #genreName{
     text-align: center;
     text-transform: capitalize;
+}
+
+/* registration page */
+.no-scroll {
+    height: 100vh;
+    overflow: hidden;
+}
+
+.card {
+    background-color: rgb(37, 37, 58);
 }

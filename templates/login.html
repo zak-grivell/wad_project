@@ -1,17 +1,46 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title_block %}
     Login
 {% endblock %}
 
+{% block body_class %}no-scroll{% endblock %}
+
 {% block body_block %}
-<h1>Login to Concertainly</h1>
-<form id="login_form" method="post" action="{% url 'concertainly:login' %}">
-    {% csrf_token %}
-    Username: <input type="text" name="username" value="" size="50" />
-    <br />
-    Password: <input type="password" name="password" value="" size="50" />
-    <br />
-    <input type="submit" value="submit" />
-</form>
+
+<div class="flex-column d-flex justify-content-center align-items-center vh-100">
+
+    <h1 class="mb-4 text-center">Login</h1>
+
+    <div class="card shadow-lg border-0 p-4" style="max-width: 400px; width: 100%;">
+        <div class="card-body">
+            <form id="login_form" method="POST" action="{% url 'concertainly:login' %}">
+                {% csrf_token %}
+
+                {% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endif %}
+
+                <div class="mb-3">
+                    Username: <input type="text" name="username" value="" size="25"/>
+                </div>
+                <div class="mb-3">
+                    Password: <input type="password" name="password" value="" size="25"/>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" value="submit" class="btn btn-primary w-100 py-2">Login</button>
+                </div>
+            </form>
+
+            <div class="text-center mt-3">
+                Not registered?
+                <a href="{% url 'concertainly:register' %}">Create account</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
