@@ -127,7 +127,6 @@ def user_login(request):
 
 @login_required
 def user_logout(request):
-    print("LOGGING OOOOOOOOOUT")
     logout(request)
     return redirect(reverse("concertainly:home"))
 
@@ -156,9 +155,11 @@ def genre(request, genre_name):
 def artist(request, slug):
     artist = get_object_or_404(Artist, slug=slug)
     tours = Tour.objects.filter(artist=artist)
+    genre = artist.genres.first()
     context_dict = {}
     context_dict["artist"] = artist
     context_dict["tours"] = tours
+    context_dict["genre"] = genre.name
     return render(request, "artist.html", context=context_dict)
 
 def tour(request, slug):
