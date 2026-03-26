@@ -289,6 +289,7 @@ def populate():
         user=emma,
         tour=the_eras_tour,
         songs=[taylor_s1, taylor_s2, taylor_s3],
+    )
 
     add_review(
         title = "Best tour forever",

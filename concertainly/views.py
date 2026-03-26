@@ -1,7 +1,6 @@
-from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from concertainly.models import Genre, Artist, Tour, Review, Venue
-from concertainly.forms import UserForm, ReviewForm
+from concertainly.forms import UserForm, ReviewForm, SearchForm
 from django.shortcuts import redirect 
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
@@ -90,6 +89,8 @@ def search_results(request):
     return render(request, "search_results.html", dict())
 
 def user_register(request):
+    if request.user.is_authenticated:
+        return redirect(reverse("concertainly:home"))
     registered = False
     # if it's a post request, process the data
     if request.method == "POST":
@@ -118,6 +119,9 @@ def user_register(request):
 
 def user_login(request):
     context_dict = {}
+    if request.user.is_authenticated:
+        return redirect(reverse("concertainly:home"))
+    
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -175,9 +179,18 @@ def tour(request, slug):
     tour = Tour.objects.filter(slug=slug).first()
     if tour:
         reviews = Review.objects.filter(tour=tour)
+        request.session["last_tour"] = tour.slug
     else:
         reviews = []
     return render(request, "tour.html", {"tour": tour, "reviews": reviews})
+
+def tour_redirect(request):
+    print("Redirect last_tour:", request.session.get("last_tour"))
+
+    last_tour = request.session.get("last_tour")
+    if last_tour:
+        return redirect("concertainly:tour", slug=last_tour)
+    return redirect("concertainly:home")
 
 @login_required
 def review(request, slug=None): # add redirect
