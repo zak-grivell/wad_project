@@ -241,7 +241,7 @@ def review(request, slug=None):
         if form.is_valid():
             artist = Artist.objects.get_or_create_from_api(form.cleaned_data["artist_id"])
             tour = Tour.objects.get_or_create_from_api(form.cleaned_data["tour_id"], artist)
-            venue = Venue.objects.get_or_create_from_api(form.cleaned_data["tour_id"])
+            venue = Venue.objects.get_or_create_from_api(form.cleaned_data["venue_id"])
 
             print(form.cleaned_data["setlist"])
                         

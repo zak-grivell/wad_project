@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 from services.lastfm import LASTFM_API
 from services.spotify import SPOTIFY_API
-from services.ticketmaster import TICKET_MASTER_API
 from services.musicbrainz import MUSICBRAINZ_API
+from services.ticketmaster import TICKET_MASTER_API
 
 
 class Genre(models.Model):
@@ -32,6 +32,7 @@ class VenueManager(models.Manager):
             venue_data = TICKET_MASTER_API.venue(ticketmaster_id)
 
             venue.name = venue_data.get("name", "Unknown Venue")
+            venue.city = venue_data["city"]["name"]
             venue.save()
 
         return venue
