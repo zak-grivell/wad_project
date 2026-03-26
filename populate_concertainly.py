@@ -190,7 +190,7 @@ def populate():
     #     "Hit Me Hard and Soft: The Tour", billie, image="images/tour/billie.jpg"
     # ) dup?
     from_zero = add_tour("FROM ZERO World Tour", linkin, image="images/tour/linkin.jpg", external_id="35432126-7895-4f27-8590-5407f27539df")
-    guts = add_tour("GUTS World Tour", olivia, image="images/tour/olivia.jpg", external_id="35432126-7895-4f27-8590-5407f27539df")
+    guts = add_tour("GUTS World Tour", olivia, image="images/tour/olivia.jpg", external_id="6a416153-2d51-416d-90af-bd26fa986278")
     superache = add_tour("Superache Tour", conan, image="images/tour/conan.jpg", external_id="64132c5e-f808-42f0-bf79-89e4f9ecbc99")
     theshow = add_tour("The Show", niall, image="images/tour/niall.jpg", external_id="09135e6f-67db-4928-9aaa-42f7b209b923")
     sombr_world_tour = add_tour(

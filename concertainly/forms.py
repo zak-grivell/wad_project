@@ -114,7 +114,7 @@ class ReviewForm(forms.Form):
         ),
     )
 
-    setlist = forms.MultipleChoiceField(widget=SetListWidget(), choices=[], disabled=True)
+    setlist = forms.MultipleChoiceField(widget=SetListWidget(), choices=[], disabled=True, required=False)
 
 
 class SearchForm(forms.Form):
