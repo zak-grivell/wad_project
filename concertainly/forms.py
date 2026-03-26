@@ -1,11 +1,5 @@
-from concertainly.models import Artist, Genre, Tour, Venue
 from django import forms
 from django.contrib.auth.models import User
-from services.lastfm import LASTFM_API
-from services.spotify import SPOTIFY_API
-from services.musicbrainz import MUSICBRAINZ_API
-from services.ticketmaster import TICKET_MASTER_API
-
 
 # deals with the information that is stored in django's User class
 class UserForm(forms.ModelForm):
@@ -34,6 +28,32 @@ class DatalistWidget(forms.TextInput):
         context = super().get_context(name, value, attrs)
         context["widget"]["label"] = self.label or name.replace('_', ' ').capitalize()
         context["widget"]["datalist_id"] = attrs.get("id", name) + "_list"
+        return context
+
+class SetListWidget(forms.SelectMultiple):
+    template_name = "widgets/setlist.html"
+
+    def __init__(self, choices=[], attrs={}):
+        super().__init__()
+        self.choices = list(choices)
+
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+
+        if value is None:
+            value = []
+        value = set(str(v) for v in value)
+
+        context["widget"]["choices"] = [
+            {
+                "value": f"{option_value}|{option_label}",
+                "label": option_label,
+                "selected": str(option_value) in value,
+            }
+            for option_value, option_label in self.choices
+        ]
+        context["widget"]["disabled"] = attrs.get("disabled", False)
+
         return context
 
 class ReviewForm(forms.Form):
@@ -72,6 +92,7 @@ class ReviewForm(forms.Form):
 
     tour_id = forms.CharField(max_length=128, widget=forms.HiddenInput())
     tour_select = forms.CharField(
+        disabled=True,
         max_length=128,
         widget=DatalistWidget(
             label="Tour",
@@ -92,39 +113,4 @@ class ReviewForm(forms.Form):
         ),
     )
 
-
-def insert_artist(musicbrainz_id) -> Artist:
-    artist_data = LASTFM_API.artist(musicbrainz_id)
-    spotify_id = SPOTIFY_API.search_artist(artist_data["name"], 1, 0)["items"][0]["id"]
-        
-    db_artist = Artist.objects.create(
-        external_id=musicbrainz_id,
-        name=artist_data["name"],
-        spotify_id=spotify_id,
-    )
-    db_artist.save()
-
-    genres = Genre.objects.filter(name__in=[tag["name"] for tag in artist_data["tags"]["tag"]])
-
-    db_artist.genres.set(genres)
-
-    return db_artist
-
-
-def insert_tour(musicbrainz_id, artist) -> Tour:
-    tour = MUSICBRAINZ_API.tour(musicbrainz_id)
-
-    db_tour = Tour.objects.create(external_id=musicbrainz_id, name=tour["name"], artist=artist)
-
-    db_tour.save()
-
-    return db_tour
-
-
-def insert_venue(id) -> Venue:
-    venue = TICKET_MASTER_API.venue(id)
-
-    db_venue = Venue.objects.create(external_id=id, name=venue["name"])
-    db_venue.save()
-
-    return db_venue
+    setlist = forms.MultipleChoiceField(widget=SetListWidget(), choices=[], disabled=True)

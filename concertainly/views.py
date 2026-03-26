@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from concertainly.models import Genre, Artist, Tour, Review, Venue
-from concertainly.forms import UserForm, ReviewForm, insert_artist, insert_tour, insert_venue
+from concertainly.forms import UserForm, ReviewForm
 from django.shortcuts import redirect 
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
@@ -145,12 +145,24 @@ def tour(request, slug):
 @login_required
 def review(request, slug=None): # add redirect
     if (request.method == "POST"):
+        submitted_ids = request.POST.getlist('setlist')
+
         form = ReviewForm(request.POST, request.FILES)
 
+        form.fields["setlist"].disabled = False
+        form.fields["tour_select"].disabled = False
+
+        print([(i.split("|")[0], i.split("|")[1]) for i in submitted_ids])
+
+        form.fields['setlist'].choices = [(i, i) for i in submitted_ids]
+
+        
         if form.is_valid():
             artist = Artist.objects.get_or_create_from_api(form.cleaned_data["artist_id"])
             tour = Tour.objects.get_or_create_from_api(form.cleaned_data["tour_id"], artist)
             venue = Venue.objects.get_or_create_from_api(form.cleaned_data["tour_id"])
+
+            print(form.cleaned_data["setlist"])
                         
             Review.objects.create(
                 title=form.cleaned_data["title"],
@@ -163,8 +175,9 @@ def review(request, slug=None): # add redirect
                 user=request.user
              )
 
-            return redirect(reverse("tour", kwargs={"slug": tour.slug}))
+            return redirect(reverse("concertainly:tour", kwargs={"slug": tour.slug}))
         else:    
+            form.fields['setlist'].choices = [(i.split("|")[0], i.split("|")[0]) for i in submitted_ids]
             print(form.errors)
     elif slug and (tour := Tour.objects.filter(slug=slug).first()):
         print("filling in")
@@ -174,6 +187,10 @@ def review(request, slug=None): # add redirect
           "tour_id": tour.external_id,
           "tour_select": tour.name
       })
+
+        form.fields["setlist"].disabled = False
+        form.fields["tour_select"].disabled = False
+        
         print(f"Form initial data: {form.initial}")
     else:
         form = ReviewForm()
