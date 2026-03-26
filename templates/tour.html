@@ -12,15 +12,20 @@
 {% block body_block %}
 <div class="container py-5">
     {% if tour %}
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>{{ tour.artist.name }} : {{ tour.name }}</h1>
-
+        <div class="d-flex justify-content-start align-items-center mb-4">
+            <div style="width: 150px">
+                <img src="{% static tour.image %}" class="img-fluid rounded-0" alt="popular tour">
+            </div>
+            <div class="d-flex flex-column ms-4">
+                <h1>{{ tour.name }}</h1>
+                <small class="text-muted"><a href="{% url 'concertainly:artist' tour.artist.slug %}" class="text-decoration-none text-muted">{{ tour.artist.name }}</a></small>
+            </div>
             {% if user.is_authenticated %}
-                <a href="{% url 'concertainly:review' %}" class="btn btn-success">
+                <a href="{% url 'concertainly:review' %}" class="btn btn-success ms-auto">
                     Post Review
                 </a>
             {% else %}
-                <a href="{% url 'concertainly:login' %}" class="btn btn-success">
+                <a href="{% url 'concertainly:login' %}" class="btn btn-success ms-auto">
                     Login to post a review
                 </a>
             {% endif %}
@@ -28,17 +33,17 @@
 
         {% if reviews %}
             {% for review in reviews %}
-                <div class="card my-4 custom-card">
+                <div class="card my-4 shadow custom-card rounded-0 border-0">
                     <div class="card-body">
                         <div class="row">
 
                             <div class="col-md-8 align-self-start">
-                                <h2 class="card-title mb-3">{{ review.title }}</h2>
+                                <h2 class="card-title mb-1">"{{ review.title }}"</h2>
+                                <small class="text-muted mb-3 d-block">Review by: <strong>{{ review.user.username }}</strong></small>
+                                <p><strong>Rating:</strong> {{ review.rating }}/5</p>
                                 <p><strong>Thoughts:</strong> {{ review.thoughts }}</p>
                                 <p><strong>Venue:</strong> {{ review.venue }}</p>
                                 <p><strong>Date:</strong> {{ review.date }}</p>
-                                <p><strong>Rating:</strong> {{ review.rating }}/5</p>
-                                <p><strong>Uploaded by:</strong> {{ review.user.username }}</p>
 
                                 {% if review.set_list.all %}
                                     {% with songs=review.set_list.all %}
@@ -57,7 +62,7 @@
                                 {% if review.img %}
                                     <div class="col-md-4 align-self-center">
                                         <div class="review-image-box">
-                                            <img src="{% static review.img %}" class="review-image" alt="review image">
+                                            <img src="{% static review.img %}" class="review-image shadow" alt="review image">
                                         </div>
                                     </div>
                                 {% endif %}
@@ -69,7 +74,8 @@
         
         {% else %}
             <div class="text-center py-5">
-                <h2 class = "mb-4">Be the first one to comment for this tour!</h2>
+                <h2 class = "mb-2">No Reviews</h2>
+                <small class="text-muted">Be the first one to review this tour!</small>
             </div>
         {% endif %}
     {% else %}
