@@ -1,7 +1,6 @@
-from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from concertainly.models import Genre, Artist, Tour, Review, Venue
-from concertainly.forms import UserForm, ReviewForm
+from concertainly.forms import UserForm, ReviewForm, SearchForm
 from django.shortcuts import redirect 
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout

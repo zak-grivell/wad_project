@@ -17,9 +17,11 @@ Tour Reviews
   <section class="mx-3 mt-3">
     <h2>Review</h2>
     <div class="mb-3">
+      <label for="title">Title:</label>
       {{form.title}}
     </div>
 
+    <label for="title">Ratings: </label>
     <div class="mb-3 input-group">
       {% for radio in form.rating %}
       <div class="form-check form-check-inline">
@@ -37,6 +39,7 @@ Tour Reviews
       {% endif %}
     </div>
 
+    <label for="title">Thoughts: </label><br/>
     <div class="mb-3">
       {{form.comment}}
     </div>

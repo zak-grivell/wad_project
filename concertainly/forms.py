@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from concertainly.models import Artist, Tour, Venue, Genre
 
 # deals with the information that is stored in django's User class
 class UserForm(forms.ModelForm):
