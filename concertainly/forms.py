@@ -1,11 +1,6 @@
-from concertainly.models import Artist, Genre, Tour, Venue
 from django import forms
 from django.contrib.auth.models import User
-from services.lastfm import LASTFM_API
-from services.spotify import SPOTIFY_API
-from services.musicbrainz import MUSICBRAINZ_API
-from services.ticketmaster import TICKET_MASTER_API
-
+from concertainly.models import Artist, Tour, Venue, Genre
 
 # deals with the information that is stored in django's User class
 class UserForm(forms.ModelForm):
@@ -34,6 +29,32 @@ class DatalistWidget(forms.TextInput):
         context = super().get_context(name, value, attrs)
         context["widget"]["label"] = self.label or name.replace('_', ' ').capitalize()
         context["widget"]["datalist_id"] = attrs.get("id", name) + "_list"
+        return context
+
+class SetListWidget(forms.SelectMultiple):
+    template_name = "widgets/setlist.html"
+
+    def __init__(self, choices=[], attrs={}):
+        super().__init__()
+        self.choices = list(choices)
+
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+
+        if value is None:
+            value = []
+        value = set(str(v) for v in value)
+
+        context["widget"]["choices"] = [
+            {
+                "value": f"{option_value}|{option_label}",
+                "label": option_label,
+                "selected": str(option_value) in value,
+            }
+            for option_value, option_label in self.choices
+        ]
+        context["widget"]["disabled"] = attrs.get("disabled", False)
+
         return context
 
 class ReviewForm(forms.Form):
@@ -72,6 +93,7 @@ class ReviewForm(forms.Form):
 
     tour_id = forms.CharField(max_length=128, widget=forms.HiddenInput())
     tour_select = forms.CharField(
+        disabled=True,
         max_length=128,
         widget=DatalistWidget(
             label="Tour",
@@ -91,6 +113,9 @@ class ReviewForm(forms.Form):
             }
         ),
     )
+
+    setlist = forms.MultipleChoiceField(widget=SetListWidget(), choices=[], disabled=True)
+
 
 class SearchForm(forms.Form):
     artist_id = forms.CharField(max_length=128, widget=forms.HiddenInput(), required=False)

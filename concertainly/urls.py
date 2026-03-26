@@ -19,4 +19,5 @@ urlpatterns = [
     path("review", views.review, name="review"),
     path("review/<slug:slug>", views.review, name="review"),
     path("api/", include("concertainly.api.urls"), name="api"),
+    path("tour/", views.tour_redirect),
 ]

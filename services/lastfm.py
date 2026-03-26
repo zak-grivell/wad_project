@@ -24,4 +24,12 @@ class LastfmApi:
     def artist(self, id: str):
         return self.request("artist.getInfo", params={"mbid": id})["artist"]
 
+    def search_song(self, q: str, artist: str):
+        params = {'track': q, 'artist': artist, 'limit':5}
+
+        if artist:
+            params["artist"] = artist
+            
+        return self.request("track.search", params=params)["results"]["trackmatches"]["track"]
+
 LASTFM_API = LastfmApi()
