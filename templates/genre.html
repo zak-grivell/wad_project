@@ -19,10 +19,11 @@ Genre
         <div class="card-body">
           <p><a href="{% url 'concertainly:artist' artist.slug %}" class="btn btn-dark">{{ artist.name }}</a></p>
         </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-  {% endif %}
+        </div>
+    {% else %}
+        <h2>This is awkward...</h2>
+        We currently have no {{ genre.nice_name }} artists <br>  
+        <a href="{% url 'concertainly:genres' %}">Return to all genres.</a><br />
+    {% endif %}
 </div>
 {% endblock %}

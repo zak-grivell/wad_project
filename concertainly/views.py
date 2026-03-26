@@ -21,8 +21,7 @@ def home(request):
     context_dict = {}
 
     if len(highlight_tour) == 0:
-        print("no populated data")
-        return render(request, "noData.html", context=context_dict)
+        return error_page(request, context_dict, "We had some trouble loading the data - none was found!")
     
     tour1 = highlight_tour[0]
     tour2 = highlight_tour[1]
@@ -38,22 +37,57 @@ def home(request):
     return render(request, "homepage.html", context=context_dict)
 
 def search(request):
-    genre_list = (
-        Genre.objects.annotate(review_count=Count("review"))
-        .filter(review_count__gt=0)
-        .order_by("-review_count")[:10]
-    )
-    artist_list = (
-        Tour.objects.annotate(review_count=Count("review"))
-        .filter(review_count__gt=0)
-        .order_by("-review_count")[:10]
-    )
+    if (request.method == "POST"):
+        form = SearchForm(request.POST, request.FILES)
 
-    context_dict = {}
-    context_dict["genre_list"] = genre_list
-    context_dict["artist_list"] = artist_list
+        if form.is_valid():
+            s_artist = Artist.objects.filter(name=form.cleaned_data["artist_select"])
+            s_tour = Tour.objects.filter(name=form.cleaned_data["tour_select"])   
+            s_venue = Venue.objects.filter(name=form.cleaned_data["venue_select"])
+            s_date=form.cleaned_data["date"],
+            s_genre = Genre.objects.filter(name=form.cleaned_data["genre_select"])
 
-    return render(request, "search.html", context=context_dict)
+            reviews = Review.objects.all()
+            
+            print("artist - " + str(not not s_artist))
+            print("tour - " + str(not not s_tour))
+            print("venue - " + str(not not s_venue))
+            print("date - " + str(not not s_date))
+
+            if (s_artist):
+                reviews = [r for r in reviews if r.artist() == s_artist[0]]
+            if (s_tour):
+                reviews = [r for r in reviews if r.tour == s_tour[0]]
+            if (s_venue):
+                print(s_venue[0])
+                for v in reviews.venue:
+                    print(v)
+    
+                reviews = [r for r in reviews if r.venue == s_venue[0]]
+            if (s_date is not None and s_date[0] is not None):
+                reviews = [r for r in reviews if r.date.strftime('%Y-%m-%d') == s_date[0].strftime('%Y-%m-%d')]
+            else:
+                print("epic date fail")
+        
+            # TODO: add genre filtering
+            #if (s_genre):
+                #reviews = reviews.filter(lambda review: review.tour.artist.genres.contains)
+            
+            context_dict = {}
+            context_dict["reviews"] = reviews
+            context_dict["any_results"] = len(reviews) != 0
+            return render(request, "search_results.html", context=context_dict)
+        
+        else:
+            print("form data not valid")
+            print(form.errors)
+    else:
+        form = SearchForm()
+    
+    return render(request, "search.html", {"form": form})
+
+def search_results(request):
+    return render(request, "search_results.html", dict())
 
 def user_register(request):
     registered = False
@@ -69,6 +103,9 @@ def user_register(request):
             user.set_password(user.password)
             user.save()
             registered = True
+            if user:
+                login(request, user)
+            return redirect('concertainly:home')
         else:
             # if invalid, complain to the terminal
             print(user_form.errors)
@@ -80,6 +117,7 @@ def user_register(request):
     return render(request, 'register.html', context = {'user_form': user_form, 'registered': registered})
 
 def user_login(request):
+    context_dict = {}
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -91,12 +129,11 @@ def user_login(request):
                 login(request, user)
                 return redirect(reverse("concertainly:home"))
             else:
-                return HttpResponse("Your Concertainly account is disabled.")
+                context_dict["error"] = "Your Concertainly account is disabled."
         else:
-            print(f"Invalid login details")
-            return HttpResponse("Invalid login details supplied.")
-    else:
-        return render(request, "login.html")
+            context_dict["error"] = "Login details invalid."
+
+    return render(request, "login.html", context_dict)
 
 @login_required
 def user_logout(request):
@@ -196,3 +233,7 @@ def review(request, slug=None): # add redirect
         form = ReviewForm()
     
     return render(request, "review.html", {"form": form})
+
+def error_page(request, context_dict, err_message):
+    context_dict["error_message"] = err_message
+    return render(request, "errorPage.html", context=context_dict)

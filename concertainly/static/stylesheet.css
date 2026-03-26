@@ -1,6 +1,34 @@
+html {
+    overflow-y: scroll;
+}
+
 body {
-  background-color: #16161D;
-  color: white
+    background-color: #16161D;
+    color: white;
+    padding-top: 64px;
+}
+
+/* navbar */
+.navbar-translucent {
+    background: radial-gradient(circle at bottom center, rgba(58, 58, 92, 0.7) 0%, rgba(15, 15, 19, 0.7) 70%);
+    backdrop-filter: blur(5px);
+}
+
+.navbar-brand {
+    font-size: 2rem;
+}
+
+.nav-link {
+    font-weight: bold;
+}
+
+.navbar .nav-link {
+    color: #bbbbbb !important;
+    transition: color 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+    color: #ffffff !important;
 }
 
 /* tour page */
@@ -64,6 +92,19 @@ button:hover img {
   object-fit: cover;
 }
 
+.popular-tours-heading {
+    background: radial-gradient(circle at center, rgba(58, 58, 92, 0.7) 0%, rgba(15, 15, 19, 0.7) 70%);
+}
+
+.popular-tour-card-body {
+    background: radial-gradient(circle at top center, rgba(58, 58, 92, 0.7) 0%, rgba(15, 15, 19, 1) 70%);
+}
+
+.popular-tour-card .card:hover {
+    transform: translateY(-4px);
+    transition: 0.3s;
+}
+
 /* genre page */
 #genreName {
   text-align: center;
@@ -94,6 +135,17 @@ select[multiple] option:hover {
   background-color: #2a2a3e;
 }
 
-select {
-  padding: 4 !important;
+#genreName{
+    text-align: center;
+    text-transform: capitalize;
+}
+
+/* registration page */
+.no-scroll {
+    height: 100vh;
+    overflow: hidden;
+}
+
+.card {
+    background-color: rgb(37, 37, 58);
 }

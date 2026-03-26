@@ -114,3 +114,91 @@ class ReviewForm(forms.Form):
     )
 
     setlist = forms.MultipleChoiceField(widget=SetListWidget(), choices=[], disabled=True)
+
+
+class SearchForm(forms.Form):
+    artist_id = forms.CharField(max_length=128, widget=forms.HiddenInput(), required=False)
+    artist_select = forms.CharField(
+        max_length=128,
+        widget=DatalistWidget(
+            label="Artist",
+            attrs={
+                "id": "artist_select",
+            }
+        ),
+        required=False
+    )
+
+    tour_id = forms.CharField(max_length=128, widget=forms.HiddenInput(), required=False)
+    tour_select = forms.CharField(
+        max_length=128,
+        widget=DatalistWidget(
+            label="Tour",
+            attrs={
+                "id": "tour_select",
+            }
+        ),
+        required=False
+    )
+
+    venue_id = forms.CharField(max_length=128, widget=forms.HiddenInput(), required=False)
+    venue_select = forms.CharField(
+        max_length=128,
+        widget=DatalistWidget(
+            label="Venue",
+            attrs={
+                "id": "venue_select",
+            }
+        ),
+        required=False
+    )
+
+    genre_id = forms.CharField(max_length=128, widget=forms.HiddenInput(), required=False)
+    genre_select = forms.CharField(
+        max_length=128,
+        widget=DatalistWidget(
+            label="Genre",
+            attrs={
+                "id": "genre_select",
+            }
+        ),
+        required=False
+    )
+
+    date = forms.DateField(widget=forms.DateInput(attrs={"class":"form-control", "type": "date" }), required=False)
+
+def insert_artist(musicbrainz_id) -> Artist:
+    artist_data = LASTFM_API.artist(musicbrainz_id)
+    spotify_id = SPOTIFY_API.search_artist(artist_data["name"], 1, 0)["items"][0]["id"]
+        
+    db_artist = Artist.objects.create(
+        external_id=musicbrainz_id,
+        name=artist_data["name"],
+        spotify_id=spotify_id,
+    )
+    db_artist.save()
+
+    genres = Genre.objects.filter(name__in=[tag["name"] for tag in artist_data["tags"]["tag"]])
+
+    db_artist.genres.set(genres)
+
+    return db_artist
+
+
+def insert_tour(musicbrainz_id, artist) -> Tour:
+    tour = MUSICBRAINZ_API.tour(musicbrainz_id)
+
+    db_tour = Tour.objects.create(external_id=musicbrainz_id, name=tour["name"], artist=artist)
+
+    db_tour.save()
+
+    return db_tour
+
+
+def insert_venue(id) -> Venue:
+    venue = TICKET_MASTER_API.venue(id)
+
+    db_venue = Venue.objects.create(external_id=id, name=venue["name"])
+    db_venue.save()
+
+    return db_venue

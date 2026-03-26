@@ -181,6 +181,9 @@ def populate():
     luna = add_user("Luna-_-", "password")
     george = add_user("George100", "password")
     casey = add_user("Casey<3", "password")
+    emelia = add_user("Emilia.xx", "password")
+    sam = add_user("its_me_sammy", "password")
+    daphne = add_user("Daphne_jones", "password")
 
     # one review
     hit_me_hard_and_soft = add_tour(
@@ -194,12 +197,14 @@ def populate():
         "Sombr World Tour", sombr, image="images/tour/sombr.jpg"
     )
 
-    # two reviews
+
+    #two/+ reviews
     love_on_tour = add_tour("Love on Tour", harry, image="images/tour/harry.jpg")
     short_n_sweet = add_tour(
         "Short n' Sweet", sabrina, image="images/tour/sabrina.jpeg"
     )
     the_eras_tour = add_tour("The Eras Tour", taylor, image="images/tour/taylor.jpg")
+    hit_me_hard_and_soft = add_tour("Hit Me Hard and Soft: The Tour", billie, image="images/tour/billie.jpg")
 
     # no reviews
     the_eras_tour_2 = add_tour(
@@ -284,6 +289,41 @@ def populate():
         user=emma,
         tour=the_eras_tour,
         songs=[taylor_s1, taylor_s2, taylor_s3],
+
+    add_review(
+        title = "Best tour forever",
+        thoughts = "love itttt. Already looking forward to the next show.xxxxx",
+        img = "images/reviews/billie_1.jpg",
+        venue = ovo,
+        date = date(2025,6,7),
+        rating = 4,
+        user = charlotte,
+        tour = hit_me_hard_and_soft,
+        songs = [billie_s1, billie_s2, billie_s3],
+    )
+
+    add_review(
+        title = "BEST",
+        thoughts = "The nostalgia... Act 4 is my favourite. Soldiers forever.",
+        img = "images/reviews/linkin_1.jpg",
+        venue = barclays,
+        date = date(2024,11,16),
+        rating = 5,
+        user = mark,
+        tour = from_zero,
+        songs = [linkin_s1, linkin_s2, linkin_s3],
+    )
+
+    add_review(
+        title = "<3<3<3",
+        thoughts = "Everything is so good espcailly like OMG I love her sm",
+        img = "images/reviews/taylor_1.jpg",
+        venue = murrayfield_stadium ,
+        date = date(2024,6,9),
+        rating = 5,
+        user = emma,
+        tour = the_eras_tour,
+        songs = [taylor_s1, taylor_s2, taylor_s3]
     )
 
     add_review(
@@ -394,6 +434,69 @@ def populate():
         songs=[],
     )
 
+    add_review(
+        title = "coool", 
+        thoughts = "first time going to billie's concert. not bad overall.", 
+        img = "images/reviews/billie_2.jpg",
+        venue = ovo,
+        date = date(2025,6,7),
+        rating = 3,
+        user = lizzy,
+        tour = hit_me_hard_and_soft,
+        songs = [],
+    )
+
+    add_review(
+        title = "i lovee it", 
+        thoughts = "I love it sm. Love her. LEGEND.", 
+        img = "images/reviews/taylor_2.jpg",
+        venue = ovo,
+        date = date(2025,6,7),
+        rating = 4,
+        user = carolina,
+        tour = the_eras_tour,
+        songs = [],
+    )
+
+    add_review(
+        title = "brill", 
+        thoughts = "had a blast icl", 
+        img = "",
+        venue = wembley,
+        date = date(2024,6,21),
+        rating = 4,
+        user = sam,
+        tour = the_eras_tour,
+        songs = [],
+    )
+
+    add_review(
+        title = "tpwk <3", 
+        thoughts = "hes amazing and so was the vibes the crowd, was a really special concert", 
+        img = "",
+        venue = ibrox,
+        date = date(2022,6,11),
+        rating = 4,
+        user = emelia,
+        tour = love_on_tour,
+        songs = [],
+    )
+
+    add_review(
+        title = "so glad i went", 
+        thoughts = "had an amazing time", 
+        img = "",
+        venue = utilita_arena,
+        date = date(2025,3,6),
+        rating = 4,
+        user = daphne,
+        tour = short_n_sweet,
+        songs = [],
+    )
+
+
+
+    
 
 if __name__ == "__main__":
     print("Starting concert-ainly population script...")

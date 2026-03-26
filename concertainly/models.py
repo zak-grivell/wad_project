@@ -41,6 +41,8 @@ class Venue(models.Model):
     external_id = models.CharField(max_length=128)
     city = models.CharField(max_length=128)
 
+    def __str__(self):
+        return f"{self.name}, {self.city}"
 
 class ArtistManager(models.Manager):
     def get_or_create_from_api(self, musicbrainz_id: str) -> "Artist":
@@ -84,7 +86,8 @@ class Artist(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
-
+    def __str__(self):
+        return self.name
 
 class TourManager(models.Manager):
     def get_or_create_from_api(
@@ -102,6 +105,7 @@ class TourManager(models.Manager):
         )
 
         return tour
+
 
 
 class Tour(models.Model):
@@ -124,6 +128,10 @@ class Tour(models.Model):
         super().save(*args, **kwargs)
 
 
+    def __str__(self):
+        return self.name
+
+    
 class Song(models.Model):
     id = models.UUIDField(
         default=uuid.uuid4, editable=False, unique=True, primary_key=True
@@ -163,3 +171,10 @@ class Review(models.Model):
     tour = models.ForeignKey(Tour, on_delete=CASCADE)
 
     set_list = models.ManyToManyField(Song)
+
+    def artist(self):
+        return self.tour.artist
+    
+    def __str__(self):
+        return "Review: ID - " + str(self.id) + ", Title - " + str(self.title) + ", Venue - " + str(self.venue) + ", Date - " + str(self.date) + ", Artist - " + str(self.artist()) + ", Tour - " + str(self.tour)
+
