@@ -13,6 +13,19 @@
         {% else %}
             <h2>No results found!</h2>
         {% endif %}
+
+        {% if search_artist %}
+            <p>Artist - {{ search_artist }}</p>
+        {% endif %}
+        {% if search_tour %}
+            <p>Tour - {{ search_tour }}</p>
+        {% endif %}
+        {% if search_venue %}
+            <p>Venue - {{ search_venue }}</p>
+        {% endif %}
+        {% if search_date %}
+            <p>Date - {{ search_date }}</p>
+        {% endif %}
     </div>
     {% if reviews %}
         {% for review in reviews %}

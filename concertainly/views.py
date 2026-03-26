@@ -50,27 +50,29 @@ def search(request):
             clean_genre = str(form.cleaned_data["genre_select"])
 
             reviews = Review.objects.all()
-
+            context_dict = {}
+            
             if (str(clean_artist) != ""):
-                for r in reviews:
-                    print(str(r.artist()))
-                        
                 reviews = [r for r in reviews if insens_str_contain(r.artist().name, clean_artist)]
+                context_dict["search_artist"] = clean_artist
 
             if (str(clean_tour) != ""):
                 reviews = [r for r in reviews if insens_str_contain(clean_tour, r.tour.name)]
+                context_dict["search_tour"] = clean_tour
 
             if (str(clean_venue) != ""):
                 reviews = [r for r in reviews if insens_str_contain(clean_venue, r.venue.name)]
+                context_dict["search_venue"] = clean_venue
 
             if (s_date is not None and s_date[0] is not None):
-                reviews = [r for r in reviews if r.date.strftime('%Y-%m-%d') == s_date[0].strftime('%Y-%m-%d')]
+                formatted_date = s_date[0].strftime('%Y-%m-%d')
+                reviews = [r for r in reviews if r.date.strftime('%Y-%m-%d') == formatted_date]
+                context_dict["search_date"] = s_date[0].strftime('%d-%m-%Y')
 
             # TODO: add genre filtering
             #if (s_genre):
                 #reviews = reviews.filter(lambda review: review.tour.artist.genres.contains)
-            
-            context_dict = {}
+        
             context_dict["reviews"] = reviews
             context_dict["any_results"] = len(reviews) != 0
             return render(request, "search_results.html", context=context_dict)
