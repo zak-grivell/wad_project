@@ -11,7 +11,7 @@
         {% if any_results %}
             <h2>{{ number_of_reviews }} Search Results</h2>
         {% else %}
-            <h2>No results found!</h2>
+            <h2>No Results</h2>
         {% endif %}
 
         {% if search_artist %}
@@ -28,6 +28,11 @@
         {% endif %}
         {% if search_genre %}
             <small class="text-muted">, Genre(s): "{{ search_genre }}"</small>
+        {% endif %}
+
+        {% if not any_results %}
+            <br>
+            <a href="{% url 'concertainly:search' %}" class="text-decoration-none">Try another search</a>
         {% endif %}
     </div>
     {% if reviews %}
