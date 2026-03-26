@@ -28,7 +28,11 @@ def add_artist(name, genres, spotify_image, external_id):
         name=name, defaults={"spotify_image": spotify_image, "external_id": external_id}
     )
 
-    artist.genres.add(genres)
+    if not isinstance(genres, (list, tuple, set)):
+        genres = [genres]
+
+    artist.genres.set(genres)
+    artist.save()
 
     changed = False
 
@@ -116,58 +120,64 @@ def populate():
 
     billie = add_artist(
         "Billie Eilish",
-        pop,
+        [pop],
         "https://i.scdn.co/image/ab6761610000e5eb4a21b4760d2ecb7b0dcdc8da",
         "f4abc0b5-3f7a-4eff-8f78-ac078dbce533",
     )
     linkin = add_artist(
         "Linkin Park",
-        rock,
+        [rock],
         "https://i.scdn.co/image/ab6761610000e5eb527d95dabbe8b8b527e8136f",
         "f59c5520-5f46-4d2c-b2c4-822eabf53419",
     )
     taylor = add_artist(
         "Taylor Swift",
-        pop,
+        [pop],
         "https://i.scdn.co/image/ab6761610000e5ebe2e8e7ff002a4afda1c7147e",
         "20244d07-534f-4eff-b4d4-930878889970",
     )
     harry = add_artist(
         "Harry Styles",
-        pop,
+        [pop],
         "https://i.scdn.co/image/ab6761610000e5ebe309f8c3056a59f20d0968ca",
         "7eb1ce54-a355-41f9-8d68-e018b096d427",
     )
     olivia = add_artist(
         "Olivia Rodrigo",
-        pop,
+        [pop],
         "https://i.scdn.co/image/ab6761610000e5ebe03a98785f3658f0b6461ec4",
         "6925db17-f35e-42f3-a4eb-84ee6bf5d4b0",
     )
     sabrina = add_artist(
         "Sabrina Carpenter",
-        pop,
+        [pop],
         "https://i.scdn.co/image/ab6761610000e5eb78e45cfa4697ce3c437cb455",
         "1882fe91-cdd9-49c9-9956-8e06a3810bd4",
     )
     conan = add_artist(
         "Conan Gray",
-        pop,
+        [pop],
         "https://i.scdn.co/image/ab6761610000e5eb4c2b62d4748524454a6f99b0",
         "1882fe91-cdd9-49c9-9956-8e06a3810bd4",
     )
     niall = add_artist(
         "Niall Horan",
-        pop,
+        [pop],
         "https://i.scdn.co/image/ab6761610000e5eb536b839c5962c26b847d1013",
         "55e6074f-ef78-4ec3-8fff-bd1b8cc8c14a",
     )
     sombr = add_artist(
         "Sombr",
-        pop,
+        [pop],
         "https://i.scdn.co/image/ab6761610000e5eb78edaa6468cae153565c2c97",
         "502cf908-9921-48bc-bf0e-265c881c0156",
     )
+    gem = add_artist(
+        "G.E.M",
+        [pop, mandopop],
+        "https://i.scdn.co/image/ab6761610000e5eb8b385b6aa7b47570adbeff7b",
+        "7aRC4L63dBn3CiLDuWaLSI",
+        )
 
     charlotte = add_user("Charlotte.528", "password")
     mark = add_user("Mark420", "password")

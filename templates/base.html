@@ -36,6 +36,11 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="{% url 'concertainly:home' %}">HOME</a>
             </li>
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'concertainly:review' %}">REVIEW</a>
+            </li>
+            {% endif %}
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="{% url 'concertainly:genres' %}">GENRES</a>
             </li>

@@ -16,7 +16,7 @@ urlpatterns = [
     path("artist/<slug:slug>/", views.artist, name="artist"),
     path("tour/<slug:slug>/", views.tour, name="tour"),
     path("logout/", views.user_logout, name="logout"),    
-    path("review", views.review, name="review"),
+    path("review/", views.review, name="review"),
     path("review/<slug:slug>", views.review, name="review"),
     path("api/", include("concertainly.api.urls"), name="api"),
     path("tour/", views.tour_redirect),
