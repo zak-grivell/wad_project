@@ -20,10 +20,10 @@
                 {% csrf_token %}
 
                 {% if error %}
-    <div class="alert alert-danger" role="alert">
-        {{ error }}
-    </div>
-    {% endif %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                {% endif %}
 
                 <div class="mb-3">
                     Username: <input type="text" name="username" value="" size="25"/>

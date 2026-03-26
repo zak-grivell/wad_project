@@ -1,31 +1,29 @@
 {% extends 'base.html' %}
 
 {% block title_block %}
-    Genre
+Genre
 {% endblock %}
 
 {% block body_block %}
 <div class="container py-5">
-    {% if genre %}
-            <h1 id="genreName">{{ genre.nice_name }} Artists</h1><br>
-    {% endif %}
+  {% if genre %}
+  <h1 id="genreName">{{ genre.nice_name }} Artists</h1><br>
+  {% endif %}
 
-    {% if artists %}
-        <div class="col artist-card">
-        <div class="row row-cols-2 row-cols-md-3 g-4">
-            {% for artist in artists %}
-            <div class="card">
-                <img src="" class="card-img-top" alt="artist image">
-                <div class="card-body">
-                <p><a href="{% url 'concertainly:artist' artist.slug %}" class="btn btn-dark">{{ artist.name }}</a></p>
-                </div>
-            </div>
-            {% endfor %}
+  {% if artists %}
+  <div class="col artist-card">
+    <div class="row row-cols-2 row-cols-md-3 g-4">
+      {% for artist in artists %}
+      <div class="card">
+        <img src="{{artist.spotify_image}}" class="card-img-top" alt="artist image">
+        <div class="card-body">
+          <p><a href="{% url 'concertainly:artist' artist.slug %}" class="btn btn-dark">{{ artist.name }}</a></p>
         </div>
         </div>
     {% else %}
+        <h2>This is awkward...</h2>
         We currently have no {{ genre.nice_name }} artists <br>  
-        Choose a different genre to browse? <a href="{% url 'concertainly:genres' %}">Go back to all genres.</a><br />
+        <a href="{% url 'concertainly:genres' %}">Return to all genres.</a><br />
     {% endif %}
 </div>
 {% endblock %}
