@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from concertainly.models import Genre, Artist, Tour, Review, Venue
+from concertainly.models import Genre, Artist, Tour, Review, Venue, Song
 from concertainly.forms import UserForm, ReviewForm, SearchForm
 from django.shortcuts import redirect 
 from django.urls import reverse
@@ -209,7 +209,7 @@ def review(request, slug=None): # add redirect
         form.fields["setlist"].disabled = False
         form.fields["tour_select"].disabled = False
 
-        print([(i.split("|")[0], i.split("|")[1]) for i in submitted_ids])
+        setlist = [(i.split("|")[0], i.split("|")[1]) for i in submitted_ids]
 
         form.fields['setlist'].choices = [(i, i) for i in submitted_ids]
 
@@ -221,7 +221,7 @@ def review(request, slug=None): # add redirect
 
             print(form.cleaned_data["setlist"])
                         
-            Review.objects.create(
+            review = Review.objects.create(
                 title=form.cleaned_data["title"],
                 thoughts=form.cleaned_data["comment"],
                 date=form.cleaned_data["date"],
@@ -230,7 +230,10 @@ def review(request, slug=None): # add redirect
                 tour=tour,
                 venue=venue,
                 user=request.user
-             )
+            )
+
+            review.set_list.add(*[Song.objects.get_or_create(external_id=id, defaults={'name': name, 'artist': artist})[0] for id, name in setlist])
+            
 
             return redirect(reverse("concertainly:tour", kwargs={"slug": tour.slug}))
         else:    
