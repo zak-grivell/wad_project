@@ -111,6 +111,10 @@ document.getElementById("search_add").addEventListener("click", () => {
 
     li.selected = true;
 
+    
+    li.addEventListener("click", () => {
+      li.remove()
+    });
     song_search_field.value = ""
     datalist.replaceChildren()
 
