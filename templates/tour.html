@@ -14,7 +14,7 @@ Tour not found
   {% if tour %}
   <div class="d-flex justify-content-start align-items-center mb-4">
     <div style="width: 150px">
-      <img src="{% static tour.image %}" class="img-fluid rounded-0" alt="popular tour">
+      <img src="{% static tour.image %}" class="img-fluid rounded-0" alt="{{ tour.name }} image">
     </div>
     <div class="d-flex flex-column ms-4">
       <h1>{{ tour.name }}</h1>
