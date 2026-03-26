@@ -17,6 +17,12 @@ class Genre(models.Model):
     name = models.CharField(max_length=128)
     nice_name = models.CharField(max_length=128, default="")
 
+    def genre_name(self):
+        return str(self.name)
+    
+    def genre_nice_name(self):
+        return str(self.nice_name)
+
 
 class VenueManager(models.Manager):
     def get_or_create_from_api(self, ticketmaster_id):
@@ -178,3 +184,14 @@ class Review(models.Model):
     def __str__(self):
         return "Review: ID - " + str(self.id) + ", Title - " + str(self.title) + ", Venue - " + str(self.venue) + ", Date - " + str(self.date) + ", Artist - " + str(self.artist()) + ", Tour - " + str(self.tour)
 
+    def genres(self):
+        return [genre for genre in self.artist().genres.all()]
+    
+    def genre_name_list(self):
+        return [g.genre_name() for g in self.genres()]
+    
+    def genre_nice_name_list(self):
+        return [g.genre_nice_name() for g in self.genres()]
+    
+    def genres_allnames_string(self):
+        return ", ".join([g.genre_name() for g in self.genres()])

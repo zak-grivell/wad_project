@@ -26,6 +26,9 @@
         {% if search_date %}
             <p>Date - {{ search_date }}</p>
         {% endif %}
+        {% if search_genre %}
+            <p>Genre - {{ search_genre }}</p>
+        {% endif %}
     </div>
     {% if reviews %}
         {% for review in reviews %}
@@ -42,6 +45,7 @@
                                 <p><strong>Thoughts:</strong> {{ review.thoughts }}</p>
                                 <p><strong>Venue:</strong> {{ review.venue }}</p>
                                 <p><strong>Date:</strong> {{ review.date }}</p>
+                                <p><strong>Genres: </strong>{{ review.genres_allnames_string }}</p>
 
                                 {% if review.set_list.all %}
                                     {% with songs=review.set_list.all %}
