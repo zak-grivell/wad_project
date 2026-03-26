@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.conf import settings
 import os
 from django.urls import reverse
-from populate_concertainly import populate
+from population_script import populate
 
 class BaseTemplate(TestCase):
 
