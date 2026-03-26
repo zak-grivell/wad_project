@@ -17,7 +17,7 @@ Genre
                 <div class="col">
                     <a href="{% url 'concertainly:artist' artist.slug %}" class="text-decoration-none">
                     <div class="card rounded-0 border-0 h-100">
-                        <img src="" class="card-img-top rounded-0" alt="artist image">
+                        <img src="{{ artist.spotify_image }}" class="card-img-top rounded-0" alt="artist image">
                         <div class="card-body popular-tour-card-body text-center">
                         <h5 class="card-title mb-1" >{{ artist.name }}</h5>
                         </div>
