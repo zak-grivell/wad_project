@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.conf import settings
 import os
 from django.urls import reverse
-from populate_concertainly import populate
+from population_script import populate
 
 class BaseTemplate(TestCase):
 
@@ -63,16 +63,24 @@ class HomePage(TestCase):
 
 class ArtistPage(TestCase):
 
-        def test_example_artist(self):
-            populate()
-            response = self.client.get(reverse('concertainly:artist', kwargs={'slug': 'taylor-swift'}))
-            self.assertEqual(response.status_code, 200)
+    def test_example_artist(self):
+        populate()
+        response = self.client.get(reverse('concertainly:artist', kwargs={'slug': 'taylor-swift'}))
+        self.assertEqual(response.status_code, 200)
+
+class GenrePage(TestCase):
+
+    def test_example_genre(self):
+        populate()
+        response = self.client.get(reverse('concertainly:genre', kwargs={'genre_name': 'pop'}))
+        self.assertEqual(response.status_code, 200)
 
 class LoginPage(TestCase):
 
-    # are these tests correct? i don't know!
     def test_username_field(self):
-        self.assertContains("Username: <input type=\"text\" name=\"username\" value=\"\"")
+        response = self.client.get(reverse('concertainly:login'))
+        self.assertContains(response, "Username: <input type=\"text\" name=\"username\" value=\"\"")
 
     def test_password_field(self):
-        self.assertContains("Password: <input type=\"password\" name=\"password\" value=\"\"")
+        response = self.client.get(reverse('concertainly:login'))
+        self.assertContains(response, "Password: <input type=\"password\" name=\"password\" value=\"\"")

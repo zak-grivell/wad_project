@@ -30,7 +30,7 @@ function searchDataList(name, required) {
     element.reportValidity();
   })
 
-  const buffer_time = 800;
+  const buffer_time = 250;
   let timer = null;
 
   const onStall = (text) => {
@@ -111,6 +111,10 @@ document.getElementById("search_add").addEventListener("click", () => {
 
     li.selected = true;
 
+    
+    li.addEventListener("click", () => {
+      li.remove()
+    });
     song_search_field.value = ""
     datalist.replaceChildren()
 
@@ -118,7 +122,7 @@ document.getElementById("search_add").addEventListener("click", () => {
   }
 });
 
-const buffer_time = 800;
+const buffer_time = 250;
 let timer = null;
 
 const onStall = (text) => {
@@ -142,6 +146,8 @@ const onStall = (text) => {
     .then(options => {
       options.items.forEach((option /** @type {string} */) => {
         let e = document.createElement("option");
+
+        e.classList.add("setlist-button")
 
         e.value = option.title;
         e.dataset.id = option.id;

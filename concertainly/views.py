@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from concertainly.models import Genre, Artist, Tour, Review, Venue
+from concertainly.models import Genre, Artist, Tour, Review, Venue, Song
 from concertainly.forms import UserForm, ReviewForm, SearchForm
 from django.shortcuts import redirect 
 from django.urls import reverse
@@ -35,45 +35,75 @@ def home(request):
 
     return render(request, "homepage.html", context=context_dict)
 
+def insens_str_contain(s1, s2):
+    return (s1.lower() in s2.lower() or s2.lower() in s1.lower())
+
+def contained_in_any_list_elt(target, list):
+    for elt in list:
+        if target in elt:
+            return True
+    return False
+
 def search(request):
+    form_dict_key = "form"
     if (request.method == "POST"):
         form = SearchForm(request.POST, request.FILES)
 
         if form.is_valid():
-            s_artist = Artist.objects.filter(name=form.cleaned_data["artist_select"])
-            s_tour = Tour.objects.filter(name=form.cleaned_data["tour_select"])   
-            s_venue = Venue.objects.filter(name=form.cleaned_data["venue_select"])
+            clean_artist = str(form.cleaned_data["artist_select"])
+            clean_tour = str(form.cleaned_data["tour_select"])
+            clean_venue = str(form.cleaned_data["venue_select"])
             s_date=form.cleaned_data["date"],
-            s_genre = Genre.objects.filter(name=form.cleaned_data["genre_select"])
+            clean_genre = str(form.cleaned_data["genre_select"])
 
+            # me when i query every single object in the database
+            # if it lags i'll fix it
+            # premature optimisation is the root of all evil
             reviews = Review.objects.all()
-            
-            print("artist - " + str(not not s_artist))
-            print("tour - " + str(not not s_tour))
-            print("venue - " + str(not not s_venue))
-            print("date - " + str(not not s_date))
-
-            if (s_artist):
-                reviews = [r for r in reviews if r.artist() == s_artist[0]]
-            if (s_tour):
-                reviews = [r for r in reviews if r.tour == s_tour[0]]
-            if (s_venue):
-                print(s_venue[0])
-                for v in reviews.venue:
-                    print(v)
-    
-                reviews = [r for r in reviews if r.venue == s_venue[0]]
-            if (s_date is not None and s_date[0] is not None):
-                reviews = [r for r in reviews if r.date.strftime('%Y-%m-%d') == s_date[0].strftime('%Y-%m-%d')]
-            else:
-                print("epic date fail")
-        
-            # TODO: add genre filtering
-            #if (s_genre):
-                #reviews = reviews.filter(lambda review: review.tour.artist.genres.contains)
-            
             context_dict = {}
+
+            # collect all presence bools - if all are false, display an error message
+            presences = []
+
+            artist_present = clean_artist != ""
+            presences.append(artist_present)
+            if (artist_present):
+                reviews = [r for r in reviews if insens_str_contain(r.artist().name, clean_artist)]
+                context_dict["search_artist"] = clean_artist
+
+            tour_present = clean_tour != ""
+            presences.append(tour_present)
+            if (tour_present):
+                reviews = [r for r in reviews if insens_str_contain(clean_tour, r.tour.name)]
+                context_dict["search_tour"] = clean_tour
+
+            venue_present = clean_venue != ""
+            presences.append(venue_present)
+            if (venue_present):
+                reviews = [r for r in reviews if insens_str_contain(clean_venue, r.venue.name)]
+                context_dict["search_venue"] = clean_venue
+
+            if (s_date is not None and s_date[0] is not None):
+                presences.append(True)
+                formatted_date = s_date[0].strftime('%Y-%m-%d')
+                reviews = [r for r in reviews if r.date.strftime('%Y-%m-%d') == formatted_date]
+                context_dict["search_date"] = s_date[0].strftime('%d-%m-%Y')
+            else:
+                presences.append(False)
+
+            presences.append(bool(clean_genre))
+            if (clean_genre):
+                reviews = [r for r in reviews if contained_in_any_list_elt(clean_genre, r.genre_name_list()) or contained_in_any_list_elt(clean_genre, r.genre_nice_name_list())]
+                context_dict["search_genre"] = clean_genre
+
+            # if there are no true presences
+            if (not any(presences)):
+                context_dict["error"] = "Please provide some search parameters."
+                context_dict[form_dict_key] = SearchForm()
+                return render(request, "search.html", context=context_dict)
+                
             context_dict["reviews"] = reviews
+            context_dict["number_of_reviews"] = len(reviews)
             context_dict["any_results"] = len(reviews) != 0
             return render(request, "search_results.html", context=context_dict)
         
@@ -83,7 +113,7 @@ def search(request):
     else:
         form = SearchForm()
     
-    return render(request, "search.html", {"form": form})
+    return render(request, "search.html", {form_dict_key: form})
 
 def search_results(request):
     return render(request, "search_results.html", dict())
@@ -194,7 +224,7 @@ def tour_redirect(request):
     return redirect("concertainly:home")
 
 @login_required
-def review(request, slug=None): # add redirect
+def review(request, slug=None):
     if (request.method == "POST"):
         submitted_ids = request.POST.getlist('setlist')
 
@@ -203,10 +233,9 @@ def review(request, slug=None): # add redirect
         form.fields["setlist"].disabled = False
         form.fields["tour_select"].disabled = False
 
-        print([(i.split("|")[0], i.split("|")[1]) for i in submitted_ids])
+        setlist = [(i.split("|")[0], i.split("|")[1]) for i in submitted_ids]
 
         form.fields['setlist'].choices = [(i, i) for i in submitted_ids]
-
         
         if form.is_valid():
             artist = Artist.objects.get_or_create_from_api(form.cleaned_data["artist_id"])
@@ -215,7 +244,7 @@ def review(request, slug=None): # add redirect
 
             print(form.cleaned_data["setlist"])
                         
-            Review.objects.create(
+            review = Review.objects.create(
                 title=form.cleaned_data["title"],
                 thoughts=form.cleaned_data["comment"],
                 date=form.cleaned_data["date"],
@@ -224,7 +253,10 @@ def review(request, slug=None): # add redirect
                 tour=tour,
                 venue=venue,
                 user=request.user
-             )
+            )
+
+            review.set_list.add(*[Song.objects.get_or_create(external_id=id, defaults={'name': name, 'artist': artist})[0] for id, name in setlist])
+            
 
             return redirect(reverse("concertainly:tour", kwargs={"slug": tour.slug}))
         else:    

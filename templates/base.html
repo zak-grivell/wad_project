@@ -30,11 +30,17 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav align-items-center mx-auto d-flex gap-5 mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="navbar-brand fw-bold m-0" aria-current="page" href="{% url 'concertainly:home' %}">Concertainly!</a>
+              <a class="navbar-brand fw-bold m-0" aria-current="page"
+                href="{% url 'concertainly:home' %}">Concertainly!</a>
             </li>
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="{% url 'concertainly:home' %}">HOME</a>
             </li>
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'concertainly:review' %}">REVIEW</a>
+            </li>
+            {% endif %}
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="{% url 'concertainly:genres' %}">GENRES</a>
             </li>
@@ -60,7 +66,7 @@
             {% endif %}
           </ul>
         </div>
-        
+
       </div>
     </nav>
   </div>
@@ -71,7 +77,6 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
     crossorigin="anonymous"></script>
-  <script src="{% static 'js/register.js' %}"></script>
 </body>
 
 </html>

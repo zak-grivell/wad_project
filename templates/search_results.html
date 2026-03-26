@@ -9,9 +9,30 @@
 <div class="container py-4">
     <div class="text-center mb-4">
         {% if any_results %}
-            <h2>Search Results</h2>
+            <h2>{{ number_of_reviews }} Search Results</h2>
         {% else %}
-            <h2>No results found!</h2>
+            <h2>No Results</h2>
+        {% endif %}
+
+        {% if search_artist %}
+            <small class="text-muted">Artist: "{{ search_artist }}"</small>
+        {% endif %}
+        {% if search_tour %}
+            <small class="text-muted">, Tour: "{{ search_tour }}"</small>
+        {% endif %}
+        {% if search_venue %}
+            <small class="text-muted">, Venue: "{{ search_venue }}"</small>
+        {% endif %}
+        {% if search_date %}
+            <small class="text-muted">, Date: "{{ search_date }}"</small>
+        {% endif %}
+        {% if search_genre %}
+            <small class="text-muted">, Genre(s): "{{ search_genre }}"</small>
+        {% endif %}
+
+        {% if not any_results %}
+            <br>
+            <a href="{% url 'concertainly:search' %}" class="text-decoration-none">Try another search</a>
         {% endif %}
     </div>
     {% if reviews %}
@@ -24,10 +45,12 @@
                             <div class="col-md-8 align-self-start">
                                 <h2 class="card-title mb-1">"{{ review.title }}"</h2>
                                 <small class="text-muted mb-3 d-block">Review by: <strong>{{ review.user.username }}</strong></small>
+                                <p><strong>Tour:</strong> {{ review.tour }}</p>
                                 <p><strong>Rating:</strong> {{ review.rating }}/5</p>
                                 <p><strong>Thoughts:</strong> {{ review.thoughts }}</p>
                                 <p><strong>Venue:</strong> {{ review.venue }}</p>
                                 <p><strong>Date:</strong> {{ review.date }}</p>
+                                <p><strong>Genre(s): </strong>{{ review.genres_allnames_string }}</p>
 
                                 {% if review.set_list.all %}
                                     {% with songs=review.set_list.all %}

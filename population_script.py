@@ -28,7 +28,11 @@ def add_artist(name, genres, spotify_image, external_id):
         name=name, defaults={"spotify_image": spotify_image, "external_id": external_id}
     )
 
-    artist.genres.add(genres)
+    if not isinstance(genres, (list, tuple, set)):
+        genres = [genres]
+
+    artist.genres.set(genres)
+    artist.save()
 
     changed = False
 
@@ -54,14 +58,14 @@ def add_user(name, password):
     return user
 
 
-def add_tour(name, artist, ticket_master_id="", image=""):
+def add_tour(name, artist, external_id="", image=""):
     tour, _ = Tour.objects.get_or_create(
         name=name,
         artist=artist,
-        defaults={"external_id": ticket_master_id, "image": image},
+        defaults={"external_id": external_id, "image": image},
     )
-    if tour.external_id != ticket_master_id:
-        tour.external_id = ticket_master_id
+    if tour.external_id != external_id:
+        tour.external_id = external_id
         tour.save()
     return tour
 
@@ -116,58 +120,64 @@ def populate():
 
     billie = add_artist(
         "Billie Eilish",
-        pop,
+        [pop],
         "https://i.scdn.co/image/ab6761610000e5eb4a21b4760d2ecb7b0dcdc8da",
         "f4abc0b5-3f7a-4eff-8f78-ac078dbce533",
     )
     linkin = add_artist(
         "Linkin Park",
-        rock,
+        [rock],
         "https://i.scdn.co/image/ab6761610000e5eb527d95dabbe8b8b527e8136f",
         "f59c5520-5f46-4d2c-b2c4-822eabf53419",
     )
     taylor = add_artist(
         "Taylor Swift",
-        pop,
+        [pop],
         "https://i.scdn.co/image/ab6761610000e5ebe2e8e7ff002a4afda1c7147e",
         "20244d07-534f-4eff-b4d4-930878889970",
     )
     harry = add_artist(
         "Harry Styles",
-        pop,
+        [pop],
         "https://i.scdn.co/image/ab6761610000e5ebe309f8c3056a59f20d0968ca",
         "7eb1ce54-a355-41f9-8d68-e018b096d427",
     )
     olivia = add_artist(
         "Olivia Rodrigo",
-        pop,
+        [pop],
         "https://i.scdn.co/image/ab6761610000e5ebe03a98785f3658f0b6461ec4",
         "6925db17-f35e-42f3-a4eb-84ee6bf5d4b0",
     )
     sabrina = add_artist(
         "Sabrina Carpenter",
-        pop,
+        [pop],
         "https://i.scdn.co/image/ab6761610000e5eb78e45cfa4697ce3c437cb455",
         "1882fe91-cdd9-49c9-9956-8e06a3810bd4",
     )
     conan = add_artist(
         "Conan Gray",
-        pop,
+        [pop],
         "https://i.scdn.co/image/ab6761610000e5eb4c2b62d4748524454a6f99b0",
         "1882fe91-cdd9-49c9-9956-8e06a3810bd4",
     )
     niall = add_artist(
         "Niall Horan",
-        pop,
+        [pop],
         "https://i.scdn.co/image/ab6761610000e5eb536b839c5962c26b847d1013",
         "55e6074f-ef78-4ec3-8fff-bd1b8cc8c14a",
     )
     sombr = add_artist(
         "Sombr",
-        pop,
+        [pop],
         "https://i.scdn.co/image/ab6761610000e5eb78edaa6468cae153565c2c97",
         "502cf908-9921-48bc-bf0e-265c881c0156",
     )
+    gem = add_artist(
+        "G.E.M",
+        [pop, mandopop],
+        "https://i.scdn.co/image/ab6761610000e5eb8b385b6aa7b47570adbeff7b",
+        "7aRC4L63dBn3CiLDuWaLSI",
+        )
 
     charlotte = add_user("Charlotte.528", "password")
     mark = add_user("Mark420", "password")
@@ -186,35 +196,35 @@ def populate():
     daphne = add_user("Daphne_jones", "password")
 
     # one review
-    hit_me_hard_and_soft = add_tour(
-        "Hit Me Hard and Soft: The Tour", billie, image="images/tour/billie.jpg"
-    )
-    from_zero = add_tour("FROM ZERO World Tour", linkin, image="images/tour/linkin.jpg")
-    guts = add_tour("GUTS World Tour", olivia, image="images/tour/olivia.jpg")
-    superache = add_tour("Superache Tour", conan, image="images/tour/conan.jpg")
-    theshow = add_tour("The Show", niall, image="images/tour/niall.jpg")
+    # hit_me_hard_and_soft = add_tour(
+    #     "Hit Me Hard and Soft: The Tour", billie, image="images/tour/billie.jpg"
+    # ) dup?
+    from_zero = add_tour("FROM ZERO World Tour", linkin, image="images/tour/linkin.jpg", external_id="35432126-7895-4f27-8590-5407f27539df")
+    guts = add_tour("GUTS World Tour", olivia, image="images/tour/olivia.jpg", external_id="6a416153-2d51-416d-90af-bd26fa986278")
+    superache = add_tour("Superache Tour", conan, image="images/tour/conan.jpg", external_id="64132c5e-f808-42f0-bf79-89e4f9ecbc99")
+    theshow = add_tour("The Show", niall, image="images/tour/niall.jpg", external_id="09135e6f-67db-4928-9aaa-42f7b209b923")
     sombr_world_tour = add_tour(
-        "Sombr World Tour", sombr, image="images/tour/sombr.jpg"
+        "Sombr World Tour", sombr, image="images/tour/sombr.jpg", external_id="e91a95eb-39da-414e-85be-acedf2ce5996"
     )
 
 
     #two/+ reviews
-    love_on_tour = add_tour("Love on Tour", harry, image="images/tour/harry.jpg")
+    love_on_tour = add_tour("Love on Tour", harry, image="images/tour/harry.jpg", external_id="43194bb7-bb24-45b1-a077-081725b17deb")
     short_n_sweet = add_tour(
-        "Short n' Sweet", sabrina, image="images/tour/sabrina.jpeg"
+        "Short n' Sweet", sabrina, image="images/tour/sabrina.jpeg", external_id="23e32ee9-7bb7-4489-a4f1-e822ab8168de"
     )
-    the_eras_tour = add_tour("The Eras Tour", taylor, image="images/tour/taylor.jpg")
-    hit_me_hard_and_soft = add_tour("Hit Me Hard and Soft: The Tour", billie, image="images/tour/billie.jpg")
+    the_eras_tour = add_tour("The Eras Tour", taylor, image="images/tour/taylor.jpg", external_id="23aa9d94-ffc6-4160-a7f3-31cfba1ea646")
+    hit_me_hard_and_soft = add_tour("Hit Me Hard and Soft: The Tour", billie, image="images/tour/billie.jpg", external_id="5e96b309-8383-427d-ad03-52bb64362ff6")
 
     # no reviews
-    the_eras_tour_2 = add_tour(
-        "The Eras Tour 2.0", taylor, image="images/tour/erastour2.jpg"
-    )
-    fearless_tour = add_tour("Fearless Tour", taylor, image="images/tour/fearless.jpg")
+    # the_eras_tour_2 = add_tour(
+    #     "The Eras Tour 2.0", taylor, image="images/tour/erastour2.jpg", external_id=
+    # ) could not find
+    fearless_tour = add_tour("Fearless Tour", taylor, image="images/tour/fearless.jpg", external_id="c4d15234-bb8a-4c54-99bb-c6549d8c1885")
     speak_now_world_tour = add_tour(
-        "Speak Now World Tour", taylor, image="images/tour/speaknow.jpg"
+        "Speak Now World Tour", taylor, image="images/tour/speaknow.jpg", external_id="8f3e56fc-72df-4e50-8430-9c03766d75e6"
     )
-    the_red_tour = add_tour("The Red Tour", taylor, image="images/tour/redtour.jpg")
+    the_red_tour = add_tour("The Red Tour", taylor, image="images/tour/redtour.jpg", external_id="f7cae2cd-3821-408f-9019-7b282ab6afb1")
 
     billie_s1 = add_song("bad guy", billie, "2Fxmhks0bxGSBdJ92vM42m")
     billie_s2 = add_song("BIRDS OF A FEATHER", billie, "6dOtVTDdiauQNBQEDOtlAB")
