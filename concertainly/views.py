@@ -224,7 +224,7 @@ def tour_redirect(request):
     return redirect("concertainly:home")
 
 @login_required
-def review(request, slug=None): # add redirect
+def review(request, slug=None):
     if (request.method == "POST"):
         submitted_ids = request.POST.getlist('setlist')
 
@@ -236,7 +236,6 @@ def review(request, slug=None): # add redirect
         setlist = [(i.split("|")[0], i.split("|")[1]) for i in submitted_ids]
 
         form.fields['setlist'].choices = [(i, i) for i in submitted_ids]
-
         
         if form.is_valid():
             artist = Artist.objects.get_or_create_from_api(form.cleaned_data["artist_id"])

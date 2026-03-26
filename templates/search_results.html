@@ -11,7 +11,7 @@
         {% if any_results %}
             <h2>{{ number_of_reviews }} Search Results</h2>
         {% else %}
-            <h2>No results found!</h2>
+            <h2>No Results</h2>
         {% endif %}
 
         {% if search_artist %}
@@ -27,7 +27,12 @@
             <small class="text-muted">, Date: "{{ search_date }}"</small>
         {% endif %}
         {% if search_genre %}
-            <small class="text-muted">, Genre: "{{ search_genre }}"</small>
+            <small class="text-muted">, Genre(s): "{{ search_genre }}"</small>
+        {% endif %}
+
+        {% if not any_results %}
+            <br>
+            <a href="{% url 'concertainly:search' %}" class="text-decoration-none">Try another search</a>
         {% endif %}
     </div>
     {% if reviews %}
@@ -45,7 +50,7 @@
                                 <p><strong>Thoughts:</strong> {{ review.thoughts }}</p>
                                 <p><strong>Venue:</strong> {{ review.venue }}</p>
                                 <p><strong>Date:</strong> {{ review.date }}</p>
-                                <p><strong>Genres: </strong>{{ review.genres_allnames_string }}</p>
+                                <p><strong>Genre(s): </strong>{{ review.genres_allnames_string }}</p>
 
                                 {% if review.set_list.all %}
                                     {% with songs=review.set_list.all %}
