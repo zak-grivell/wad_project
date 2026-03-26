@@ -35,55 +35,37 @@ def home(request):
 
     return render(request, "homepage.html", context=context_dict)
 
+def insens_str_contain(s1, s2):
+    return (s1.lower() in s2.lower() or s2.lower() in s1.lower())
+
 def search(request):
     if (request.method == "POST"):
         form = SearchForm(request.POST, request.FILES)
 
         if form.is_valid():
-            clean_artist = form.cleaned_data["artist_select"]
-            s_artist = Artist.objects.filter(name=clean_artist)
-            clean_tour = form.cleaned_data["tour_select"]
-            s_tour = Tour.objects.filter(name=clean_tour)
-            clean_venue = form.cleaned_data["venue_select"]
-            s_venue = Venue.objects.filter(name=clean_venue)
+            clean_artist = str(form.cleaned_data["artist_select"])
+            clean_tour = str(form.cleaned_data["tour_select"])
+            clean_venue = str(form.cleaned_data["venue_select"])
             s_date=form.cleaned_data["date"],
-            clean_genre = form.cleaned_data["genre_select"]
-            s_genre = Genre.objects.filter(name=clean_genre)
+            clean_genre = str(form.cleaned_data["genre_select"])
 
             reviews = Review.objects.all()
-            
-            print("artist - (" + str(clean_artist) + ")")
-            print("tour - (" + str(clean_tour) + ")")
-            print("venue - (" + str(clean_venue) + ")")
-            print("date - (" + str(clean_genre) + ")")
-            print(str(clean_artist) == "")
-            print(str(clean_tour) == "")
-            print(str(clean_venue) == "")
-            print(str(clean_genre) == "")
 
             if (str(clean_artist) != ""):
-                if (len(s_artist) != 0):
-                    reviews = [r for r in reviews if r.artist() == s_artist[0]]
-                else:
-                    reviews = []
+                for r in reviews:
+                    print(str(r.artist()))
+                        
+                reviews = [r for r in reviews if insens_str_contain(r.artist().name, clean_artist)]
 
             if (str(clean_tour) != ""):
-                if (len(s_tour) != 0):
-                    reviews = [r for r in reviews if r.tour == s_tour[0]]
-                else:
-                    reviews = []
+                reviews = [r for r in reviews if insens_str_contain(clean_tour, r.tour.name)]
 
             if (str(clean_venue) != ""):
-                if (len(s_tour) != 0):
-                    reviews = [r for r in reviews if r.venue == s_venue[0]]
-                else:
-                    reviews = []
-                    
+                reviews = [r for r in reviews if insens_str_contain(clean_venue, r.venue.name)]
+
             if (s_date is not None and s_date[0] is not None):
                 reviews = [r for r in reviews if r.date.strftime('%Y-%m-%d') == s_date[0].strftime('%Y-%m-%d')]
-            else:
-                print("epic date fail")
-        
+
             # TODO: add genre filtering
             #if (s_genre):
                 #reviews = reviews.filter(lambda review: review.tour.artist.genres.contains)
