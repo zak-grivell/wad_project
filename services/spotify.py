@@ -177,6 +177,7 @@ if __name__ == "__main__":
     A.append("4Uc8Dsxct0oMqx0P6i60ea") 
     A.append("1Hsdzj7Dlq2I7tHP7501T4") 
     A.append("4G9NDjRyZFDlJKMRL8hx3S")
+    A.append("7aRC4L63dBn3CiLDuWaLSI")
 
     for a in A:
         a = SPOTIFY_API.artist(a)

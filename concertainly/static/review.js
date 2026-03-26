@@ -143,6 +143,8 @@ const onStall = (text) => {
       options.items.forEach((option /** @type {string} */) => {
         let e = document.createElement("option");
 
+        e.classList.add("setlist-button")
+
         e.value = option.title;
         e.dataset.id = option.id;
 
