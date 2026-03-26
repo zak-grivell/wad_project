@@ -6,29 +6,43 @@
 {% endblock %}
 
 {% block body_block %}
-    <div class="text-center py-5">
+<div class="container py-4">
+    <div class="text-center mb-4">
         {% if any_results %}
-            <h3>Search Results</h3>
+            <h2>Search Results</h2>
         {% else %}
-            <h3>No results found!</h3>
+            <h2>No results found!</h2>
+        {% endif %}
+
+        {% if search_artist %}
+            <p>Artist - {{ search_artist }}</p>
+        {% endif %}
+        {% if search_tour %}
+            <p>Tour - {{ search_tour }}</p>
+        {% endif %}
+        {% if search_venue %}
+            <p>Venue - {{ search_venue }}</p>
+        {% endif %}
+        {% if search_date %}
+            <p>Date - {{ search_date }}</p>
         {% endif %}
     </div>
     {% if reviews %}
         {% for review in reviews %}
-        <div class="card my-4 custom-card">
+         <a href="{% url 'concertainly:tour' review.tour.slug %}" class="text-decoration-none">
+                <div class="card my-4 shadow custom-card rounded-0 border-0">
                     <div class="card-body">
                         <div class="row">
- 
+
                             <div class="col-md-8 align-self-start">
-                                <h2 class="card-title mb-3">{{ review.title }}</h2>
+                                <h2 class="card-title mb-1">"{{ review.title }}"</h2>
+                                <small class="text-muted mb-3 d-block">Review by: <strong>{{ review.user.username }}</strong></small>
                                 <p><strong>Tour:</strong> {{ review.tour }}</p>
-                                <p><strong>Artist:</strong> {{ review.tour.artist }}</p>
+                                <p><strong>Rating:</strong> {{ review.rating }}/5</p>
                                 <p><strong>Thoughts:</strong> {{ review.thoughts }}</p>
                                 <p><strong>Venue:</strong> {{ review.venue }}</p>
                                 <p><strong>Date:</strong> {{ review.date }}</p>
-                                <p><strong>Rating:</strong> {{ review.rating }}/5</p>
-                                <p><strong>Uploaded by:</strong> {{ review.user.username }}</p>
- 
+
                                 {% if review.set_list.all %}
                                     {% with songs=review.set_list.all %}
                                             {% if songs %}
@@ -39,21 +53,23 @@
                                                     {% endfor %}
                                                 </ul>
                                             {% endif %}
-                                    {% endwith %}
+                                    {% endwith%}
                                 {% endif %}
                                 </div>
- 
+
                                 {% if review.img %}
                                     <div class="col-md-4 align-self-center">
                                         <div class="review-image-box">
-                                            <img src="{% static review.img %}" class="review-image" alt="review image">
+                                            <img src="{% static review.img %}" class="review-image shadow" alt="review image">
                                         </div>
                                     </div>
                                 {% endif %}
- 
+
                         </div>
                     </div>
                 </div>
-        {% endfor %}
+            </a>
+            {% endfor %}
     {% endif %}
+</div>
 {% endblock %}

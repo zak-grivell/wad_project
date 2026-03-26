@@ -33,9 +33,8 @@ body {
 
 /* tour page */
 .custom-card {
-  background-color: #1e1e2f;
-  color: white;
-  border: 1px solid white;
+    background-color: #1e1e2f;
+    color: white;
 }
 
 .review-image-box {
@@ -45,11 +44,10 @@ body {
 }
 
 .review-image {
-  width: 80%;
-  max-width: 1000px;
-  max-height: 1000px;
-  object-fit: cover;
-  border-radius: 10px;
+    width: 80%;
+    max-width: 1000px;
+    max-height: 1000px;
+    object-fit: cover;
 }
 
 /* allGenres page */
@@ -90,14 +88,15 @@ button:hover img {
 .popular-tour-card img {
   height: 50vh;
   object-fit: cover;
+  object-position: center top;
 }
 
 .popular-tours-heading {
-    background: radial-gradient(circle at center, rgba(58, 58, 92, 0.7) 0%, rgba(15, 15, 19, 0.7) 70%);
+    background: radial-gradient(circle at center, rgba(58, 58, 92, 0.7) 0%, rgba(22, 22, 29, 1) 70%);
 }
 
 .popular-tour-card-body {
-    background: radial-gradient(circle at top center, rgba(58, 58, 92, 0.7) 0%, rgba(15, 15, 19, 1) 70%);
+    background: radial-gradient(circle at top center, rgba(58, 58, 92, 0.7) 0%, rgba(22, 22, 29, 1) 70%);
 }
 
 .popular-tour-card .card:hover {
@@ -138,6 +137,27 @@ select[multiple] option:hover {
 #genreName{
     text-align: center;
     text-transform: capitalize;
+}
+
+.artist-card .card {
+    padding: 20px;
+    border: 100px solid white;
+    background-color: #1c1c2e;
+}
+
+.artist-img-wrapper {
+    width: 100%;
+    height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.artist-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 /* registration page */

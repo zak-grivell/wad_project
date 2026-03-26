@@ -5,25 +5,34 @@ Genre
 {% endblock %}
 
 {% block body_block %}
-<div class="container py-5">
-  {% if genre %}
-  <h1 id="genreName">{{ genre.nice_name }} Artists</h1><br>
-  {% endif %}
+<div class="container py-4">
+    {% if genre %}
+            <h1 id="genreName">{{ genre.nice_name }} Artists</h1><br>
+    {% endif %}
 
-  {% if artists %}
-  <div class="col artist-card">
-    <div class="row row-cols-2 row-cols-md-3 g-4">
-      {% for artist in artists %}
-      <div class="card">
-        <img src="{{artist.spotify_image}}" class="card-img-top" alt="artist image">
-        <div class="card-body">
-          <p><a href="{% url 'concertainly:artist' artist.slug %}" class="btn btn-dark">{{ artist.name }}</a></p>
-        </div>
+    {% if artists %}
+        <div class="col popular-tour-card">
+            <div class="row row-cols-2 row-cols-md-3">
+                {% for artist in artists %}
+                <div class="col">
+                    <a href="{% url 'concertainly:artist' artist.slug %}" class="text-decoration-none">
+                    <div class="card rounded-0 border-0 h-100">
+                        <img src="{{ artist.spotify_image }}" class="card-img-top rounded-0" alt="artist image">
+                        <div class="card-body popular-tour-card-body text-center">
+                        <h5 class="card-title mb-1" >{{ artist.name }}</h5>
+                        </div>
+                    </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
         </div>
     {% else %}
+    <div class="d-flex flex-column text-center justify-content-center align-items-center">
         <h2>This is awkward...</h2>
         We currently have no {{ genre.nice_name }} artists <br>  
         <a href="{% url 'concertainly:genres' %}">Return to all genres.</a><br />
+    </div>
     {% endif %}
 </div>
 {% endblock %}

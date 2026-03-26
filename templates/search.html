@@ -5,28 +5,42 @@
     Search
 {% endblock %}
 
+{% block body_class %}
+    no-scroll
+{% endblock %}
+
 {% block body_block %}
-<form action="{% url 'concertainly:search' %}" method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
-  {% for hidden in form.hidden_fields %}
-  {{ hidden }}
-  {% endfor %}
 
-  <section class="mx-3 mt-3">
-    <h2>Search</h2>
-    {{form.artist_select}}
+<div class="d-flex justify-content-center align-items-center pb-5 min-vh-100">
+  <form action="{% url 'concertainly:search' %}" method="POST" enctype="multipart/form-data" class="w-100" style="max-width: 500px;">
+    {% csrf_token %}
+    {% for hidden in form.hidden_fields %}
+      {{ hidden }}
+    {% endfor %}
 
-    {{form.tour_select}}
-
-    {{form.venue_select}}
-
-    {{form.genre_select}}
-    
-    {{form.date}}
-  </section>
-
-  <input type="submit" value="Search" class="mx-3 mt-3 btn btn-primary">
-</form>
+    <div class="text-center">
+      <div class="mb-4">
+        <h2>Search</h2>
+      </div>
+      <div class="mb-3">
+        {{ form.artist_select }}
+      </div>
+      <div class="mb-3">
+        {{ form.tour_select }}
+      </div>
+      <div class="mb-3">
+        {{ form.venue_select }}
+      </div>
+      <div class="mb-3">
+        {{ form.genre_select }}
+      </div>
+      <div class="mb-3">
+        {{ form.date }}
+      </div>
+      <input type="submit" value="Search" class="btn btn-primary w-100 py-2">
+    </div>
+  </form>
+</div>
 
 <script src="{% static 'search.js' %}"></script>
 

@@ -1,7 +1,6 @@
-from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from concertainly.models import Genre, Artist, Tour, Review, Venue
-from concertainly.forms import UserForm, ReviewForm
+from concertainly.forms import UserForm, ReviewForm, SearchForm
 from django.shortcuts import redirect 
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
@@ -36,44 +35,44 @@ def home(request):
 
     return render(request, "homepage.html", context=context_dict)
 
+def insens_str_contain(s1, s2):
+    return (s1.lower() in s2.lower() or s2.lower() in s1.lower())
+
 def search(request):
     if (request.method == "POST"):
         form = SearchForm(request.POST, request.FILES)
 
         if form.is_valid():
-            s_artist = Artist.objects.filter(name=form.cleaned_data["artist_select"])
-            s_tour = Tour.objects.filter(name=form.cleaned_data["tour_select"])   
-            s_venue = Venue.objects.filter(name=form.cleaned_data["venue_select"])
+            clean_artist = str(form.cleaned_data["artist_select"])
+            clean_tour = str(form.cleaned_data["tour_select"])
+            clean_venue = str(form.cleaned_data["venue_select"])
             s_date=form.cleaned_data["date"],
-            s_genre = Genre.objects.filter(name=form.cleaned_data["genre_select"])
+            clean_genre = str(form.cleaned_data["genre_select"])
 
             reviews = Review.objects.all()
+            context_dict = {}
             
-            print("artist - " + str(not not s_artist))
-            print("tour - " + str(not not s_tour))
-            print("venue - " + str(not not s_venue))
-            print("date - " + str(not not s_date))
+            if (str(clean_artist) != ""):
+                reviews = [r for r in reviews if insens_str_contain(r.artist().name, clean_artist)]
+                context_dict["search_artist"] = clean_artist
 
-            if (s_artist):
-                reviews = [r for r in reviews if r.artist() == s_artist[0]]
-            if (s_tour):
-                reviews = [r for r in reviews if r.tour == s_tour[0]]
-            if (s_venue):
-                print(s_venue[0])
-                for v in reviews.venue:
-                    print(v)
-    
-                reviews = [r for r in reviews if r.venue == s_venue[0]]
+            if (str(clean_tour) != ""):
+                reviews = [r for r in reviews if insens_str_contain(clean_tour, r.tour.name)]
+                context_dict["search_tour"] = clean_tour
+
+            if (str(clean_venue) != ""):
+                reviews = [r for r in reviews if insens_str_contain(clean_venue, r.venue.name)]
+                context_dict["search_venue"] = clean_venue
+
             if (s_date is not None and s_date[0] is not None):
-                reviews = [r for r in reviews if r.date.strftime('%Y-%m-%d') == s_date[0].strftime('%Y-%m-%d')]
-            else:
-                print("epic date fail")
-        
+                formatted_date = s_date[0].strftime('%Y-%m-%d')
+                reviews = [r for r in reviews if r.date.strftime('%Y-%m-%d') == formatted_date]
+                context_dict["search_date"] = s_date[0].strftime('%d-%m-%Y')
+
             # TODO: add genre filtering
             #if (s_genre):
                 #reviews = reviews.filter(lambda review: review.tour.artist.genres.contains)
-            
-            context_dict = {}
+        
             context_dict["reviews"] = reviews
             context_dict["any_results"] = len(reviews) != 0
             return render(request, "search_results.html", context=context_dict)
@@ -90,6 +89,8 @@ def search_results(request):
     return render(request, "search_results.html", dict())
 
 def user_register(request):
+    if request.user.is_authenticated:
+        return redirect(reverse("concertainly:home"))
     registered = False
     # if it's a post request, process the data
     if request.method == "POST":
@@ -118,6 +119,9 @@ def user_register(request):
 
 def user_login(request):
     context_dict = {}
+    if request.user.is_authenticated:
+        return redirect(reverse("concertainly:home"))
+    
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -137,7 +141,6 @@ def user_login(request):
 
 @login_required
 def user_logout(request):
-    print("LOGGING OOOOOOOOOUT")
     logout(request)
     return redirect(reverse("concertainly:home"))
 
@@ -166,18 +169,29 @@ def genre(request, genre_name):
 def artist(request, slug):
     artist = get_object_or_404(Artist, slug=slug)
     tours = Tour.objects.filter(artist=artist)
+    genre = artist.genres.first()
     context_dict = {}
     context_dict["artist"] = artist
     context_dict["tours"] = tours
+    context_dict["genre"] = genre.name
     return render(request, "artist.html", context=context_dict)
 
 def tour(request, slug):
     tour = Tour.objects.filter(slug=slug).first()
     if tour:
         reviews = Review.objects.filter(tour=tour)
+        request.session["last_tour"] = tour.slug
     else:
         reviews = []
     return render(request, "tour.html", {"tour": tour, "reviews": reviews})
+
+def tour_redirect(request):
+    print("Redirect last_tour:", request.session.get("last_tour"))
+
+    last_tour = request.session.get("last_tour")
+    if last_tour:
+        return redirect("concertainly:tour", slug=last_tour)
+    return redirect("concertainly:home")
 
 @login_required
 def review(request, slug=None): # add redirect
