@@ -9,25 +9,25 @@
 <div class="container py-4">
     <div class="text-center mb-4">
         {% if any_results %}
-            <h2>Search Results</h2>
+            <h2>{{ number_of_reviews }} Search Results</h2>
         {% else %}
             <h2>No results found!</h2>
         {% endif %}
 
         {% if search_artist %}
-            <p>Artist - {{ search_artist }}</p>
+            <small class="text-muted">Artist: "{{ search_artist }}"</small>
         {% endif %}
         {% if search_tour %}
-            <p>Tour - {{ search_tour }}</p>
+            <small class="text-muted">, Tour: "{{ search_tour }}"</small>
         {% endif %}
         {% if search_venue %}
-            <p>Venue - {{ search_venue }}</p>
+            <small class="text-muted">, Venue: "{{ search_venue }}"</small>
         {% endif %}
         {% if search_date %}
-            <p>Date - {{ search_date }}</p>
+            <small class="text-muted">, Date: "{{ search_date }}"</small>
         {% endif %}
         {% if search_genre %}
-            <p>Genre - {{ search_genre }}</p>
+            <small class="text-muted">, Genre: "{{ search_genre }}"</small>
         {% endif %}
     </div>
     {% if reviews %}

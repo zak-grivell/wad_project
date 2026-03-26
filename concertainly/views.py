@@ -80,6 +80,7 @@ def search(request):
                 context_dict["search_genre"] = clean_genre
 
             context_dict["reviews"] = reviews
+            context_dict["number_of_reviews"] = len(reviews)
             context_dict["any_results"] = len(reviews) != 0
             return render(request, "search_results.html", context=context_dict)
         
