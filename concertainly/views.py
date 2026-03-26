@@ -41,29 +41,45 @@ def search(request):
         form = SearchForm(request.POST, request.FILES)
 
         if form.is_valid():
-            s_artist = Artist.objects.filter(name=form.cleaned_data["artist_select"])
-            s_tour = Tour.objects.filter(name=form.cleaned_data["tour_select"])   
-            s_venue = Venue.objects.filter(name=form.cleaned_data["venue_select"])
+            clean_artist = form.cleaned_data["artist_select"]
+            s_artist = Artist.objects.filter(name=clean_artist)
+            clean_tour = form.cleaned_data["tour_select"]
+            s_tour = Tour.objects.filter(name=clean_tour)
+            clean_venue = form.cleaned_data["venue_select"]
+            s_venue = Venue.objects.filter(name=clean_venue)
             s_date=form.cleaned_data["date"],
-            s_genre = Genre.objects.filter(name=form.cleaned_data["genre_select"])
+            clean_genre = form.cleaned_data["genre_select"]
+            s_genre = Genre.objects.filter(name=clean_genre)
 
             reviews = Review.objects.all()
             
-            print("artist - " + str(not not s_artist))
-            print("tour - " + str(not not s_tour))
-            print("venue - " + str(not not s_venue))
-            print("date - " + str(not not s_date))
+            print("artist - (" + str(clean_artist) + ")")
+            print("tour - (" + str(clean_tour) + ")")
+            print("venue - (" + str(clean_venue) + ")")
+            print("date - (" + str(clean_genre) + ")")
+            print(str(clean_artist) == "")
+            print(str(clean_tour) == "")
+            print(str(clean_venue) == "")
+            print(str(clean_genre) == "")
 
-            if (s_artist):
-                reviews = [r for r in reviews if r.artist() == s_artist[0]]
-            if (s_tour):
-                reviews = [r for r in reviews if r.tour == s_tour[0]]
-            if (s_venue):
-                print(s_venue[0])
-                for v in reviews.venue:
-                    print(v)
-    
-                reviews = [r for r in reviews if r.venue == s_venue[0]]
+            if (str(clean_artist) != ""):
+                if (len(s_artist) != 0):
+                    reviews = [r for r in reviews if r.artist() == s_artist[0]]
+                else:
+                    reviews = []
+
+            if (str(clean_tour) != ""):
+                if (len(s_tour) != 0):
+                    reviews = [r for r in reviews if r.tour == s_tour[0]]
+                else:
+                    reviews = []
+
+            if (str(clean_venue) != ""):
+                if (len(s_tour) != 0):
+                    reviews = [r for r in reviews if r.venue == s_venue[0]]
+                else:
+                    reviews = []
+                    
             if (s_date is not None and s_date[0] is not None):
                 reviews = [r for r in reviews if r.date.strftime('%Y-%m-%d') == s_date[0].strftime('%Y-%m-%d')]
             else:
