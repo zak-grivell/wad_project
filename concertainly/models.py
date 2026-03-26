@@ -155,7 +155,7 @@ class Review(models.Model):
     title = models.CharField(max_length=128)
     thoughts = models.CharField(max_length=1024)
     img = models.ImageField(
-        upload_to="reviews/",
+        upload_to="concertainly/reviews/",
         blank=True,
         null=True,
         height_field=None,
