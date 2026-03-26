@@ -11,7 +11,7 @@ function searchDataList(name, required) {
   
   let valid_names = {};
 
-  const buffer_time = 1000;
+  const buffer_time = 250;
   let timer = null;
 
   const onStall = (text) => {

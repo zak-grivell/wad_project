@@ -45,6 +45,7 @@ def contained_in_any_list_elt(target, list):
     return False
 
 def search(request):
+    form_dict_key = "form"
     if (request.method == "POST"):
         form = SearchForm(request.POST, request.FILES)
 
@@ -55,31 +56,54 @@ def search(request):
             s_date=form.cleaned_data["date"],
             clean_genre = str(form.cleaned_data["genre_select"])
 
+            # me when i query every single object in the database
+            # if it lags i'll fix it
+            # premature optimisation is the root of all evil
             reviews = Review.objects.all()
             context_dict = {}
-            
-            if (clean_artist != ""):
+
+            # collect all presence bools - if all are false, display an error message
+            presences = []
+
+            artist_present = clean_artist != ""
+            presences.append(artist_present)
+            if (artist_present):
                 reviews = [r for r in reviews if insens_str_contain(r.artist().name, clean_artist)]
                 context_dict["search_artist"] = clean_artist
 
-            if (clean_tour != ""):
+            tour_present = clean_tour != ""
+            presences.append(tour_present)
+            if (tour_present):
                 reviews = [r for r in reviews if insens_str_contain(clean_tour, r.tour.name)]
                 context_dict["search_tour"] = clean_tour
 
-            if (clean_venue != ""):
+            venue_present = clean_venue != ""
+            presences.append(venue_present)
+            if (venue_present):
                 reviews = [r for r in reviews if insens_str_contain(clean_venue, r.venue.name)]
                 context_dict["search_venue"] = clean_venue
 
             if (s_date is not None and s_date[0] is not None):
+                presences.append(True)
                 formatted_date = s_date[0].strftime('%Y-%m-%d')
                 reviews = [r for r in reviews if r.date.strftime('%Y-%m-%d') == formatted_date]
                 context_dict["search_date"] = s_date[0].strftime('%d-%m-%Y')
+            else:
+                presences.append(False)
 
+            presences.append(bool(clean_genre))
             if (clean_genre):
                 reviews = [r for r in reviews if contained_in_any_list_elt(clean_genre, r.genre_name_list()) or contained_in_any_list_elt(clean_genre, r.genre_nice_name_list())]
                 context_dict["search_genre"] = clean_genre
 
+            # if there are no true presences
+            if (not any(presences)):
+                context_dict["error"] = "Please provide some search parameters."
+                context_dict[form_dict_key] = SearchForm()
+                return render(request, "search.html", context=context_dict)
+                
             context_dict["reviews"] = reviews
+            context_dict["number_of_reviews"] = len(reviews)
             context_dict["any_results"] = len(reviews) != 0
             return render(request, "search_results.html", context=context_dict)
         
@@ -89,7 +113,7 @@ def search(request):
     else:
         form = SearchForm()
     
-    return render(request, "search.html", {"form": form})
+    return render(request, "search.html", {form_dict_key: form})
 
 def search_results(request):
     return render(request, "search_results.html", dict())

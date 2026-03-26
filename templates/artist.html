@@ -33,6 +33,12 @@
                 {% endfor %}
             </div>
         </div>
+        {% else %}
+        <div class="d-flex flex-column text-center justify-content-center align-items-center">
+        <h2>No Tours</h2>
+        {{ artist.name }} currently has no tours <br>  
+        <a href="{% url 'concertainly:review' %}">Be the first one to write a review!</a><br />
+    </div>
     {% endif %}
 </div>
 {% endblock %}
