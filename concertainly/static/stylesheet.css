@@ -123,6 +123,7 @@ select[multiple] option {
   border-radius: 6px;
   background-color: transparent;
   cursor: pointer;
+  color: #fff;
 }
 
 /* select[multiple] option:checked { */
