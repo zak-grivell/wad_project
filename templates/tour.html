@@ -22,7 +22,7 @@ Tour not found
           class="text-decoration-none text-muted">{{ tour.artist.name }}</a></small>
     </div>
     {% if user.is_authenticated %}
-    <a href="{% url 'concertainly:review' tour.slug %}" class="btn btn-success ms-auto">
+    <a href="{% url 'concertainly:review_with_slug' tour.slug %}" class="btn btn-success ms-auto">
       Post Review
     </a>
     {% else %}

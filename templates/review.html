@@ -8,7 +8,13 @@ Tour Reviews
 
 {% block body_block %}
 
-<form action="review" method="POST" enctype="multipart/form-data">
+<form method="POST" enctype="multipart/form-data" 
+  action=
+  "{% if tour %}
+    {% url 'concertainly:review_with_slug' tour.slug %}
+  {% else %}
+    {% url 'concertainly:review' %}
+  {% endif %}">
   {% csrf_token %}
   {% for hidden in form.hidden_fields %}
   {{ hidden }}

@@ -17,7 +17,6 @@ class ShowReviewTest(TestCase):
         self.artist = Artist.objects.create(
             name = "Test Artist",
             external_id="test_external_id_123456789",
-            spotify_id = "test_id_123456789",
             slug = "test-artist",
         )
         self.artist.genres.add(self.genre)
@@ -79,7 +78,7 @@ class ShowReviewTest(TestCase):
             reverse("concertainly:tour", args=[self.tour_1.slug])
         )
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Be the first one to comment for this tour!")
+        self.assertContains(response, "Be the first one to review this tour!")
 
     def test_with_invalid_tour(self):
         response = self.client.get(
