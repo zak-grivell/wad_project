@@ -23,7 +23,7 @@ class SpotifyTests(TestCase):
 
         mock_get.assert_called_once_with(
             f"https://api.spotify.com/v1/artists/{ARTIST_ID}",
-            headers={"access_token": "test_token"},
+            headers={'Authorization': 'Bearer test_token'},
         )
 
     @patch(
@@ -44,7 +44,7 @@ class SpotifyTests(TestCase):
         ),
     )
     def test_search_track(self, mock_get):
-        result = self.api.search_track("Blank Space")
+        result = self.api.search_track("Blank Space", artist="Taylor Swift")
 
         self.assertEqual(result["items"][0]["name"], "Blank Space")
 
@@ -81,7 +81,7 @@ class SpotifyTests(TestCase):
         with patch.object(self.api, "refresh_token") as mock_refresh:
             token = self.api.get_access_token()
 
-            self.assertEqual(token, "test_token")
+            self.assertEqual(token, {'Authorization': 'Bearer test_token'})
             mock_refresh.assert_not_called()
 
     def test_get_access_token_refreshes_if_expired(self):

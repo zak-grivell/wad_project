@@ -1,4 +1,3 @@
-from requests.models import Response
 import requests
 from dotenv import load_dotenv
 import os
@@ -164,29 +163,16 @@ api_params = {"apikey": TICKETMATER_CONSUMER_KEY}
 class TicketMasterAPI:
     def event_search(self, params: SearchFields) -> list[Event]:
         responce = requests.get(f"{URL}events.json", params=params | api_params).json()
-    
-        try:
-            return responce[
-                "_embedded"
-            ]["events"]
-        except:
-            print(responce)
-            return []
 
-    def event(self, id: str) -> Event:        
+        return responce["_embedded"]["events"]
+
+    def event(self, id: str) -> Event:
         return requests.get(f"{URL}events/{id}.json", params=api_params).json()
-    
 
     def attraction_search(self, params: SearchFields) -> list[Attraction]:
-        data = requests.get(
-            f"{URL}attractions.json", params=params | api_params
-        ).json()
+        data = requests.get(f"{URL}attractions.json", params=params | api_params).json()
 
-        try:
-            return data["_embedded"]["attractions"]
-        except:
-            print(data)
-            return []
+        return data["_embedded"]["attractions"]
 
     def attraction(self, id: str):
         return requests.get(f"{URL}attractions/{id}.json", params=api_params).json()
@@ -194,18 +180,10 @@ class TicketMasterAPI:
     def venue_search(self, params: SearchFields) -> list[Venue]:
         json = requests.get(f"{URL}venues.json", params=params | api_params).json()
 
-        try:
-            return json[
-                "_embedded"
-            ]["venues"]
-        except:
-            print(json)
-            return []
+        return json["_embedded"]["venues"]
 
     def venue(self, id) -> Venue:
-        return requests.get(
-            f"{URL}venues/{id}.json",
-            params=api_params
-        ).json()
+        return requests.get(f"{URL}venues/{id}.json", params=api_params).json()
+
 
 TICKET_MASTER_API = TicketMasterAPI()

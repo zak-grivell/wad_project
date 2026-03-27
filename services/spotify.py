@@ -160,26 +160,5 @@ class SpotifyAPI:
             },
         ).json()["tracks"]
 
-    def artist_image(self, artist_id) -> str:
-        return self.artist(artist_id)["images"][-1]["url"]
 
 SPOTIFY_API = SpotifyAPI()
-
-if __name__ == "__main__":
-    A = []
-
-    A.append("6qqNVTkY8uBg9cP3Jd7DAH") 
-    A.append("6XyY86QOPPrYVGvF9ch6wz") 
-    A.append("06HL4z0CvFAxyc27GXpf02") 
-    A.append("6KImCVD70vtIoJWnq6nGn3") 
-    A.append("1McMsnEElThX1knmY4oliG") 
-    A.append("74KM79TiuVKeVCqs8QtB0B") 
-    A.append("4Uc8Dsxct0oMqx0P6i60ea") 
-    A.append("1Hsdzj7Dlq2I7tHP7501T4") 
-    A.append("4G9NDjRyZFDlJKMRL8hx3S")
-    A.append("7aRC4L63dBn3CiLDuWaLSI")
-
-    for a in A:
-        a = SPOTIFY_API.artist(a)
-
-        print(a["images"][0]["url"])
