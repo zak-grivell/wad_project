@@ -9,4 +9,4 @@ db.sqlite3
 .env
 /media/
 .direnv
-migrations/
+**/migrations/__pycache__/

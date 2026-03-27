@@ -116,6 +116,12 @@ class ReviewForm(forms.Form):
 
     setlist = forms.MultipleChoiceField(widget=SetListWidget(), choices=[], disabled=True, required=False)
 
+    def clean_date(self):
+        date = self.cleaned_data.get("date")
+        if date and date.year < 1900:
+            raise forms.ValidationError("Enter a valid year.")
+        return date
+
 
 class SearchForm(forms.Form):
     artist_id = forms.CharField(max_length=128, widget=forms.HiddenInput(), required=False)
@@ -167,3 +173,9 @@ class SearchForm(forms.Form):
     )
 
     date = forms.DateField(widget=forms.DateInput(attrs={"class":"form-control", "type": "date" }), required=False)
+
+    def clean_date(self):
+        date = self.cleaned_data.get("date")
+        if date and date.year < 1900:
+            raise forms.ValidationError("Enter a valid year.")
+        return date

@@ -108,8 +108,15 @@ def search(request):
             return render(request, "search_results.html", context=context_dict)
         
         else:
-            print("form data not valid")
-            print(form.errors)
+            context_dict = {}
+            if "date" in form.errors:
+                context_dict["error"] = "Enter a valid year."
+            else:
+                print("form data not valid")
+                print(form.errors)
+            context_dict[form_dict_key] = form
+            return render(request, "search.html", context=context_dict)
+            
     else:
         form = SearchForm()
     
@@ -204,6 +211,8 @@ def artist(request, slug):
     context_dict["artist"] = artist
     context_dict["tours"] = tours
     context_dict["genre"] = genre.name
+    request.session["last_artist"] = artist.slug
+    request.session.pop("last_tour", None)
     return render(request, "artist.html", context=context_dict)
 
 def tour(request, slug):
@@ -211,20 +220,26 @@ def tour(request, slug):
     if tour:
         reviews = Review.objects.filter(tour=tour)
         request.session["last_tour"] = tour.slug
+        request.session.pop("last_artist", None)
     else:
         reviews = []
     return render(request, "tour.html", {"tour": tour, "reviews": reviews})
 
-def tour_redirect(request):
-    print("Redirect last_tour:", request.session.get("last_tour"))
-
+def redirect_page(request):
     last_tour = request.session.get("last_tour")
+    last_artist = request.session.get("last_artist")
     if last_tour:
+        print("Redirect last_tour:", request.session.get("last_tour"))
         return redirect("concertainly:tour", slug=last_tour)
+    elif last_artist:
+        print("Redirect last_artist:", request.session.get("last_artist"))
+        return redirect("concertainly:artist", slug=last_artist)
     return redirect("concertainly:home")
 
 @login_required
 def review(request, slug=None):
+    tour = None
+
     if (request.method == "POST"):
         submitted_ids = request.POST.getlist('setlist')
 
@@ -237,6 +252,8 @@ def review(request, slug=None):
 
         form.fields['setlist'].choices = [(i, i) for i in submitted_ids]
 
+        if slug:
+            tour = Tour.objects.filter(slug=slug).first()
         
         if form.is_valid():
             artist = Artist.objects.get_or_create_from_api(form.cleaned_data["artist_id"])
@@ -279,7 +296,7 @@ def review(request, slug=None):
     else:
         form = ReviewForm()
     
-    return render(request, "review.html", {"form": form})
+    return render(request, "review.html", {"form": form, "tour": tour})
 
 def error_page(request, context_dict, err_message):
     context_dict["error_message"] = err_message

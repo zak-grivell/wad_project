@@ -156,13 +156,14 @@ class Review(models.Model):
     title = models.CharField(max_length=128)
     thoughts = models.CharField(max_length=1024)
     img = models.ImageField(
-        upload_to="concertainly/reviews/",
+        upload_to="reviews/",
         blank=True,
         null=True,
         height_field=None,
         width_field=None,
         max_length=100,
     )
+    static_img = models.CharField(max_length=255, blank=True)
 
     venue = models.ForeignKey(Venue, on_delete=CASCADE)
     date = models.DateField()

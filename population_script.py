@@ -80,7 +80,7 @@ def add_song(name, artist, spotify_id):
     return song
 
 
-def add_review(title, thoughts, img, venue, date, rating, user, tour, songs):
+def add_review(title, thoughts, venue, date, rating, user, tour, songs, img=None, static_img=""):
     review, created = Review.objects.get_or_create(
         title=title,
         user=user,
@@ -96,8 +96,10 @@ def add_review(title, thoughts, img, venue, date, rating, user, tour, songs):
 
     if img:
         review.img = img
+        review.static_img = ""
     else:
         review.img = None
+        review.static_img = static_img
     review.save()
     review.set_list.set(songs)
 
@@ -268,7 +270,7 @@ def populate():
     add_review(
         title="Best tour forever",
         thoughts="love itttt. Already looking forward to the next show.xxxxx",
-        img="reviews/billie_1.jpg",
+        static_img="images/reviews/billie_1.jpg",
         venue=ovo,
         date=date(2025, 6, 7),
         rating=4,
@@ -280,7 +282,7 @@ def populate():
     add_review(
         title="BEST",
         thoughts="The nostalgia... Act 4 is my favourite. Soldiers forever.",
-        img="reviews/linkin_1.jpg",
+        static_img="images/reviews/linkin_1.jpg",
         venue=barclays,
         date=date(2024, 11, 16),
         rating=5,
@@ -292,7 +294,7 @@ def populate():
     add_review(
         title="<3<3<3",
         thoughts="Everything is so good espcailly like OMG I love her sm",
-        img="reviews/taylor_1.jpg",
+        static_img="images/reviews/taylor_1.jpg",
         venue=murrayfield_stadium,
         date=date(2024, 6, 9),
         rating=5,
@@ -304,7 +306,7 @@ def populate():
     add_review(
         title = "Best tour forever",
         thoughts = "love itttt. Already looking forward to the next show.xxxxx",
-        img = "images/reviews/billie_1.jpg",
+        static_img = "images/reviews/billie_1.jpg",
         venue = ovo,
         date = date(2025,6,7),
         rating = 4,
@@ -316,7 +318,7 @@ def populate():
     add_review(
         title = "BEST",
         thoughts = "The nostalgia... Act 4 is my favourite. Soldiers forever.",
-        img = "images/reviews/linkin_1.jpg",
+        static_img = "images/reviews/linkin_1.jpg",
         venue = barclays,
         date = date(2024,11,16),
         rating = 5,
@@ -328,7 +330,7 @@ def populate():
     add_review(
         title = "<3<3<3",
         thoughts = "Everything is so good espcailly like OMG I love her sm",
-        img = "images/reviews/taylor_1.jpg",
+        static_img = "images/reviews/taylor_1.jpg",
         venue = murrayfield_stadium ,
         date = date(2024,6,9),
         rating = 5,
@@ -448,7 +450,7 @@ def populate():
     add_review(
         title = "coool", 
         thoughts = "first time going to billie's concert. not bad overall.", 
-        img = "images/reviews/billie_2.jpg",
+        static_img = "images/reviews/billie_2.jpg",
         venue = ovo,
         date = date(2025,6,7),
         rating = 3,
@@ -460,7 +462,7 @@ def populate():
     add_review(
         title = "i lovee it", 
         thoughts = "I love it sm. Love her. LEGEND.", 
-        img = "images/reviews/taylor_2.jpg",
+        static_img = "images/reviews/taylor_2.jpg",
         venue = ovo,
         date = date(2025,6,7),
         rating = 4,
