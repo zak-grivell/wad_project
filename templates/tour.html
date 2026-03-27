@@ -63,7 +63,13 @@ Tour not found
         {% if review.img %}
         <div class="col-md-4 align-self-center">
           <div class="review-image-box">
-            <img src="{% static review.img %}" class="review-image shadow" alt="review image">
+            <img src="{{ review.img.url }}" class="review-image shadow" alt="review image">
+          </div>
+        </div>
+        {% elif review.static_img %}
+        <div class="col-md-4 align-self-center">
+          <div class="review-image-box">
+            <img src="{% static review.static_img %}" class="review-image shadow" alt="review image">
           </div>
         </div>
         {% endif %}

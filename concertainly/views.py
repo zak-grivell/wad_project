@@ -108,8 +108,15 @@ def search(request):
             return render(request, "search_results.html", context=context_dict)
         
         else:
-            print("form data not valid")
-            print(form.errors)
+            context_dict = {}
+            if "date" in form.errors:
+                context_dict["error"] = "Enter a valid year."
+            else:
+                print("form data not valid")
+                print(form.errors)
+            context_dict[form_dict_key] = form
+            return render(request, "search.html", context=context_dict)
+            
     else:
         form = SearchForm()
     
